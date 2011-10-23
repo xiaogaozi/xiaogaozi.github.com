@@ -2,10 +2,10 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://yoursite.com
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+url: http://xiaogaozi.heroku.com
+title: 自由
+subtitle: 淡泊以明志，宁静以致远。
+author: 小高子
 simple_search: http://google.com/search
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
@@ -94,4 +94,4 @@ disqus_show_comment_count: false
 google_analytics_tracking_id:
    
 # Facebook Like
-facebook_like: true   
+facebook_like: false
