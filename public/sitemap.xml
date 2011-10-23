@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://xiaogaozi.heroku.com/blog/2011/10/23/octopress-rocks/</loc>
+        <loc>http://blog.xiaogaozi.org/blog/2011/10/23/octopress-rocks/</loc>
         <lastmod>2011-10-23T22:08:38+08:00</lastmod>
     </url>
     <url>
-        <loc>http://xiaogaozi.heroku.com/blog/archives/</loc>
+        <loc>http://blog.xiaogaozi.org/blog/archives/</loc>
         <lastmod>2011-10-23T22:08:38+08:00</lastmod>
     </url>
     <url>
-        <loc>http://xiaogaozi.heroku.com/</loc>
+        <loc>http://blog.xiaogaozi.org/</loc>
         <lastmod>2011-10-23T22:08:38+08:00</lastmod>
     </url>
 </urlset>
