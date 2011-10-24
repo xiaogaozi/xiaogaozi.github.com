@@ -12,7 +12,7 @@ categories: [C'EST LA VIE]
 
 Yes。Octopress 具备一个博客应当具备的所有功能，文章、评论、页面、分享、RSS、搜索、Archives等等。
 
-No。正如 Octopress 网站介绍所说：A blogging framework for hackers，重点就在最后那个 hackers。没有了 WordPress 的后台界面，写博客需要的工具仅仅是 Ruby、Git、Markdown。如果你是一个 hacker，那你对这些工具不会陌生，相比 WordPress 蹩脚的后台页面，Octopress 提供的写作方式会让你非常喜爱。
+No。正如 Octopress 网站介绍所说：A blogging framework for hackers，重点就在最后那个 hackers。没有了 WordPress 的后台界面，写博客需要的工具仅仅是 Ruby、Git、Markdown和你喜爱的编辑器。如果你是一个 hacker，那你对这些工具不会陌生，相比 WordPress 蹩脚的后台页面，Octopress 提供的写作方式会让你非常喜爱。
 
 ## 写作 ##
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 ## 版本控制 ##
 
-程序员已经被版本控制惯坏了，只要能纳入版本库，就统统放进去。WordPress 拥有同样蹩脚的版本控制，显然不足以满足 hakcer 的需求，Octopress 为我们提供了 Git 原生支持，一切一切都为你所控，放在你喜欢的版本控制库里即可。
+程序员已经被版本控制惯坏了，只要能纳入版本库，就统统放进去。WordPress 拥有同样蹩脚的版本控制，显然不足以满足 hacker 的需求，Octopress 为我们提供了 Git 原生支持，一切一切都为你所控，放在你喜欢的版本控制库里即可。
 
 ## 部署 ##
 
