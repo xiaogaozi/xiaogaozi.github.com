@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: SCons | 自由]]></title>
+  <link href="http://blog.xiaogaozi.org/categories/scons/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2011-10-31T14:38:28+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[小高子]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[GYP 简介]]></title>
+    <link href="http://blog.xiaogaozi.org/2011/10/29/gyp-jian-jie/"/>
+    <updated>2011-10-29T22:55:00+08:00</updated>
+    <id>http://blog.xiaogaozi.org/2011/10/29/gyp-jian-jie</id>
+    <content type="html"><![CDATA[<p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://www.gnu.org/s/autoconf/">Autoconf</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autoconf 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autoconf 天生对于跨平台支持不佳。</p>
+
+<p>后来我从<a href="http://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autoconf 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
+
+<p><a href="http://code.google.com/p/gyp/">GYP</a>（Generate Your Projects）是由 Chromium 团队开发的跨平台自动化项目构建工具，Chromium 便是通过 GYP 进行项目构建管理。为什么我要选择 GYP，而放弃 CMake 呢？功能上 GYP 和 CMake 很是相似，在我看来，它们的最大区别在于配置文件的编写方式和其中蕴含的思想。</p>
+
+<p>编写 CMake 配置文件相比 Autoconf 来说已经简化很多，一个最简单的配置文件只需要写上源文件及生成类型（可执行文件、静态库、动态库等）即可。对分支语句和循环语句的支持也使得 CMake 更加灵活。但是，CMake 最大的问题也是在这个配置文件，请看下面这个示例文件：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='cmake'><span class='line'><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span>
+</span><span class='line'><span class="nb">project</span><span class="p">(</span><span class="s">VP8</span> <span class="s">CXX</span><span class="p">)</span><span class="err">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-Wall</span><span class="p">)</span>
+</span><span class='line'><span class="nb">cmake_policy</span><span class="p">(</span><span class="s">SET</span> <span class="s">CMP0015</span> <span class="s">NEW</span><span class="p">)</span>
+</span><span class='line'><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&quot;include&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">link_directories</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_ARCHIVE_OUTPUT_DIRECTORY</span> <span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">VP8SRC</span> <span class="s">VP8Encoder.cpp</span> <span class="s">VP8Decoder.cpp</span><span class="p">)</span><span class="err">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="nb">if</span><span class="p">(</span><span class="s">X86</span><span class="p">)</span><span class="err">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;pre&gt;&lt;code&gt;</span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Darwin</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">i386</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="s2">&quot;i386&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">add_library</span><span class="p">(</span><span class="s">vp8</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">VP8SRC</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'><span class="err">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="nb">elseif</span><span class="p">(</span><span class="s">IPHONE</span><span class="p">)</span><span class="err">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;pre&gt;&lt;code&gt;</span><span class="nb">if</span><span class="p">(</span><span class="s">SIMULATOR</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">PLATFORM</span> <span class="s2">&quot;iPhoneSimulator&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">PROCESSOR</span> <span class="s">i386</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">ARCH</span> <span class="s2">&quot;i386&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">else</span><span class="p">()</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">PLATFORM</span> <span class="s2">&quot;iPhoneOS&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">PROCESSOR</span> <span class="s">arm</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">ARCH</span> <span class="s2">&quot;armv7&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">endif</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">SDKVER</span> <span class="s2">&quot;4.0&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">DEVROOT</span> <span class="s2">&quot;/Developer/Platforms/${PLATFORM}.platform/Developer&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">SDKROOT</span> <span class="s2">&quot;${DEVROOT}/SDKs/${PLATFORM}${SDKVER}.sdk&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_SYSROOT</span> <span class="s2">&quot;${SDKROOT}&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Generic</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="o">${</span><span class="nv">PROCESSOR</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s2">&quot;${DEVROOT}/usr/bin/g++&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="o">${</span><span class="nv">ARCH</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">include_directories</span><span class="p">(</span><span class="s">SYSTEM</span> <span class="s2">&quot;${SDKROOT}/usr/include&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">link_directories</span><span class="p">(</span><span class="s">SYSTEM</span> <span class="s2">&quot;${SDKROOT}/usr/lib&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_PHONE</span><span class="p">)</span>
+</span><span class='line'><span class="nb">add_library</span><span class="p">(</span><span class="s">vp8-armv7-darwin</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">VP8SRC</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'><span class="err">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="nb">endif</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>你能一眼看出这个配置文件干了什么吗？其实这个配置文件想要产生的目标（target）只有一个，就是通过 <code>${VP8SRC}</code> 编译生成的静态库，但因为加上了条件判断，及各种平台相关配置，使得这个配置文件看起来很是复杂。在我看来，编写 CMake 配置文件是一种线性思维，对于同一个目标的配置可能会零散分布在各个地方。而 GYP 则相当不同，GYP 的配置文件更多地强调模块化、结构化。看看下面这个示例文件：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s">&#39;targets&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">{</span>
+</span><span class='line'>  <span class="s">&#39;target_name&#39;</span><span class="p">:</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;&amp;lt;(library)&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s">&#39;dependencies&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s">&#39;bar&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s">&#39;DEFINE_FOO&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s">&#39;DEFINE_A_VALUE=value&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="s">&#39;include_dirs&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s">&#39;..&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="s">&#39;sources&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s">&#39;file1.cc&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s">&#39;file2.cc&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="s">&#39;conditions&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">[</span><span class="s">&#39;OS==&quot;linux&quot;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;LINUX_DEFINE&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="s">&#39;include_dirs&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;include/linux&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>    <span class="p">}],</span>
+</span><span class='line'>    <span class="p">[</span><span class="s">&#39;OS==&quot;win&quot;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;WINDOWS_SPECIFIC_DEFINE&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>    <span class="p">},</span> <span class="p">{</span> <span class="c"># OS != &quot;win&quot;,</span>
+</span><span class='line'>      <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;NON_WINDOWS_DEFINE&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>    <span class="p">}]</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="p">],</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>我们可以立马看出上面这个配置文件的输出目标只有一个，也就是 <code>foo</code>，它是一个库文件（至于是静态的还是动态的这需要在生成项目时指定），它依赖的目标、宏定义、包含的头文件路径、源文件是什么，以及根据不同平台设定的不同配置等。这种定义配置文件的方式相比 CMake 来说，让我觉得更加舒服，也更加清晰，特别是当一个输出目标的配置越来越多时，使用 CMake 来管理可能会愈加混乱。</p>
+
+<p>配置文件的编写方式是我区分 GYP 和 CMake 之间最大的不同点，当然 GYP 也有一些小细节值得注意，比如支持跨平台项目工程文件输出，Windows 平台默认是 Visual Studio，Linux 平台默认是 Makefile，Mac 平台默认是 Xcode，这个功能 CMake 也同样支持，只是缺少了 Xcode。Chromium 团队成员也撰文详细<a href="http://code.google.com/p/gyp/wiki/GypVsCMake">比较</a>了 GYP 和 CMake 之间的优缺点，在开发 GYP 之前，他们也曾试图转到 <a href="http://www.scons.org/">SCons</a>（这个我没用过，有经验的同学可以比较一下），但是失败了，于是 GYP 就诞生了。</p>
+
+<p>当然 GYP 也不是没有缺点，相反，我觉得它的“缺点”一大堆：</p>
+
+<ul>
+<li>文档不够完整，项目不够正式，某些地方还保留着 Chromium 的影子，看起来像是还没有完全独立出来。</li>
+<li>大量的括号嵌套，很容易让人看晕，有过 Lisp 使用经验的同学可以对号入座。对于有括号恐惧症，或者不使用现代编辑器的同学基本可以绕行。</li>
+<li>为了支持跨平台，有时不得不加入某些特定平台的配置信息，比如只适用于 Visual Studio 的 <code>RuntimeLibrary</code> 配置，这不利于跨平台配置文件的编写，也无形中增加了编写复杂度。</li>
+<li>不支持 <code>make clean</code>，唯一的方法就是将输出目录整个删除或者手动删除其中的某些文件。</li>
+</ul>
+
+
+<p>如果你已经打算尝试 GYP，那一定记得在生成项目工程文件时加上 <code>--depth</code> 参数，譬如：</p>
+
+<pre><code>$ gyp --depth=. foo.gyp
+</code></pre>
+
+<p>这也是一个从 Chromium 项目遗留下来的历史问题。</p>
+
+<p>也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的<a href="http://code.google.com/p/princess-alist/source/browse/trunk/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl">模板</a>，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的“风格”，至于孰优孰劣，还得仁者见仁，智者见智。</p>
+]]></content>
+  </entry>
+  
+</feed>
