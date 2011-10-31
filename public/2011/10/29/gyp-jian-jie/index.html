@@ -280,7 +280,7 @@
 
 <p>我们可以立马看出上面这个配置文件的输出目标只有一个，也就是 <code>foo</code>，它是一个库文件（至于是静态的还是动态的这需要在生成项目时指定），它依赖的目标、宏定义、包含的头文件路径、源文件是什么，以及根据不同平台设定的不同配置等。这种定义配置文件的方式相比 CMake 来说，让我觉得更加舒服，也更加清晰，特别是当一个输出目标的配置越来越多时，使用 CMake 来管理可能会愈加混乱。</p>
 
-<p>配置文件的编写方式是我区分 GYP 和 CMake 之间最大的不同点，当然 GYP 也有一些小细节值得注意，比如支持跨平台项目工程文件输出，Windows 平台默认是 Visual Studio，Linux 平台默认是 Makefile，Mac 平台默认是 Xcode，这个功能 CMake 也同样支持，只是缺少了 Xcode。Chromium 团队成员也撰文详细<a href="http://code.google.com/p/gyp/wiki/GypVsCMake">比较</a>了 GYP 和 CMake 之间的优缺点，在开发 GYP 之前，他们也曾试图转到 <a href="http://www.scons.org/">SCons</a>（这个我没用过，有经验的同学可以比较一下），但是失败了，于是 GYP 就诞生了。</p>
+<p>配置文件的编写方式是我区分 GYP 和 CMake 之间最大的不同点，当然 GYP 也有一些小细节值得注意，比如支持跨平台项目工程文件输出，Windows 平台默认是 Visual Studio，Linux 平台默认是 Makefile，Mac 平台默认是 Xcode，这个功能 CMake 也同样支持<del>，只是缺少了 Xcode</del>。Chromium 团队成员也撰文详细<a href="http://code.google.com/p/gyp/wiki/GypVsCMake">比较</a>了 GYP 和 CMake 之间的优缺点，在开发 GYP 之前，他们也曾试图转到 <a href="http://www.scons.org/">SCons</a>（这个我没用过，有经验的同学可以比较一下），但是失败了，于是 GYP 就诞生了。</p>
 
 <p>当然 GYP 也不是没有缺点，相反，我觉得它的“缺点”一大堆：</p>
 
