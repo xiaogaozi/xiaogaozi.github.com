@@ -10,7 +10,7 @@ categories: [C'EST LA VIE]
 
 ## Another WordPress? ##
 
-Yes。Octopress 具备一个博客应当具备的所有功能，文章、评论、页面、分享、RSS、搜索、Archives等等。
+Yes。Octopress 具备一个博客应当具备的所有功能，文章、评论、页面、分享、RSS、搜索、Archives 等等。
 
 No。正如 Octopress 网站介绍所说：A blogging framework for hackers，重点就在最后那个 hackers。没有了 WordPress 的后台界面，写博客需要的工具仅仅是 Ruby、Git、Markdown 和你喜爱的编辑器。如果你是一个 hacker，那你对这些工具不会陌生，相比 WordPress 蹩脚的后台页面，Octopress 提供的写作方式会让你非常喜爱。
 
