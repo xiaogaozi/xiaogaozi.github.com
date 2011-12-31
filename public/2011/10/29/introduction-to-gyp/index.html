@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>自由</title>
+  <title>GYP 简介 - 自由</title>
   <meta name="author" content="小高子">
 
   
-  <meta name="description" content="“WarGames”是一部 1983 年上映的科幻电影，作为投资仅 1200 万美元的小制作，在当年赢得了近 8000 万的票房。故事发生在美苏冷战时期，那个年代的电影，多多少少都会跟核威慑有关。这两个国家不管谁先发射导弹，那第三次世界大战就会爆发。电影中 NORAD（北美防空司令部） &hellip;">
+  <meta name="description" content="说起项目构建工具，Linux 用户最熟悉的恐怕就是 Autoconf，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autoconf 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autoconf &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.xiaogaozi.org">
+  <link rel="canonical" href="http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,63 +75,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/2011/11/06/shall-we-play-a-game/">Shall We Play a Game?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-06T16:24:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="center" src="http://farm7.static.flickr.com/6235/6317821194_c76b0fd4cf.jpg" title="The IMSAI 8080 computer used in WarGames." ></p>
-
-<p>“<a href="http://www.imdb.com/title/tt0086567/">WarGames</a>”是一部 1983 年上映的科幻电影，作为投资仅 1200 万美元的小制作，在当年赢得了近 8000 万的票房。故事发生在美苏冷战时期，那个年代的电影，多多少少都会跟核威慑有关。这两个国家不管谁先发射导弹，那第三次世界大战就会爆发。电影中 NORAD（北美防空司令部）使用了一台叫做 WOPR 的超级计算机进行战事控制，这台计算机特别的地方在于它能自己模拟战争，模拟的过程就像在玩一个游戏（game）。某一天，我们的男主角天才高中生无意中侵入了这台电脑，出于好奇和好玩，启动了核战争游戏。不料这场模拟战争误使 NORAD 以为苏联发动了袭击，一度差点引爆真正的核对抗。最后在男主角和 WOPR 创造者的共同努力下及时终止了这场“战争”。</p>
-
-<p>电影中男主角的人物原型来自一位叫做 David Scott Lewis 的黑客，这位老兄之后一直在搞机器人，后来按照他自己的话来说是“sold my soul to the bigger corporations”，分别在三星、Microsoft 和 Oracle 工作一段时间之后，他来到了中国，跟清华大学合作。现在貌似又搞太阳能去了。WOPR 的创造者 Dr. Stephen Falken 的原型来自著名的物理学家 Steven Hawking（是不是名字也很像？），WarGames 最初的剧本就是根据 Hawking 来写的，曾经还打算塑造一个坐在轮椅上的天体物理学家，但因为太容易让人联想到另一部讲述冷战的电影“Dr. Strangelove”而作罢。其实 Dr. Stephen Falken 对于人工智能的深入研究，倒让我觉得更像是 Alan Turing。</p>
-
-<p>WarGames 对于此后的黑客文化产生了深远的影响。它创造了“firewall”这个词汇（方校长表示感谢）。电影中男主角入侵 NORAD 时使用的技术衍生出了“<a href="http://en.wikipedia.org/wiki/War_dialing">wardialing</a>”术语。wardialing 是指通过程序不断扫描电话号码来发现计算机 modem，早期的电话黑客即是使用的这种技术。著名的电话黑客（phone phreak）<a href="http://en.wikipedia.org/wiki/John_Draper">John Draper</a> 因为通过 wardialing 免费打电话而闻名，后来他将这项技术教给了 Steve Jobs 和 Steve Wozniak（是的，没错，就是乔帮主），帮主他们还因此赚了不少钱（帮主果然是个好商人，从小就懂得怎么把技术转为商业利益）。John Draper 后来受雇于 Apple，但这是后话了。wardialing 之后又衍生出了 <a href="http://en.wikipedia.org/wiki/Wardriving">wardriving</a>，通过扫描和收集 Wi-Fi 热点来进行攻击，之所以叫这个名字，是因为通常是在汽车里一边行驶，一边收集（这样说来 Google 的街景小车也算是 wardriving 了一把）。现在你可以在你的 iPhone 或者 Android 手机里装上一款 wardriving 软件试试看，我曾经试过，但是貌似效果不是很好。</p>
-
-<p>还有一个人“深受”这部电影的影响，<a href="http://en.wikipedia.org/wiki/Kevin_Mitnick">Kevin Mitnick</a>，这个计算机安全界传说级的人物。当然不是说 Kevin 同学是因为这部电影走上的不归路，Kevin 同学搞入侵那会儿 WarGames 还没上映呢。Kevin 同学后来入狱时被拒绝接触任何电子设备，包括电话，是因为控诉律师相信他可以通过电话连接到 NORAD。据 Kevin 同学分析 WarGames 这部电影很大程度上使得公众相信这件事情是可以很容易办到的，其实他根本就没有入侵过 NORAD，通过电话来入侵也过于夸张。尽管如此，他还是被判单独监禁，从此传为计算机安全界的一段“佳话”……</p>
-
-<p>游戏界也从 WarGames 获益不少，1984 年<a href="http://en.wikipedia.org/wiki/WarGames_(video_game)">同名游戏</a>发布。2006 年一款叫做 <a href="http://en.wikipedia.org/wiki/Defcon_(video_game)">DEFCON</a> 的即时战略游戏发布，游戏画面与电影中 NORAD 指挥中心的大屏幕极为相似。DEFCON（defense readiness condition）是美国军方采用的警报等级，在 WarGames 电影中 NORAD 曾因模拟的苏联进攻一度将 DEFCON 等级提升到最高等级 1。著名的黑客大会 <a href="https://www.defcon.org/">DEF CON</a> 的名字也是来源于此。</p>
-
-<p>或许 WarGames 对于电影史并没有太大的贡献，但却深深影响着那一代的 Geek 们。谨以此文献给那些逝去的先驱，RIP</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/10/29/introduction-to-gyp/">GYP 简介</a></h1>
+      <h1 class="entry-title">GYP 简介</h1>
     
     
       <p class="meta">
@@ -154,7 +103,7 @@
   </header>
 
 
-  <div class="entry-content"><p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://www.gnu.org/s/autoconf/">Autoconf</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autoconf 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autoconf 天生对于跨平台支持不佳。</p>
+<div class="entry-content"><p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://www.gnu.org/s/autoconf/">Autoconf</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autoconf 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autoconf 天生对于跨平台支持不佳。</p>
 
 <p>后来我从<a href="http://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autoconf 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
 
@@ -359,22 +308,16 @@
 
 <p>也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的<a href="http://code.google.com/p/princess-alist/source/browse/trunk/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl">模板</a>，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的“风格”，至于孰优孰劣，还得仁者见仁，智者见智。</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/10/23/octopress-rocks/">Octopress Rocks!</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">小高子</span></span>
+
+      
 
 
 
@@ -386,170 +329,46 @@
   
 
 
-<time datetime="2011-10-23T17:12:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2011</time>
-        
-      </p>
+<time datetime="2011-10-29T22:55:00+08:00" pubdate data-updated="true">Oct 29<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/autoconf/'>Autoconf</a>, <a class='category' href='/categories/cmake/'>CMake</a>, <a class='category' href='/categories/gyp/'>GYP</a>, <a class='category' href='/categories/scons/'>SCons</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>今天开始尝试 <a href="http://octopress.org/">Octopress</a>，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为“A blogging framework for hackers.”。我用了多年的 Blogger <a href="http://xiaogaozi.blogspot.com">博客</a>也终于寿终正寝，如果你是一个非 hacker 博客作者，<a href="http://www.blogger.com/">Blogger</a> 绝对值得推荐（满足 <a href="http://www.dbanotes.net/review/gfw_rule.html">GFW 三定律</a>）。</p>
-
-<h2>Another WordPress?</h2>
-
-<p>Yes。Octopress 具备一个博客应当具备的所有功能，文章、评论、页面、分享、RSS、搜索、Archives 等等。</p>
-
-<p>No。正如 Octopress 网站介绍所说：A blogging framework for hackers，重点就在最后那个 hackers。没有了 WordPress 的后台界面，写博客需要的工具仅仅是 Ruby、Git、Markdown 和你喜爱的编辑器。如果你是一个 hacker，那你对这些工具不会陌生，相比 WordPress 蹩脚的后台页面，Octopress 提供的写作方式会让你非常喜爱。</p>
-
-<h2>写作</h2>
-
-<p>博客最重要的功能就是写作，写作就像程序员编写代码，如果不能提供舒服的方式，那简直是一种自虐。事实已经证明 HTML 不是一种好的写作方式，因此 WordPress 这类博客提供了所见即所得编辑器，但对于喜欢精确掌控的 hacker 来说这还不够，于是类似于 Markdown 这样的标记语言逐渐在圈内盛行。这类标记语言最大的好处就是让作者不用关心文章的样式，而专注于文章的内容。这很重要，一篇文章的精髓在于文字，如果过多地被样式困扰，精力便会分散，也必然不会思考出更好的文字。类似的比较还有 Word 和 LaTeX，当然这种观点也是仁者见仁，智者见智。</p>
-
-<p>Octopress 原生为我们提供了 Markdown 支持，需要写一篇新博客了？打开你喜欢的编辑器，使用 Markdown 语法开始书写即可。WordPress？虽然也可以添加 Markdown 支持，但不免显得蹩脚。</p>
-
-<h2>语法高亮</h2>
-
-<p>这个功能对程序员来说尤为重要，但至今没有博客提供原生支持，这也是最大的遗憾。Octopress 彻底颠覆了这种局面，语法高亮变得如此顺其自然。</p>
-
-<figure class='code'><figcaption><span>rename.py</span><a href='http://princess-alist.googlecode.com/svn/trunk/home/xiaogaozi/src/Python/rename.py'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c">#!/usr/bin/env python</span>
-</span><span class='line'><span class="c"># -*- coding: utf-8 -*-</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Batch rename utility. &lt;http://code.google.com/p/princess-alist/&gt;</span>
-</span><span class='line'><span class="c"># Copyright (C) &lt;2011&gt;  xiaogaozi &lt;gaochangjian@gmail.com&gt;</span>
-</span><span class='line'><span class="c"># </span>
-</span><span class='line'><span class="c"># This program is free software: you can redistribute it and/or modify</span>
-</span><span class='line'><span class="c"># it under the terms of the GNU General Public License as published by</span>
-</span><span class='line'><span class="c"># the Free Software Foundation, either version 3 of the License, or</span>
-</span><span class='line'><span class="c"># (at your option) any later version.</span>
-</span><span class='line'><span class="c"># </span>
-</span><span class='line'><span class="c"># This program is distributed in the hope that it will be useful,</span>
-</span><span class='line'><span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-</span><span class='line'><span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-</span><span class='line'><span class="c"># GNU General Public License for more details.</span>
-</span><span class='line'><span class="c"># </span>
-</span><span class='line'><span class="c"># You should have received a copy of the GNU General Public License</span>
-</span><span class='line'><span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="nn">os</span>
-</span><span class='line'><span class="kn">import</span> <span class="nn">re</span>
-</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">usage</span><span class="p">():</span>
-</span><span class='line'>    <span class="sd">&quot;&quot;&quot;Usage&quot;&quot;&quot;</span>
-</span><span class='line'>    <span class="k">print</span> <span class="s">&quot;Usage: rename.py expr files&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-</span><span class='line'>    <span class="sd">&quot;&quot;&quot;Main progress.&quot;&quot;&quot;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-</span><span class='line'>        <span class="n">usage</span><span class="p">()</span>
-</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">expr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span><span class='line'>    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;^[sy]/([^/]*)/([^/]*)/$&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;expression incorrect</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">re1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">re2</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c"># actually in substitute mode this portion is not regular expression</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">for</span> <span class="n">oldfile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
-</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">oldfile</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">oldname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">oldfile</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">newname</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class='line'>        <span class="n">newfile</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class='line'>        <span class="k">if</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;s&#39;</span><span class="p">:</span>  <span class="c"># substitute</span>
-</span><span class='line'>            <span class="n">newname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re1</span><span class="p">,</span> <span class="n">re2</span><span class="p">,</span> <span class="n">oldname</span><span class="p">)</span>
-</span><span class='line'>            <span class="n">newfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">newname</span><span class="p">)</span>
-</span><span class='line'>            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">oldfile</span><span class="p">,</span> <span class="n">newfile</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">elif</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>  <span class="c"># transliterate</span>
-</span><span class='line'>            <span class="k">pass</span>
-</span><span class='line'>        <span class="k">print</span> <span class="n">oldfile</span><span class="p">,</span> <span class="s">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">newfile</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">main</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>版本控制</h2>
-
-<p>程序员已经被版本控制惯坏了，只要能纳入版本库，就统统放进去。WordPress 拥有同样蹩脚的版本控制，显然不足以满足 hacker 的需求，Octopress 为我们提供了 Git 原生支持，一切一切都为你所控，放在你喜欢的版本控制库里即可。</p>
-
-<h2>部署</h2>
-
-<p>Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了……</p>
-
-<h2>Continue?</h2>
-
-<p>开始享受写作的乐趣吧～</p>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/" data-via="xiaogaozi" data-counturl="http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/10/23/octopress-rocks/" title="Previous Post: Octopress Rocks!">&laquo; Octopress Rocks!</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/11/06/shall-we-play-a-game/" title="next Post: Shall We Play a Game?">Shall We Play a Game? &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
+  </section>
+
+</div>
+
 <aside class="sidebar">
   
     <section>
@@ -575,7 +394,7 @@
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -595,6 +414,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -609,7 +429,10 @@
       var disqus_shortname = 'xiaogaozi';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/';
+        var disqus_url = 'http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

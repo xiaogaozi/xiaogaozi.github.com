@@ -2,26 +2,30 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://blog.xiaogaozi.org/2011/10/23/octopress-rocks/</loc>
-        <lastmod>2011-12-17T16:41:44+08:00</lastmod>
+        <lastmod>2011-12-31T22:58:37+08:00</lastmod>
     </url>
     <url>
-        <loc>http://blog.xiaogaozi.org/2011/10/29/gyp-jian-jie/</loc>
-        <lastmod>2011-11-01T01:28:21+08:00</lastmod>
+        <loc>http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/</loc>
+        <lastmod>2011-12-31T22:58:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://blog.xiaogaozi.org/2011/11/06/shall-we-play-a-game/</loc>
-        <lastmod>2011-11-06T23:50:57+08:00</lastmod>
+        <lastmod>2011-12-31T22:58:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://blog.xiaogaozi.org/about/</loc>
-        <lastmod>2011-10-24T02:49:48+08:00</lastmod>
+        <lastmod>2011-12-31T22:58:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://blog.xiaogaozi.org/archives/</loc>
-        <lastmod>2011-12-17T16:41:44+08:00</lastmod>
+        <lastmod>2011-12-31T22:58:37+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.xiaogaozi.org/blog/archives/</loc>
+        <lastmod>2011-12-31T22:58:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://blog.xiaogaozi.org/</loc>
-        <lastmod>2011-12-17T16:41:44+08:00</lastmod>
+        <lastmod>2011-12-31T22:58:38+08:00</lastmod>
     </url>
 </urlset>
