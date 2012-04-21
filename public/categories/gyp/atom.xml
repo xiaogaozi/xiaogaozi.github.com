@@ -4,7 +4,7 @@
   <title><![CDATA[Category: GYP | 自由]]></title>
   <link href="http://blog.xiaogaozi.org/categories/gyp/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2011-12-31T23:31:42+08:00</updated>
+  <updated>2012-04-22T03:01:25+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[小高子]]></name>
@@ -20,7 +20,7 @@
     <id>http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp</id>
     <content type="html"><![CDATA[<p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://www.gnu.org/s/autoconf/">Autoconf</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autoconf 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autoconf 天生对于跨平台支持不佳。</p>
 
-<p>后来我从<a href="http://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autoconf 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
+<p>后来我从<a href="https://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autoconf 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
 
 <p><a href="http://code.google.com/p/gyp/">GYP</a>（Generate Your Projects）是由 Chromium 团队开发的跨平台自动化项目构建工具，Chromium 便是通过 GYP 进行项目构建管理。为什么我要选择 GYP，而放弃 CMake 呢？功能上 GYP 和 CMake 很是相似，在我看来，它们的最大区别在于配置文件的编写方式和其中蕴含的思想。</p>
 
@@ -237,7 +237,7 @@
 
 <p>这也是一个从 Chromium 项目遗留下来的历史问题。</p>
 
-<p>也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的<a href="http://code.google.com/p/princess-alist/source/browse/trunk/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl">模板</a>，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的“风格”，至于孰优孰劣，还得仁者见仁，智者见智。</p>
+<p>也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的<a href="https://github.com/xiaogaozi/princess-alist/blob/master/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl">模板</a>，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的“风格”，至于孰优孰劣，还得仁者见仁，智者见智。</p>
 ]]></content>
   </entry>
   

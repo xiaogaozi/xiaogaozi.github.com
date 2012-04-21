@@ -24,7 +24,7 @@ Octopress 原生为我们提供了 Markdown 支持，需要写一篇新博客了
 
 这个功能对程序员来说尤为重要，但至今没有博客提供原生支持，这也是最大的遗憾。Octopress 彻底颠覆了这种局面，语法高亮变得如此顺其自然。
 
-{% codeblock rename.py http://princess-alist.googlecode.com/svn/trunk/home/xiaogaozi/src/Python/rename.py download %}
+{% codeblock rename.py https://raw.github.com/xiaogaozi/princess-alist/master/home/xiaogaozi/src/Python/rename.py download %}
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
