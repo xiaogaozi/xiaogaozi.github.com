@@ -28,7 +28,7 @@ Octopress 原生为我们提供了 Markdown 支持，需要写一篇新博客了
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Batch rename utility. <http://code.google.com/p/princess-alist/>
+# Batch rename utility. <https://github.com/xiaogaozi/princess-alist>
 # Copyright (C) <2011>  xiaogaozi <gaochangjian@gmail.com>
 # 
 # This program is free software: you can redistribute it and/or modify
