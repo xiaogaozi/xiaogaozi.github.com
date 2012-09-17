@@ -3,16 +3,16 @@ layout: post
 title: "GYP 简介"
 date: 2011-10-29 22:55
 comments: true
-categories: [Autoconf, CMake, GYP, SCons]
+categories: [Autotools, CMake, GYP, SCons]
 ---
 
-说起项目构建工具，Linux 用户最熟悉的恐怕就是 [Autoconf](http://www.gnu.org/s/autoconf/)，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autoconf 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autoconf 天生对于跨平台支持不佳。
+说起项目构建工具，Linux 用户最熟悉的恐怕就是 [Autotools](http://en.wikipedia.org/wiki/GNU_build_system)，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autotools 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autotools 天生对于跨平台支持不佳。
 
-后来我从[大猫](https://twitter.com/zhzhxtrrk)同学那里听说了 [CMake](http://www.cmake.org/)，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autoconf 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。
+后来我从[大猫](https://twitter.com/zhzhxtrrk)同学那里听说了 [CMake](http://www.cmake.org/)，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autotools 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。
 
 [GYP](http://code.google.com/p/gyp/)（Generate Your Projects）是由 Chromium 团队开发的跨平台自动化项目构建工具，Chromium 便是通过 GYP 进行项目构建管理。为什么我要选择 GYP，而放弃 CMake 呢？功能上 GYP 和 CMake 很是相似，在我看来，它们的最大区别在于配置文件的编写方式和其中蕴含的思想。
 
-编写 CMake 配置文件相比 Autoconf 来说已经简化很多，一个最简单的配置文件只需要写上源文件及生成类型（可执行文件、静态库、动态库等）即可。对分支语句和循环语句的支持也使得 CMake 更加灵活。但是，CMake 最大的问题也是在这个配置文件，请看下面这个示例文件：
+编写 CMake 配置文件相比 Autotools 来说已经简化很多，一个最简单的配置文件只需要写上源文件及生成类型（可执行文件、静态库、动态库等）即可。对分支语句和循环语句的支持也使得 CMake 更加灵活。但是，CMake 最大的问题也是在这个配置文件，请看下面这个示例文件：
 
 {% codeblock lang:cmake %}
 cmake_minimum_required(VERSION 2.8)
