@@ -4,7 +4,7 @@
   <title><![CDATA[自由]]></title>
   <link href="http://blog.xiaogaozi.org/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2012-09-18T01:32:22+08:00</updated>
+  <updated>2012-09-18T01:50:22+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[小高子]]></name>
@@ -88,7 +88,7 @@
 
 <p>WarGames 对于此后的黑客文化产生了深远的影响。它创造了「firewall」这个词汇（方校长表示感谢）。电影中男主角入侵 NORAD 时使用的技术衍生出了「<a href="http://en.wikipedia.org/wiki/War_dialing">wardialing</a>」术语。wardialing 是指通过程序不断扫描电话号码来发现计算机 modem，早期的电话黑客即是使用的这种技术。著名的电话黑客（phone phreak）<a href="http://en.wikipedia.org/wiki/John_Draper">John Draper</a> 因为通过 wardialing 免费打电话而闻名，后来他将这项技术教给了 Steve Jobs 和 Steve Wozniak（是的，没错，就是乔帮主），帮主他们还因此赚了不少钱（帮主果然是个好商人，从小就懂得怎么把技术转为商业利益）。John Draper 后来受雇于 Apple，但这是后话了。wardialing 之后又衍生出了 <a href="http://en.wikipedia.org/wiki/Wardriving">wardriving</a>，通过扫描和收集 Wi-Fi 热点来进行攻击，之所以叫这个名字，是因为通常是在汽车里一边行驶，一边收集（这样说来 Google 的街景小车也算是 wardriving 了一把）。现在你可以在你的 iPhone 或者 Android 手机里装上一款 wardriving 软件试试看，我曾经试过，但是貌似效果不是很好。</p>
 
-<p>还有一个人「深受」这部电影的影响，<a href="http://en.wikipedia.org/wiki/Kevin_Mitnick">Kevin Mitnick</a>，这个计算机安全界传说级的人物。当然不是说 Kevin 同学是因为这部电影走上的不归路，Kevin 同学搞入侵那会儿 WarGames 还没上映呢。Kevin 同学后来入狱时被拒绝接触任何电子设备，包括电话，是因为控诉律师相信他可以通过电话连接到 NORAD。据 Kevin 同学分析 WarGames 这部电影很大程度上使得公众相信这件事情是可以很容易办到的，其实他根本就没有入侵过 NORAD，通过电话来入侵也过于夸张。尽管如此，他还是被判单独监禁，从此传为计算机安全界的一段「佳话」……</p>
+<p>还有一个人「深受」这部电影的影响，<a href="http://en.wikipedia.org/wiki/Kevin_Mitnick">Kevin Mitnick</a>，这个计算机安全界传说级的人物。当然不是说 Kevin 同学是因为这部电影走上的不归路，Kevin 同学搞入侵那会儿 WarGames 还没上映呢。Kevin 同学后来入狱时被拒绝接触任何电子设备，包括电话，是因为控诉律师相信他可以通过电话连接到 NORAD。据 Kevin 同学分析 WarGames 这部电影很大程度上使得公众相信这件事情是可以很容易办到的，其实他根本就没有入侵过 NORAD，通过电话来入侵也过于夸张。尽管如此，他还是被判单独监禁，从此传为计算机安全界的一段「佳话」⋯⋯</p>
 
 <p>游戏界也从 WarGames 获益不少，1984 年<a href="http://en.wikipedia.org/wiki/WarGames_(video_game)">同名游戏</a>发布。2006 年一款叫做 <a href="http://en.wikipedia.org/wiki/Defcon_(video_game)">DEFCON</a> 的即时战略游戏发布，游戏画面与电影中 NORAD 指挥中心的大屏幕极为相似。DEFCON（defense readiness condition）是美国军方采用的警报等级，在 WarGames 电影中 NORAD 曾因模拟的苏联进攻一度将 DEFCON 等级提升到最高等级 1。著名的黑客大会 <a href="https://www.defcon.org/">DEF CON</a> 的名字也是来源于此。</p>
 
@@ -313,7 +313,7 @@
     <link href="http://blog.xiaogaozi.org/2011/10/23/octopress-rocks/"/>
     <updated>2011-10-23T17:12:00+08:00</updated>
     <id>http://blog.xiaogaozi.org/2011/10/23/octopress-rocks</id>
-    <content type="html"><![CDATA[<p>今天开始尝试 <a href="http://octopress.org/">Octopress</a>，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers.」。我用了多年的 Blogger <a href="http://xiaogaozi.blogspot.com">博客</a>也终于寿终正寝，如果你是一个非 hacker 博客作者，<a href="http://www.blogger.com/">Blogger</a> 绝对值得推荐（满足 <a href="http://www.dbanotes.net/review/gfw_rule.html">GFW 三定律</a>）。</p>
+    <content type="html"><![CDATA[<p>今天开始尝试 <a href="http://octopress.org/">Octopress</a>，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers」。我用了多年的 Blogger <a href="http://xiaogaozi.blogspot.com">博客</a>也终于寿终正寝，如果你是一个非 hacker 博客作者，<a href="http://www.blogger.com/">Blogger</a> 绝对值得推荐（满足 <a href="http://www.dbanotes.net/review/gfw_rule.html">GFW 三定律</a>）。</p>
 
 <h2>Another WordPress?</h2>
 
@@ -452,7 +452,7 @@
 
 <h2>部署</h2>
 
-<p>Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了……</p>
+<p>Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。<del>我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了⋯⋯</del> 我现在使用的是 GitHub Pages。</p>
 
 <h2>Continue?</h2>
 
@@ -482,7 +482,7 @@
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a>：以流水线的形式传输请求和数据，这里吐槽一下，以前在公司时 Facebook 的某牛来介绍时谈到了他们开发的 BigPipe，思想也是流水线，同样也是为了优化 Web 性能，不知道他们是不是借鉴了 HTTP pipelining，:)</li>
 <li><a href="http://www.sctp.org/">SCTP</a>：用于替代 TCP 的传输层协议，提供了 multiplexed streams（多路复用流）和 stream-aware congestion control（流感知拥塞控制）</li>
-<li><a href="http://pdos.csail.mit.edu/uia/sst/">SST</a>：同样用于替代 TCP 协议（TCP 同学真是众矢之的……），也可以运行在 UDP 协议之上。</li>
+<li><a href="http://pdos.csail.mit.edu/uia/sst/">SST</a>：同样用于替代 TCP 协议（TCP 同学真是众矢之的⋯⋯），也可以运行在 UDP 协议之上。</li>
 <li><a href="http://www.w3.org/Protocols/MUX/">MUX</a> 和 <a href="http://www.w3.org/TR/WD-mux">SMUX</a>：运行在传输层和应用层之间的中间协议，同样提供了复用流。</li>
 </ul>
 

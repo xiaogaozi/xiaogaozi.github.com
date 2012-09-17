@@ -6,7 +6,7 @@ comments: true
 categories: [C'EST LA VIE]
 ---
 
-今天开始尝试 [Octopress](http://octopress.org/)，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers.」。我用了多年的 Blogger [博客](http://xiaogaozi.blogspot.com)也终于寿终正寝，如果你是一个非 hacker 博客作者，[Blogger](http://www.blogger.com/) 绝对值得推荐（满足 [GFW 三定律](http://www.dbanotes.net/review/gfw_rule.html)）。
+今天开始尝试 [Octopress](http://octopress.org/)，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers」。我用了多年的 Blogger [博客](http://xiaogaozi.blogspot.com)也终于寿终正寝，如果你是一个非 hacker 博客作者，[Blogger](http://www.blogger.com/) 绝对值得推荐（满足 [GFW 三定律](http://www.dbanotes.net/review/gfw_rule.html)）。
 
 ## Another WordPress? ##
 
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
 ## 部署 ##
 
-Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了……
+Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。<del>我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了⋯⋯</del> 我现在使用的是 GitHub Pages。
 
 ## Continue? ##
 

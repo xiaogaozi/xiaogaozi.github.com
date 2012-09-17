@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Google | 自由]]></title>
   <link href="http://blog.xiaogaozi.org/categories/google/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2012-09-18T01:32:22+08:00</updated>
+  <updated>2012-09-18T01:50:22+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[小高子]]></name>
@@ -35,7 +35,7 @@
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a>：以流水线的形式传输请求和数据，这里吐槽一下，以前在公司时 Facebook 的某牛来介绍时谈到了他们开发的 BigPipe，思想也是流水线，同样也是为了优化 Web 性能，不知道他们是不是借鉴了 HTTP pipelining，:)</li>
 <li><a href="http://www.sctp.org/">SCTP</a>：用于替代 TCP 的传输层协议，提供了 multiplexed streams（多路复用流）和 stream-aware congestion control（流感知拥塞控制）</li>
-<li><a href="http://pdos.csail.mit.edu/uia/sst/">SST</a>：同样用于替代 TCP 协议（TCP 同学真是众矢之的……），也可以运行在 UDP 协议之上。</li>
+<li><a href="http://pdos.csail.mit.edu/uia/sst/">SST</a>：同样用于替代 TCP 协议（TCP 同学真是众矢之的⋯⋯），也可以运行在 UDP 协议之上。</li>
 <li><a href="http://www.w3.org/Protocols/MUX/">MUX</a> 和 <a href="http://www.w3.org/TR/WD-mux">SMUX</a>：运行在传输层和应用层之间的中间协议，同样提供了复用流。</li>
 </ul>
 

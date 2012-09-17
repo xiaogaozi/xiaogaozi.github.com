@@ -19,7 +19,7 @@ categories: Google
 
 - [HTTP pipelining](http://en.wikipedia.org/wiki/HTTP_pipelining)：以流水线的形式传输请求和数据，这里吐槽一下，以前在公司时 Facebook 的某牛来介绍时谈到了他们开发的 BigPipe，思想也是流水线，同样也是为了优化 Web 性能，不知道他们是不是借鉴了 HTTP pipelining，:)
 - [SCTP](http://www.sctp.org/)：用于替代 TCP 的传输层协议，提供了 multiplexed streams（多路复用流）和 stream-aware congestion control（流感知拥塞控制）
-- [SST](http://pdos.csail.mit.edu/uia/sst/)：同样用于替代 TCP 协议（TCP 同学真是众矢之的……），也可以运行在 UDP 协议之上。
+- [SST](http://pdos.csail.mit.edu/uia/sst/)：同样用于替代 TCP 协议（TCP 同学真是众矢之的⋯⋯），也可以运行在 UDP 协议之上。
 - [MUX](http://www.w3.org/Protocols/MUX/) 和 [SMUX](http://www.w3.org/TR/WD-mux)：运行在传输层和应用层之间的中间协议，同样提供了复用流。
 
 但是 Google 同学觉得以上这些都还不够，它要追求更大程度的性能提升。考虑到 TCP 现在应用还很广泛，想替代也不是一天两天的事情，但 HTTP 就不一样了，它是应用层的！所以说有自家的浏览器就是好办，发明个应用层协议马上就可以上线。SPDY 在刚出来的时候 Google 还在说这并不是用来替代 HTTP 协议的，它只是一个中间协议，但看看[最新的协议文档](http://dev.chromium.org/spdy/spdy-protocol)里面已经将 SPDY 分为了两层，其中一层被描述为 HTTP-like，大有取代 HTTP 的意图（Google 最近的[一篇文章](http://googledevelopers.blogspot.com/2012/05/spdy-performance-on-mobile-networks.html)已经直呼 SPDY 为「a replacement for HTTP」）。可以想到 Google 已经将提议提交给 IETF，也许未来的某一天我们就不再使用 HTTP 协议了。SPDY 主要有以下一些特性：
