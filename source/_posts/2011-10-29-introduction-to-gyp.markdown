@@ -109,7 +109,7 @@ endif()
 
 配置文件的编写方式是我区分 GYP 和 CMake 之间最大的不同点，当然 GYP 也有一些小细节值得注意，比如支持跨平台项目工程文件输出，Windows 平台默认是 Visual Studio，Linux 平台默认是 Makefile，Mac 平台默认是 Xcode，这个功能 CMake 也同样支持<del>，只是缺少了 Xcode</del>。Chromium 团队成员也撰文详细[比较](http://code.google.com/p/gyp/wiki/GypVsCMake)了 GYP 和 CMake 之间的优缺点，在开发 GYP 之前，他们也曾试图转到 [SCons](http://www.scons.org/)（这个我没用过，有经验的同学可以比较一下），但是失败了，于是 GYP 就诞生了。
 
-当然 GYP 也不是没有缺点，相反，我觉得它的“缺点”一大堆：
+当然 GYP 也不是没有缺点，相反，我觉得它的「缺点」一大堆：
 
 - 文档不够完整，项目不够正式，某些地方还保留着 Chromium 的影子，看起来像是还没有完全独立出来。
 - 大量的括号嵌套，很容易让人看晕，有过 Lisp 使用经验的同学可以对号入座。对于有括号恐惧症，或者不使用现代编辑器的同学基本可以绕行。
@@ -122,4 +122,4 @@ endif()
 
 这也是一个从 Chromium 项目遗留下来的历史问题。
 
-也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的[模板](https://github.com/xiaogaozi/princess-alist/blob/master/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl)，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的“风格”，至于孰优孰劣，还得仁者见仁，智者见智。
+也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的[模板](https://github.com/xiaogaozi/princess-alist/blob/master/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl)，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的「风格」，至于孰优孰劣，还得仁者见仁，智者见智。
