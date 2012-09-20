@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Tornado | 自由]]></title>
+  <link href="http://blog.xiaogaozi.org/categories/tornado/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2012-09-21T01:58:08+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[小高子]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[理解 tornado.gen]]></title>
+    <link href="http://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen/"/>
+    <updated>2012-09-21T01:56:00+08:00</updated>
+    <id>http://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen</id>
+    <content type="html"><![CDATA[<p>Tornado 通过 <code>@asynchronous</code> decorator 来实现异步请求，但使用的时候必须将 request handler 和 callback 分离开，<code>tornado.gen</code> 模块可以帮助我们在一个函数里完成这两个工作。下面是官方的一个例子：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">GenAsyncHandler</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@asynchronous</span>
+</span><span class='line'><span class="nd">@gen.engine</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">http_client</span> <span class="o">=</span> <span class="n">AsyncHTTPClient</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">gen</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="n">http_client</span><span class="o">.</span><span class="n">fetch</span><span class="p">,</span> <span class="s">&quot;http://example.com&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">do_something_with_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s">&quot;template.html&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>这里用到了两个 decorator 稍显复杂，第一个 <code>@asynchronous</code> 会首先被执行，它的主要工作就是将 <code>RequestHandler</code> 的 <code>_auto_finish</code> 属性置为 <code>false</code>，如下：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>web.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">asynchronous</span><span class="p">(</span><span class="n">method</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">_wsgi</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;@asynchronous is not supported for WSGI apps&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">_auto_finish</span> <span class="o">=</span> <span class="bp">False</span>
+</span><span class='line'>    <span class="k">with</span> <span class="n">stack_context</span><span class="o">.</span><span class="n">ExceptionStackContext</span><span class="p">(</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">_stack_context_handle_exception</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'><span class="k">return</span> <span class="n">wrapper</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>接着就是最重要的 <code>@gen.engine</code>，这里充分利用了 generator 的各种特性，首先来看 <code>@gen.engine</code> 的实现（我删减了部分代码以简化理解）：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">engine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">gen</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span class='line'>        <span class="k">return</span>
+</span><span class='line'><span class="k">return</span> <span class="n">wrapper</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>局部变量 <code>gen</code> 代表第一段代码里的 <code>get</code> 函数，因为 <code>get</code> 包含了 <code>yield</code> 语句，因此成为了一个 generator。注意这里 <code>get</code> 并没有被执行，只是赋给了 <code>gen</code>。接下来是运行 <code>Runner</code> 对象的 <code>run</code> 函数。在理解 <code>run</code> 之前需要知道 generator 是通过调用 <code>next()</code> 或者 <code>send()</code> 来启动，启动之后会在遇到 <code>yield</code> 的地方 hold 住，然后将 <code>yield</code> 后面的语句的返回值返回给调用者，generator 此时即处于暂停运行状态，所有上下文都会保存。再次调用 <code>next()</code> 或 <code>send()</code> 便会恢复 generator 的运行，如果不再遇到 <code>yield</code> 语句就会抛出 <code>StopIteration</code> 异常。在恢复运行的同时 <code>yield</code> 语句本身会有返回值，如果是通过调用 <code>next()</code> 来恢复的，那么返回值永远是 <code>None</code>，而如果是通过 <code>send()</code> 则返回值取决于传给 <code>send()</code> 的参数。更多关于 generator 的说明请参考<a href="http://docs.python.org/reference/expressions.html#yield-expressions">官方文档</a>。</p>
+
+<p>结合第一段的示例代码，可以想到 <code>run</code> 干的工作可能就是启动 generator，然后获得 <code>gen.Task</code> 对象并调用 <code>http_client.fetch</code> 函数，等回调回来之后恢复 generator 的运行，最后将回调的返回值通过 <code>send()</code> 赋给 <code>response</code>。下面是我简化后的代码。</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span><span class="o">.</span><span class="n">is_ready</span><span class="p">():</span>
+</span><span class='line'>        <span class="k">return</span>
+</span><span class='line'>    <span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">yielded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">next</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">return</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yielded</span><span class="p">,</span> <span class="n">YieldPoint</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span> <span class="o">=</span> <span class="n">yielded</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>第 3 行检查回调是否完成，第一次运行 <code>run</code> 总是会返回 <code>True</code>。第 5 行获取回调的返回值，同样的第一次运行返回的是 <code>None</code>。将 <code>None</code> 传给 <code>send()</code> 启动 generator，<code>yielded</code> 即是 <code>gen.Task</code> 对象，第 12 行调用 <code>start</code> 开始运行我们真正需要运行的函数，对应到示例代码就是 <code>http_client.fetch</code> 函数，同时将 <code>Runner</code> 的 <code>result_callback</code> 作为回调函数。如下：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">result_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">1</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="n">Arguments</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">elif</span> <span class="n">args</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span class='line'><span class="k">return</span> <span class="n">inner</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>在得到回调返回值之后再次调用 <code>run</code>，通过 <code>get_result</code> 获取返回值，最后将返回值返回赋给 <code>response</code>，继续 request handler 的代码流程。</p>
+]]></content>
+  </entry>
+  
+</feed>
