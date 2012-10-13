@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JavaScript | 自由]]></title>
+  <link href="http://blog.xiaogaozi.org/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2012-10-13T23:20:38+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[小高子]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Bootstrap 的几个问题]]></title>
+    <link href="http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/"/>
+    <updated>2012-10-13T21:24:00+08:00</updated>
+    <id>http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap</id>
+    <content type="html"><![CDATA[<h2>Responsive 与 Modal</h2>
+
+<p>在开启 responsive 后，小屏幕设备上显示 modal 时会变成一闪而过，然后浮动窗口就不见了。具体效果可以缩小浏览器尺寸，在<a href="http://twitter.github.com/bootstrap/javascript.html#modals">这个页面</a>的 Live demo 点击「Launch demo modal」看到。<a href="https://github.com/twitter/bootstrap/issues/2130">Issue #2130</a> 专门讨论了这个问题，目前比较好的解决办法是使用<a href="http://niftylettuce.github.com/twitter-bootstrap-jquery-plugins">这个插件</a>，根据页面大小来动态调整 modal 的位置，不过貌似用了之后 modal 那个由上至下显示的动画就没有了。这个 issue 现在还处于开启状态，看来官方短期内是不会解决这个问题的。</p>
+
+<h2>Responsive 与 Navbar</h2>
+
+<p>responsive 模式下的 navbar 显示效果很赞，但是有一个很令人费解的事情，默认情况下所有 dropdown menu 都是展开的，对于使用多个菜单项，且子菜单条目很多的场景这是不能接受的。于是 <a href="https://github.com/twitter/bootstrap/issues/3184">Issue #3184</a> 出现了，这次的方案比较 hack，需要修改 bootstrap-responsive.css，将 <code>.nav-collapse .dropdown-menu</code> 里的 <code>display: block;</code> 注释掉。这时你会惊喜地发现 dropdown menu 默认折叠了，点击也能展开子菜单。但是（总是有很多但是），在触屏设备上子菜单是选不中的！托 <a href="http://www.filod.net">filod</a> 同学的福，修改 bootstrap-dropdown.js 中的一段代码：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">/&lt;em&gt; APPLY TO STANDARD DROPDOWN ELEMENTS</span>
+</span><span class='line'> <span class="o">*</span> <span class="o">===================================</span> <span class="o">&lt;</span><span class="sr">/em&gt;/</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">$</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown.data-api touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="nx">clearMenus</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="s1">&#39;.dropdown form&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span> <span class="p">})</span>
+</span><span class='line'><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown.data-api touchstart.dropdown.data-api&#39;</span>  <span class="p">,</span> <span class="nx">toggle</span><span class="p">,</span> <span class="nx">Dropdown</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toggle</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;keydown.dropdown.data-api touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="nx">toggle</span> <span class="o">+</span> <span class="s1">&#39;, [role=menu]&#39;</span> <span class="p">,</span> <span class="nx">Dropdown</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">keydown</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>这里同时监听了 click 和 touchstart 事件，于是在触屏设备上先有 touchstart 将子菜单隐藏，再有 click 点击到隐藏后该位置的菜单项，因此你永远都不可能点到想点的子菜单。根本原因也是因为我们之前注释了 <code>display: block;</code> 引起，改变了 Bootstrap 的使用场景，于是 JS 出现如此纰漏。解决方法便是不监听 touchstart 事件，虽然会造成些小问题，不过也算基本满足要求。这个 issue 官方明确<a href="https://github.com/twitter/bootstrap/issues/3184#issuecomment-8072507">表示</a>不会采纳，不过还是希望以后有机会增加一个开关选项给用户。</p>
+]]></content>
+  </entry>
+  
+</feed>

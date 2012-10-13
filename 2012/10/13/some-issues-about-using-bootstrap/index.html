@@ -1,0 +1,226 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>使用 Bootstrap 的几个问题 - 自由</title>
+	<meta name="author" content="小高子">
+
+	
+	<meta name="description" content="Responsive 与 Modal 在开启 responsive 后，小屏幕设备上显示 modal 时会变成一闪而过，然后浮动窗口就不见了。具体效果可以缩小浏览器尺寸，在这个页面的 Live demo 点击「Launch demo modal」看到。Issue #2130 专门讨论了这个问题， &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="自由" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">自由</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/about">About</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+        <a href="http://twitter.com/xiaogaozi" title="Twitter"><i class="icon-twitter"></i></a>
+		
+		
+        <a href="https://github.com/xiaogaozi" title="GitHub"><i class="icon-github-sign"></i></a>
+		
+		
+		
+		
+		
+        <a href="http://feeds.feedburner.com/xiaogaozi" title="RSS"><i class="icon-rss"></i></a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
+	</form>
+</nav>
+
+</header>
+	
+		
+<div id="banner" class="inner">
+	<div class="container">
+		<ul class="feed"></ul>
+	</div>
+	<small><a href="http://twitter.com/xiaogaozi">xiaogaozi</a> @ <a href="http://twitter.com">Twitter</a></small>
+	<div class="loading">Loading...</div>
+</div>
+<script src="/javascripts/twitter.js"></script>
+<script type="text/javascript">
+	(function($){
+		$('#banner').getTwitterFeed('xiaogaozi', 4, false);
+	})(jQuery);
+</script>
+
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">使用 Bootstrap 的几个问题</h1>
+	<div class="entry-content"><h2>Responsive 与 Modal</h2>
+
+<p>在开启 responsive 后，小屏幕设备上显示 modal 时会变成一闪而过，然后浮动窗口就不见了。具体效果可以缩小浏览器尺寸，在<a href="http://twitter.github.com/bootstrap/javascript.html#modals">这个页面</a>的 Live demo 点击「Launch demo modal」看到。<a href="https://github.com/twitter/bootstrap/issues/2130">Issue #2130</a> 专门讨论了这个问题，目前比较好的解决办法是使用<a href="http://niftylettuce.github.com/twitter-bootstrap-jquery-plugins">这个插件</a>，根据页面大小来动态调整 modal 的位置，不过貌似用了之后 modal 那个由上至下显示的动画就没有了。这个 issue 现在还处于开启状态，看来官方短期内是不会解决这个问题的。</p>
+
+<h2>Responsive 与 Navbar</h2>
+
+<p>responsive 模式下的 navbar 显示效果很赞，但是有一个很令人费解的事情，默认情况下所有 dropdown menu 都是展开的，对于使用多个菜单项，且子菜单条目很多的场景这是不能接受的。于是 <a href="https://github.com/twitter/bootstrap/issues/3184">Issue #3184</a> 出现了，这次的方案比较 hack，需要修改 bootstrap-responsive.css，将 <code>.nav-collapse .dropdown-menu</code> 里的 <code>display: block;</code> 注释掉。这时你会惊喜地发现 dropdown menu 默认折叠了，点击也能展开子菜单。但是（总是有很多但是），在触屏设备上子菜单是选不中的！托 <a href="http://www.filod.net">filod</a> 同学的福，修改 bootstrap-dropdown.js 中的一段代码：</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/* APPLY TO STANDARD DROPDOWN ELEMENTS</span>
+</span><span class='line'><span class="cm"> * =================================== */</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown.data-api touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="nx">clearMenus</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="s1">&#39;.dropdown form&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span> <span class="p">})</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown.data-api touchstart.dropdown.data-api&#39;</span>  <span class="p">,</span> <span class="nx">toggle</span><span class="p">,</span> <span class="nx">Dropdown</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toggle</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;keydown.dropdown.data-api touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="nx">toggle</span> <span class="o">+</span> <span class="s1">&#39;, [role=menu]&#39;</span> <span class="p">,</span> <span class="nx">Dropdown</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">keydown</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里同时监听了 click 和 touchstart 事件，于是在触屏设备上先有 touchstart 将子菜单隐藏，再有 click 点击到隐藏后该位置的菜单项，因此你永远都不可能点到想点的子菜单。根本原因也是因为我们之前注释了 <code>display: block;</code> 引起，改变了 Bootstrap 的使用场景，于是 JS 出现如此纰漏。解决方法便是不监听 touchstart 事件，虽然会造成些小问题，不过也算基本满足要求。这个 issue 官方明确<a href="https://github.com/twitter/bootstrap/issues/3184#issuecomment-8072507">表示</a>不会采纳，不过还是希望以后有机会增加一个开关选项给用户。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-13T21:24:00+08:00" pubdate data-updated="true">Oct 13<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/categories/bootstrap/'>Bootstrap</a>, <a class='category' href='/categories/css/'>CSS</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>
+
+
+</div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    小高子
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'xiaogaozi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/';
+        var disqus_url = 'http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26507501-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
