@@ -3,7 +3,7 @@ layout: post
 title: "Shall We Play a Game?"
 date: 2011-11-06 16:24
 comments: true
-categories: Culture
+categories: [Culture]
 ---
 
 {% img center http://farm7.static.flickr.com/6235/6317821194_c76b0fd4cf.jpg The IMSAI 8080 computer used in WarGames. %}
