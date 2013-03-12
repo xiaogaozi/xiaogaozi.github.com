@@ -7,7 +7,7 @@
 	<meta name="author" content="小高子">
 
 	
-	<meta name="description" content="孩子，你的一生会遇见很多不一样的人，在陌生的城市和环境里结交着朋友，找寻着恋人。你每天都会很忙，忙到没有时间喝水，没有时间吃饭，没有时间思考。你会羡慕那些生活得悠闲自在的人，仿佛他们生来如此。看到街上的情侣你也会想她是否也在想着你，因为你们仰望着同一片星空。你向往着有一天和她一起生活， &hellip;">
+	<meta name="description" content="前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 MONITOR 命令， &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -90,6 +90,44 @@
 
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/2013/03/12/little-tips-redis-monitor-command/">Little Tips: Redis MONITOR Command</a></h1>
+	<div class="entry-content">
+		<p>前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 <a href="http://redis.io/commands/monitor">MONITOR</a> 命令，可以实时打印出此时正在执行的命令，正合我意，修改缓存的命令我是知道的，只需要监测这个命令，然后就可以查到来源了。</p>
+
+<pre><code>$ redis-cli monitor | grep '"set" "alist"'
+</code></pre>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T23:47:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/categories/redis/'>Redis</a>
+
+
+</div>
+	
+</div></article>
 
 
     <article class="post">
@@ -935,7 +973,7 @@
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2012
+	<footer id="footer" class="inner">Copyright &copy; 2013
 
     小高子
 
