@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Puppet | 自由]]></title>
+  <link href="http://blog.xiaogaozi.org/categories/puppet/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2013-03-22T09:16:42+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[小高子]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Vagrant, Puppet and Chef]]></title>
+    <link href="http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/"/>
+    <updated>2013-03-21T20:25:00+08:00</updated>
+    <id>http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef</id>
+    <content type="html"><![CDATA[<p>最近要为 Phabricator 搭建虚拟测试环境，<a href="http://www.vagrantup.com">Vagrant</a> 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只<a href="https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Boxes">提供</a> Ubuntu 的 base box，不过 <a href="http://www.vagrantbox.es">Vagrantbox.es</a> 有提供很多其它的系统，甚至还有 Window$。也可以自己根据<a href="http://docs-v1.vagrantup.com/v1/docs/base_boxes.html">官方文档</a>重新搭建一个 base box。</p>
+
+<p><a href="http://docs.vagrantup.com/v2/provisioning/index.html">Provisioning</a> 是 Vagrant 一个很棒的特性，可以通过工具来自动配置和管理虚拟机。目前支持的有 Puppet 和 Chef，这两个都是著名的配置管理工具，其中 Google、Twitter、GitHub 在用 Puppet，Facebook 在用 Chef，知乎目前用的是 Puppet。正好这次两个都了解了一点，可以简单比较一下。</p>
+
+<p>从安装方式来说，因为都是基于 Ruby 的工具，所以都可以通过 <code>gem</code> 来安装，从这一点上来说还是很方便的（话说对于 Mac 用户，千万别用官方提供的烂方法）。Puppet 的命令行工具就叫 <code>puppet</code>，而 Chef 的叫做 <code>knife</code>，这倒是跟 Chef 本身名字很搭。初学工具，肯定要看官方文档，在这一点上我觉得 Puppet 做得更好，至少还有一个像模像样的 <a href="http://docs.puppetlabs.com/learning/">Learning Puppet</a> 系列，由浅入深，循序渐进，基本上看完就可以对 Puppet 有个大概的了解和使用。而 Chef 就只扔给你一个<a href="http://docs.opscode.com">不知道该从哪看起的页面</a>，作为初学者表示很难入门。</p>
+
+<p>Puppet 可以将一系列的配置文件打包成一个 module 供人下载，Chef 对应的则叫做 cookbook，这两者都提供了网站用于集中放置社区贡献的包，分别是 <a href="http://forge.puppetlabs.com">Puppet Forge</a> 和 <a href="http://community.opscode.com/cookbooks">Opscode Community</a>（不得不吐槽，这两个网站都很糙）。对于 module、cookbook 的安装及管理 Chef 略胜一筹，Puppet 的命令行工具可以很方便地安装 module，但是如果需要安装的包比较多，就只能通过自己写脚本来自动处理。而 Chef 有一个很好用的工具 <a href="https://github.com/applicationsonline/librarian">Librarian-Chef</a>，只需要定义好所有依赖包，并放到 Cheffile 中，就可以通过 <code>librarian-chef</code> 命令来安装和管理。</p>
+
+<p>Puppet 在易用性，社区质量和包的扩展性上来说要比 Chef 略优，能查到的文档资料也更多一点，最终我选择了 Puppet，<a href="https://github.com/xiaogaozi/vagrant-phabricator">这里</a>是我的适用于 Phabricator 的配置文件，对 Chef 有兴趣的同学也可以看<a href="https://github.com/grigio/vagrant-chef-solo-bootstrap">这个</a>示例配置。</p>
+]]></content>
+  </entry>
+  
+</feed>
