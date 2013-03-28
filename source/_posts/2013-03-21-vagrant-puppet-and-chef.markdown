@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Vagrant, Puppet and Chef"
+title: "流浪汉，木偶和厨子"
 date: 2013-03-21 20:25
 comments: true
 categories: [Vagrant, Puppet, Chef]
