@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SCons | 自由]]></title>
   <link href="http://blog.xiaogaozi.org/categories/scons/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2013-03-28T21:01:16+08:00</updated>
+  <updated>2013-07-02T02:22:44+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[小高子]]></name>
@@ -79,9 +79,9 @@
 </span><span class='line'>
 </span><span class='line'><span class="err">&lt;p&gt;</span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-Wall</span><span class="p">)</span>
 </span><span class='line'><span class="nb">cmake_policy</span><span class="p">(</span><span class="s">SET</span> <span class="s">CMP0015</span> <span class="s">NEW</span><span class="p">)</span>
-</span><span class='line'><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&quot;include&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="nb">link_directories</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_ARCHIVE_OUTPUT_DIRECTORY</span> <span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">include_directories</span><span class="p">(</span><span class="s">&amp;ldquo;include&amp;rdquo;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">link_directories</span><span class="p">(</span><span class="s">&amp;ldquo;lib&amp;rdquo;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_ARCHIVE_OUTPUT_DIRECTORY</span> <span class="s">&amp;ldquo;../lib&amp;rdquo;</span><span class="p">)</span>
 </span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">VP8SRC</span> <span class="s">VP8Encoder.cpp</span> <span class="s">VP8Decoder.cpp</span><span class="p">)</span><span class="err">&lt;/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="err">&lt;p&gt;</span><span class="nb">if</span><span class="p">(</span><span class="s">X86</span><span class="p">)</span><span class="err">&lt;/p&gt;</span>
@@ -171,7 +171,7 @@
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s">&#39;targets&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">targets</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="p">[</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">{</span>
 </span><span class='line'>  <span class="s">&#39;target_name&#39;</span><span class="p">:</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span>
