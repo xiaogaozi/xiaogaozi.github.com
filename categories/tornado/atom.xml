@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tornado | 自由]]></title>
   <link href="http://blog.xiaogaozi.org/categories/tornado/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2013-03-28T21:01:16+08:00</updated>
+  <updated>2013-08-09T03:02:54+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[小高子]]></name>
@@ -48,7 +48,8 @@
 
 <p>这里用到了两个 decorator 稍显复杂，第一个 <code>@asynchronous</code> 会首先被执行，它的主要工作就是将 <code>RequestHandler</code> 的 <code>_auto_finish</code> 属性置为 <code>false</code>，如下：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>web.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>web.py <a href="https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116">https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116</a> download </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -80,7 +81,8 @@
 
 <p>接着就是最重要的 <code>@gen.engine</code>，这里充分利用了 generator 的各种特性，首先来看 <code>@gen.engine</code> 的实现（我删减了部分代码以简化理解）：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py <a href="https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91">https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91</a> download </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -112,7 +114,8 @@
 
 <p>结合第一段的示例代码，可以想到 <code>run</code> 干的工作可能就是启动 generator，然后获得 <code>gen.Task</code> 对象并调用 <code>http_client.fetch</code> 函数，等回调回来之后恢复 generator 的运行，最后将回调的返回值通过 <code>send()</code> 赋给 <code>response</code>。下面是我简化后的代码。</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py <a href="https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322">https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322</a> download </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -148,7 +151,8 @@
 
 <p>第 3 行检查回调是否完成，第一次运行 <code>run</code> 总是会返回 <code>True</code>。第 5 行获取回调的返回值，同样的第一次运行返回的是 <code>None</code>。将 <code>None</code> 传给 <code>send()</code> 启动 generator，<code>yielded</code> 即是 <code>gen.Task</code> 对象，第 12 行调用 <code>start</code> 开始运行我们真正需要运行的函数，对应到示例代码就是 <code>http_client.fetch</code> 函数，同时将 <code>Runner</code> 的 <code>result_callback</code> 作为回调函数。如下：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gen.py <a href="https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374">https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374</a> download </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

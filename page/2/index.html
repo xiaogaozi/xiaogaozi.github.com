@@ -1,24 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Google | 自由]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/google/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2013-08-09T03:02:54+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
-  <author>
-    <name><![CDATA[小高子]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>自由</title>
+	<meta name="author" content="小高子">
 
-  
-  <entry>
-    <title type="html"><![CDATA[SPDY 简介]]></title>
-    <link href="http://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy/"/>
-    <updated>2011-06-11T11:26:00+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy</id>
-    <content type="html"><![CDATA[<p>今天在看 CTF write-up 时发现<a href="http://michele.spagnuolo.me/articles/web-security/defcon-ctf19-quals-grab-bag-100-writeup.html">有人提到</a> <a href="http://dev.chromium.org/spdy">SPDY</a> 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。</p>
+	
+	<meta name="description" content="今天在看 CTF write-up 时发现有人提到 SPDY 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。 首先 SPDY 是一个应用层协议，它被创造出来的唯一目的就是让 Web 更快，更快，还是更快。Google 这家公司似乎很喜欢「快」这个东西 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="自由" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">自由</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/about">About</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+        <a href="http://twitter.com/xiaogaozi" title="Twitter"><i class="icon-twitter"></i></a>
+		
+		
+        <a href="https://github.com/xiaogaozi" title="GitHub"><i class="icon-github-sign"></i></a>
+		
+		
+		
+		
+		
+        <a href="http://feeds.feedburner.com/xiaogaozi" title="RSS"><i class="icon-rss"></i></a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/2011/06/11/introduction-to-spdy/">SPDY 简介</a></h1>
+	<div class="entry-content">
+		<p>今天在看 CTF write-up 时发现<a href="http://michele.spagnuolo.me/articles/web-security/defcon-ctf19-quals-grab-bag-100-writeup.html">有人提到</a> <a href="http://dev.chromium.org/spdy">SPDY</a> 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。</p>
 
 <p>首先 SPDY 是一个应用层协议，它被创造出来的唯一目的就是让 Web 更快，更快，还是更快。Google 这家公司似乎很喜欢「快」这个东西，Chrome 从诞生到现在每次几乎必定宣传自己有多么得快，搞得大家已经产生了某种心理暗示。SPDY 诞生于 2009 年，其实这是对外公开发布的时间，开始研究的时间应该更早。众所周知，如今的 Web 是通过 HTTP 协议和 TCP 协议进行传输，但种种因素导致 HTTP 传输变得很慢：</p>
 
@@ -57,7 +120,85 @@
 <p>要支持 SPDY，除了客户端必须支持外，还要有相应的 Web 服务器。现在已经有 <a href="http://wiki.eclipse.org/Jetty/Feature/SPDY">Java</a>、<a href="http://code.google.com/p/mod-spdy/">Apache module</a>、<a href="http://github.com/mnot/nbhttp/tree/spdy">Python</a>、<a href="https://github.com/igrigorik/spdy">Ruby</a>、<a href="https://github.com/indutny/node-spdy">node.js</a> 等各种实现。</p>
 
 <p>最后，如果你正在使用 Chrome 浏览器，并且访问 Google 的网站，那你已经开始使用 SPDY 了，输入 <a href="chrome://net-internals/#spdy">chrome://net-internals/#spdy</a> 还可以了解更加详细的信息。</p>
-]]></content>
-  </entry>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
   
-</feed>
+
+
+<time datetime="2011-06-11T11:26:00+08:00" pubdate data-updated="true">Jun 11<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/categories/google/'>Google</a>
+
+
+</div>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/" class="prev">Prev</a>
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    小高子
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'xiaogaozi';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26507501-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
