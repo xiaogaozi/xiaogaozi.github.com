@@ -18,7 +18,7 @@ article{
 		}
 	}
 	.entry-content{
-		line-height: 1.8;
+		line-height: 30px;
 		text-align: justify;
 		a{
 			&:hover{
@@ -54,7 +54,8 @@ article{
 			font-style: italic;
 		}
 		p{
-			margin-top: 16px;
+			margin-top: 20px;
+            font-size: 16px;
 		}
 		h2{
 			font-weight: 300;
