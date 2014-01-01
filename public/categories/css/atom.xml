@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | 自由]]></title>
   <link href="http://blog.xiaogaozi.org/categories/css/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2013-10-22T14:34:33+08:00</updated>
+  <updated>2014-01-01T07:37:53+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[小高子]]></name>
@@ -26,7 +26,7 @@
 
 <p><del>responsive 模式下的 navbar 显示效果很赞，但是有一个很令人费解的事情，默认情况下所有 dropdown menu 都是展开的，对于使用多个菜单项，且子菜单条目很多的场景这是不能接受的。于是 <a href="https://github.com/twitter/bootstrap/issues/3184">Issue #3184</a> 出现了，这次的方案比较 hack，需要修改 bootstrap-responsive.css，将 <code>.nav-collapse .dropdown-menu</code> 里的 <code>display: block;</code> 注释掉。这时你会惊喜地发现 dropdown menu 默认折叠了，点击也能展开子菜单。</del> 最新版 Bootstrap 已经修复了 dropdown menu 默认展开的问题，但是（总是有很多但是），在触屏设备上子菜单是选不中的。托 <a href="http://www.filod.net">filod</a> 同学的福，修改 bootstrap-dropdown.js 中的一段代码：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

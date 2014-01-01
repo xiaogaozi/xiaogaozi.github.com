@@ -7,7 +7,7 @@
 	<meta name="author" content="小高子">
 
 	
-	<meta name="description" content="作为人生中的第一次境外游就献给了泰国，大约一周的时间，不长不短，遇见了很多人，经历了很多事，这恐怕是独自旅行才有的福利。对于泰国，几乎每一个交谈的人的第一印象都是「friendly」，这里的人们悠闲自在，热情好客，因为有着虔诚的信仰，会让你感受到每个人的善。作为一个历史更加悠久的国度， &hellip;">
+	<meta name="description" content="2014 年第一天的清晨我改了一个 bug，买了一个 app，喝着已经凉了的白水，加湿器冒着白烟。这座城市还在熟睡，这个每天生活、工作、恋爱的地方，它的气息吸引着我，人们仿佛只能看到它的丑，殊不知都是我们自己种下的恶果。平安夜，临下车前我把苹果送给了司机师傅， &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -76,6 +76,46 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/2014/01/01/hello-goodbye/">Hello, Goodbye</a></h1>
+	<div class="entry-content">
+		<p>2014 年第一天的清晨我改了一个 bug，买了一个 app，喝着已经凉了的白水，加湿器冒着白烟。这座城市还在熟睡，这个每天生活、工作、恋爱的地方，它的气息吸引着我，人们仿佛只能看到它的丑，殊不知都是我们自己种下的恶果。平安夜，临下车前我把苹果送给了司机师傅，一声谢谢让我们似乎都有了对于未来的企盼。2013 年的最后一天，吃饭时朋友特意点了鱼，喻为「年年有余」，三个「孤独」的男人就这样就着玉米汁品味这一年的最后一顿饭。也许我们对于未来都有不同的打算，但是如果能互相陪伴，彼此的人生也不会孤单。我相信人性的善，当一个人告诉我他再也不相信时，或许是你还没有遇到那个人，经历那件事。从来没有觉得自己如此重要，当被另一个人视若珍宝，我只能不争气地泣不成声。</p>
+
+<blockquote><p>You don&#8217;t know about real loss, cause it only occurs when you&#8217;ve loved something more than you love yourself.</p><footer><strong>Good Will Hunting</strong> <cite><a href='http://www.imdb.com/title/tt0119217'>www.imdb.com/title/tt0119217/&hellip;</a></cite></footer></blockquote>
+
+
+<p>这段话我想很难做到，但我们都会尽力实现它，因为有些事情是不能重来的。如果你要问我有什么新年愿望，我会说「Believe love, believe dream」。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T06:38:26+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/categories/cest-la-vie/'>C&#8217;EST LA VIE</a>
+
+
+</div>
+	
+</div></article>
 
 
     <article class="post">
@@ -249,7 +289,7 @@
 
 <p><del>responsive 模式下的 navbar 显示效果很赞，但是有一个很令人费解的事情，默认情况下所有 dropdown menu 都是展开的，对于使用多个菜单项，且子菜单条目很多的场景这是不能接受的。于是 <a href="https://github.com/twitter/bootstrap/issues/3184">Issue #3184</a> 出现了，这次的方案比较 hack，需要修改 bootstrap-responsive.css，将 <code>.nav-collapse .dropdown-menu</code> 里的 <code>display: block;</code> 注释掉。这时你会惊喜地发现 dropdown menu 默认折叠了，点击也能展开子菜单。</del> 最新版 Bootstrap 已经修复了 dropdown menu 默认展开的问题，但是（总是有很多但是），在触屏设备上子菜单是选不中的。托 <a href="http://www.filod.net">filod</a> 同学的福，修改 bootstrap-dropdown.js 中的一段代码：</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -305,7 +345,7 @@
 	<div class="entry-content">
 		<p>Tornado 通过 <code>@asynchronous</code> decorator 来实现异步请求，但使用的时候必须将 request handler 和 callback 分离开，<code>tornado.gen</code> 模块可以帮助我们在一个函数里完成这两个工作。下面是官方的一个例子：</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -326,7 +366,7 @@
 
 <p>这里用到了两个 decorator 稍显复杂，第一个 <code>@asynchronous</code> 会首先被执行，它的主要工作就是将 <code>RequestHandler</code> 的 <code>_auto_finish</code> 属性置为 <code>false</code>，如下：</p>
 
-<figure class='code'><figcaption><span>web.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>web.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -351,7 +391,7 @@
 
 <p>接着就是最重要的 <code>@gen.engine</code>，这里充分利用了 generator 的各种特性，首先来看 <code>@gen.engine</code> 的实现（我删减了部分代码以简化理解）：</p>
 
-<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -376,7 +416,7 @@
 
 <p>结合第一段的示例代码，可以想到 <code>run</code> 干的工作可能就是启动 generator，然后获得 <code>gen.Task</code> 对象并调用 <code>http_client.fetch</code> 函数，等回调回来之后恢复 generator 的运行，最后将回调的返回值通过 <code>send()</code> 赋给 <code>response</code>。下面是我简化后的代码。</p>
 
-<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -405,7 +445,7 @@
 
 <p>第 3 行检查回调是否完成，第一次运行 <code>run</code> 总是会返回 <code>True</code>。第 5 行获取回调的返回值，同样的第一次运行返回的是 <code>None</code>。将 <code>None</code> 传给 <code>send()</code> 启动 generator，<code>yielded</code> 即是 <code>gen.Task</code> 对象，第 12 行调用 <code>start</code> 开始运行我们真正需要运行的函数，对应到示例代码就是 <code>http_client.fetch</code> 函数，同时将 <code>Runner</code> 的 <code>result_callback</code> 作为回调函数。如下：</p>
 
-<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -556,7 +596,7 @@
 
 <p>编写 CMake 配置文件相比 Autotools 来说已经简化很多，一个最简单的配置文件只需要写上源文件及生成类型（可执行文件、静态库、动态库等）即可。对分支语句和循环语句的支持也使得 CMake 更加灵活。但是，CMake 最大的问题也是在这个配置文件，请看下面这个示例文件：</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -645,7 +685,7 @@
 
 <p>你能一眼看出这个配置文件干了什么吗？其实这个配置文件想要产生的目标（target）只有一个，就是通过 <code>${VP8SRC}</code> 编译生成的静态库，但因为加上了条件判断，及各种平台相关配置，使得这个配置文件看起来很是复杂。在我看来，编写 CMake 配置文件是一种线性思维，对于同一个目标的配置可能会零散分布在各个地方。而 GYP 则相当不同，GYP 的配置文件更多地强调模块化、结构化。看看下面这个示例文件：</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -782,184 +822,6 @@
 	
 </div></article>
 
-
-    <article class="post">
-	<h1 class="title"><a href="/2011/10/23/octopress-rocks/">Octopress Rocks!</a></h1>
-	<div class="entry-content">
-		<p>今天开始尝试 <a href="http://octopress.org/">Octopress</a>，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers」。我用了多年的 Blogger <a href="http://xiaogaozi.blogspot.com">博客</a>也终于寿终正寝，如果你是一个非 hacker 博客作者，<a href="http://www.blogger.com/">Blogger</a> 绝对值得推荐（满足 <a href="http://www.dbanotes.net/review/gfw_rule.html">GFW 三定律</a>）。</p>
-
-<h2>Another WordPress?</h2>
-
-<p>Yes。Octopress 具备一个博客应当具备的所有功能，文章、评论、页面、分享、RSS、搜索、Archives 等等。</p>
-
-<p>No。正如 Octopress 网站介绍所说：A blogging framework for hackers，重点就在最后那个 hackers。没有了 WordPress 的后台界面，写博客需要的工具仅仅是 Ruby、Git、Markdown 和你喜爱的编辑器。如果你是一个 hacker，那你对这些工具不会陌生，相比 WordPress 蹩脚的后台页面，Octopress 提供的写作方式会让你非常喜爱。</p>
-
-<h2>写作</h2>
-
-<p>博客最重要的功能就是写作，写作就像程序员编写代码，如果不能提供舒服的方式，那简直是一种自虐。事实已经证明 HTML 不是一种好的写作方式，因此 WordPress 这类博客提供了所见即所得编辑器，但对于喜欢精确掌控的 hacker 来说这还不够，于是类似于 Markdown 这样的标记语言逐渐在圈内盛行。这类标记语言最大的好处就是让作者不用关心文章的样式，而专注于文章的内容。这很重要，一篇文章的精髓在于文字，如果过多地被样式困扰，精力便会分散，也必然不会思考出更好的文字。类似的比较还有 Word 和 LaTeX，当然这种观点也是仁者见仁，智者见智。</p>
-
-<p>Octopress 原生为我们提供了 Markdown 支持，需要写一篇新博客了？打开你喜欢的编辑器，使用 Markdown 语法开始书写即可。WordPress？虽然也可以添加 Markdown 支持，但不免显得蹩脚。</p>
-
-<h2>语法高亮</h2>
-
-<p>这个功能对程序员来说尤为重要，但至今没有博客提供原生支持，这也是最大的遗憾。Octopress 彻底颠覆了这种局面，语法高亮变得如此顺其自然。</p>
-
-<figure class='code'><figcaption><span>rename.py</span><a href='https://raw.github.com/xiaogaozi/princess-alist/master/home/xiaogaozi/src/Python/rename.py'>download </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c">#!/usr/bin/env python</span>
-</span><span class='line'><span class="c"># -*- coding: utf-8 -*-</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Batch rename utility. &lt;https://github.com/xiaogaozi/princess-alist&gt;</span>
-</span><span class='line'><span class="c"># Copyright (C) &lt;2011&gt;  xiaogaozi &lt;gaochangjian@gmail.com&gt;</span>
-</span><span class='line'><span class="c"># </span>
-</span><span class='line'><span class="c"># This program is free software: you can redistribute it and/or modify</span>
-</span><span class='line'><span class="c"># it under the terms of the GNU General Public License as published by</span>
-</span><span class='line'><span class="c"># the Free Software Foundation, either version 3 of the License, or</span>
-</span><span class='line'><span class="c"># (at your option) any later version.</span>
-</span><span class='line'><span class="c"># </span>
-</span><span class='line'><span class="c"># This program is distributed in the hope that it will be useful,</span>
-</span><span class='line'><span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-</span><span class='line'><span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-</span><span class='line'><span class="c"># GNU General Public License for more details.</span>
-</span><span class='line'><span class="c"># </span>
-</span><span class='line'><span class="c"># You should have received a copy of the GNU General Public License</span>
-</span><span class='line'><span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="nn">os</span>
-</span><span class='line'><span class="kn">import</span> <span class="nn">re</span>
-</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">usage</span><span class="p">():</span>
-</span><span class='line'>    <span class="sd">&quot;&quot;&quot;Usage&quot;&quot;&quot;</span>
-</span><span class='line'>    <span class="k">print</span> <span class="s">&quot;Usage: rename.py expr files&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-</span><span class='line'>    <span class="sd">&quot;&quot;&quot;Main progress.&quot;&quot;&quot;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-</span><span class='line'>        <span class="n">usage</span><span class="p">()</span>
-</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">expr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span><span class='line'>    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;^[sy]/([^/]*)/([^/]*)/$&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;expression incorrect</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">re1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">re2</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c"># actually in substitute mode this portion is not regular expression</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">for</span> <span class="n">oldfile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
-</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">oldfile</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">oldname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">oldfile</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">newname</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class='line'>        <span class="n">newfile</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class='line'>        <span class="k">if</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;s&#39;</span><span class="p">:</span>  <span class="c"># substitute</span>
-</span><span class='line'>            <span class="n">newname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re1</span><span class="p">,</span> <span class="n">re2</span><span class="p">,</span> <span class="n">oldname</span><span class="p">)</span>
-</span><span class='line'>            <span class="n">newfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">newname</span><span class="p">)</span>
-</span><span class='line'>            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">oldfile</span><span class="p">,</span> <span class="n">newfile</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">elif</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>  <span class="c"># transliterate</span>
-</span><span class='line'>            <span class="k">pass</span>
-</span><span class='line'>        <span class="k">print</span> <span class="n">oldfile</span><span class="p">,</span> <span class="s">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">newfile</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">main</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>版本控制</h2>
-
-<p>程序员已经被版本控制惯坏了，只要能纳入版本库，就统统放进去。WordPress 拥有同样蹩脚的版本控制，显然不足以满足 hacker 的需求，Octopress 为我们提供了 Git 原生支持，一切一切都为你所控，放在你喜欢的版本控制库里即可。</p>
-
-<h2>部署</h2>
-
-<p>Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。<del>我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了⋯⋯</del> 我现在使用的是 GitHub Pages。</p>
-
-<h2>Continue?</h2>
-
-<p>开始享受写作的乐趣吧～</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-23T17:12:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/categories/cest-la-vie/'>C&#8217;EST LA VIE</a>
-
-
-</div>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     
@@ -967,7 +829,7 @@
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
+	<footer id="footer" class="inner">Copyright &copy; 2014
 
     小高子
 
