@@ -1,0 +1,243 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Auto Open Browser After Copy URL - 自由</title>
+	<meta name="author" content="小高子">
+
+	
+	<meta name="description" content="前段时间看过一篇叫 Automate Everyday Tasks 的博客，其中的一些见解很有意思，我们日常工作中有很多细小但是重复的事情，如果能够将某些工作自动完成，会让生活更加舒适。我很喜欢 Mac 上一个叫 PopClip 的小 app，可以大大减少很多重复的操作。 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="自由" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">自由</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/about">About</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+        <a href="http://twitter.com/xiaogaozi" title="Twitter"><i class="icon-twitter"></i></a>
+		
+		
+        <a href="https://github.com/xiaogaozi" title="GitHub"><i class="icon-github-sign"></i></a>
+		
+		
+		
+		
+		
+        <a href="http://feeds.feedburner.com/xiaogaozi" title="RSS"><i class="icon-rss"></i></a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">Auto Open Browser After Copy URL</h1>
+	<div class="entry-content"><p>前段时间看过一篇叫 <a href="http://sc5.io/blog/2014/01/automate-everyday-tasks">Automate Everyday Tasks</a> 的博客，其中的一些见解很有意思，我们日常工作中有很多细小但是重复的事情，如果能够将某些工作自动完成，会让生活更加舒适。我很喜欢 Mac 上一个叫 <a href="http://pilotmoon.com/popclip">PopClip</a> 的小 app，可以大大减少很多重复的操作。这篇博客就是介绍如何制作一个 app，当复制 URL 时自动在浏览器中打开。</p>
+
+<!-- more -->
+
+
+<p>有了这个想法之后我先去<a href="https://www.google.com/search?q=os+x+clipboard+manager">找找看</a>是否有类似的软件，但已有的剪贴板管理工具都没有这样的功能。于是决定自己动手做，因为没有开发 Mac app 的经验，首先想到的就是利用 Automator 来实现，可惜 Automator 不支持后台运行。经过搜索 StackExchange 上的一个<a href="http://apple.stackexchange.com/questions/96214/creating-a-resident-workflow-with-automator">问题</a>给了我思路：用 AppleScript 来做。</p>
+
+<h2>AppleScript 程序</h2>
+
+<p>打开 AppleScript Editor，输入以下代码，代码大意是每隔 1 秒判断剪贴板内容是否为 URL，如果是就在浏览器中打开。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='applescript'><span class='line'><span class="k">property</span> <span class="nv">oldValue</span> <span class="p">:</span> <span class="no">missing value</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">on </span><span class="nf">idle</span>
+</span><span class='line'>    <span class="k">local</span> <span class="nv">newValue</span>
+</span><span class='line'>    <span class="k">set</span> <span class="nv">newValue</span> <span class="k">to</span> <span class="nb">the clipboard</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nv">oldValue</span> <span class="ow">is not</span> <span class="ow">equal to</span> <span class="nv">newValue</span> <span class="k">then</span>
+</span><span class='line'>        <span class="k">try</span>
+</span><span class='line'>            <span class="k">if</span> <span class="nv">newValue</span> <span class="ow">starts with</span> <span class="s2">&quot;http://&quot;</span> <span class="ow">or</span> <span class="nv">newValue</span> <span class="ow">starts with</span> <span class="s2">&quot;https://&quot;</span> <span class="k">then</span>
+</span><span class='line'>                <span class="nb">do shell script</span> <span class="s2">&quot;open &quot;</span> <span class="o">&amp;</span> <span class="nv">newValue</span>
+</span><span class='line'>            <span class="k">end</span> <span class="k">if</span>
+</span><span class='line'>        <span class="k">end</span> <span class="k">try</span>
+</span><span class='line'>        <span class="k">set</span> <span class="nv">oldValue</span> <span class="k">to</span> <span class="nv">newValue</span>
+</span><span class='line'>    <span class="k">end</span> <span class="k">if</span>
+</span><span class='line'>    <span class="no">return</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">end </span><span class="nf">idle</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存，「File Format」选「Application」，勾选「Stay open after run handler」。</p>
+
+<p><img class="center" src="http://f.cl.ly/items/3s0D1g2D2h2U1R273i1b/Screen%20Shot%202014-01-30%20at%2017.31.56.png"></p>
+
+<h2>设置后台运行</h2>
+
+<p>AppleScript 程序运行时会在 Dock 上显示一个图标，我们需要隐藏这个图标。</p>
+
+<p><img class="center" src="http://f.cl.ly/items/343f2V1S2D3E1O102h0t/Screen%20Shot%202014-01-31%20at%200.57.07.png"></p>
+
+<p><img class="center" src="http://cl.ly/image/2O0v2O23341w/Screen%20Shot%202014-01-31%20at%204.49.28.png"></p>
+
+<p>增加一个新的 key「Application is background only」，value 为「YES」。</p>
+
+<p><img class="center" src="http://f.cl.ly/items/0L3c0u1R47213D2b2F3N/Screen%20Shot%202014-01-30%20at%2017.58.09.png"></p>
+
+<h2>设置登录自动启动</h2>
+
+<p>在 System Preferences → Users &amp; Groups → Login Items 中添加刚才创建的 app，并设置为 hide 模式。</p>
+
+<p><img class="center" src="http://f.cl.ly/items/1t461t21143M1s1J1L1o/Screen%20Shot%202014-01-30%20at%2018.02.57.png"></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-31T05:07:36+08:00" pubdate data-updated="true">Jan 31<span>st</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/categories/applescript/'>AppleScript</a>, <a class='category' href='/categories/productivity/'>Productivity</a>
+
+
+</div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    小高子
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'xiaogaozi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/';
+        var disqus_url = 'http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26507501-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

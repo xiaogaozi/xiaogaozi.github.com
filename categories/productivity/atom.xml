@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Productivity | 自由]]></title>
+  <link href="http://blog.xiaogaozi.org/categories/productivity/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2014-01-31T05:15:39+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[小高子]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Auto Open Browser After Copy URL]]></title>
+    <link href="http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/"/>
+    <updated>2014-01-31T05:07:36+08:00</updated>
+    <id>http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url</id>
+    <content type="html"><![CDATA[<p>前段时间看过一篇叫 <a href="http://sc5.io/blog/2014/01/automate-everyday-tasks">Automate Everyday Tasks</a> 的博客，其中的一些见解很有意思，我们日常工作中有很多细小但是重复的事情，如果能够将某些工作自动完成，会让生活更加舒适。我很喜欢 Mac 上一个叫 <a href="http://pilotmoon.com/popclip">PopClip</a> 的小 app，可以大大减少很多重复的操作。这篇博客就是介绍如何制作一个 app，当复制 URL 时自动在浏览器中打开。</p>
+
+<!-- more -->
+
+
+<p>有了这个想法之后我先去<a href="https://www.google.com/search?q=os+x+clipboard+manager">找找看</a>是否有类似的软件，但已有的剪贴板管理工具都没有这样的功能。于是决定自己动手做，因为没有开发 Mac app 的经验，首先想到的就是利用 Automator 来实现，可惜 Automator 不支持后台运行。经过搜索 StackExchange 上的一个<a href="http://apple.stackexchange.com/questions/96214/creating-a-resident-workflow-with-automator">问题</a>给了我思路：用 AppleScript 来做。</p>
+
+<h2>AppleScript 程序</h2>
+
+<p>打开 AppleScript Editor，输入以下代码，代码大意是每隔 1 秒判断剪贴板内容是否为 URL，如果是就在浏览器中打开。</p>
+
+<p>```applescript
+property oldValue : missing value</p>
+
+<p>on idle</p>
+
+<pre><code>local newValue
+set newValue to the clipboard
+if oldValue is not equal to newValue then
+    try
+        if newValue starts with "http://" or newValue starts with "https://" then
+            do shell script "open " &amp; newValue
+        end if
+    end try
+    set oldValue to newValue
+end if
+return 1
+</code></pre>
+
+<p>end idle
+```</p>
+
+<p>保存，「File Format」选「Application」，勾选「Stay open after run handler」。</p>
+
+<p><img class="center <a" src="href="http://f.cl.ly/items/3s0D1g2D2h2U1R273i1b/Screen%20Shot%202014-01-30%20at%2017.31.56.png">http://f.cl.ly/items/3s0D1g2D2h2U1R273i1b/Screen%20Shot%202014-01-30%20at%2017.31.56.png</a>"></p>
+
+<h2>设置后台运行</h2>
+
+<p>AppleScript 程序运行时会在 Dock 上显示一个图标，我们需要隐藏这个图标。</p>
+
+<p><img class="center <a" src="href="http://f.cl.ly/items/343f2V1S2D3E1O102h0t/Screen%20Shot%202014-01-31%20at%200.57.07.png">http://f.cl.ly/items/343f2V1S2D3E1O102h0t/Screen%20Shot%202014-01-31%20at%200.57.07.png</a>"></p>
+
+<p><img class="center <a" src="href="http://cl.ly/image/2O0v2O23341w/Screen%20Shot%202014-01-31%20at%204.49.28.png">http://cl.ly/image/2O0v2O23341w/Screen%20Shot%202014-01-31%20at%204.49.28.png</a>"></p>
+
+<p>增加一个新的 key「Application is background only」，value 为「YES」。</p>
+
+<p><img class="center <a" src="href="http://f.cl.ly/items/0L3c0u1R47213D2b2F3N/Screen%20Shot%202014-01-30%20at%2017.58.09.png">http://f.cl.ly/items/0L3c0u1R47213D2b2F3N/Screen%20Shot%202014-01-30%20at%2017.58.09.png</a>"></p>
+
+<h2>设置登录自动启动</h2>
+
+<p>在 System Preferences → Users &amp; Groups → Login Items 中添加刚才创建的 app，并设置为 hide 模式。</p>
+
+<p><img class="center <a" src="href="http://f.cl.ly/items/1t461t21143M1s1J1L1o/Screen%20Shot%202014-01-30%20at%2018.02.57.png">http://f.cl.ly/items/1t461t21143M1s1J1L1o/Screen%20Shot%202014-01-30%20at%2018.02.57.png</a>"></p>
+]]></content>
+  </entry>
+  
+</feed>
