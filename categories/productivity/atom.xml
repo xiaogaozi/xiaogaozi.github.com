@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Productivity | 自由]]></title>
+  <title><![CDATA[Category: Productivity | Freedom]]></title>
   <link href="http://blog.xiaogaozi.org/categories/productivity/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2014-01-31T05:15:39+08:00</updated>
+  <updated>2014-02-09T12:10:04+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
-    <name><![CDATA[小高子]]></name>
+    <name><![CDATA[xiaogaozi]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
