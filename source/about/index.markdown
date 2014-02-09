@@ -7,12 +7,10 @@ sharing: false
 footer: true
 ---
 
-### 个人主页 ###
+## Homepage
 
-[http://www.xiaogaozi.org/](http://www.xiaogaozi.org/)
+- [http://xiaogaozi.org](http://xiaogaozi.org)
 
-### 历史博客 ###
+## History Blog
 
-- 2007～2011.9：[http://xiaogaozi.blogspot.com/](http://xiaogaozi.blogspot.com/)
-
-
+- 2007～2011.9：[http://xiaogaozi.blogspot.com](http://xiaogaozi.blogspot.com)
