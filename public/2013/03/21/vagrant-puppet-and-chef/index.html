@@ -1,96 +1,86 @@
 
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<title>流浪汉，木偶和厨子 - Freedom</title>
-	<meta name="author" content="xiaogaozi">
+  <meta charset="utf-8">
+  <title>流浪汉，木偶和厨子 - Freedom</title>
+  <meta name="author" content="xiaogaozi">
 
-	
-	<meta name="description" content="最近要为 Phabricator 搭建虚拟测试环境，Vagrant 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只提供 Ubuntu 的 base box，不过 Vagrantbox.es 有提供很多其它的系统，甚至还有 Window$。 &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="description" content="最近要为 Phabricator 搭建虚拟测试环境，Vagrant 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只提供 Ubuntu 的 base box，不过 Vagrantbox.es 有提供很多其它的系统，甚至还有 Window$。 &hellip;">
+  
 
-	<link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="Freedom" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.png" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef">
+  <link href="/favicon.png" rel="shortcut icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="Freedom" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Rambla:700' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26507501-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
 </head>
 
-<body>
-	<header id="header" class="inner"><h1><a href="/">Freedom</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/archives">Archives</a></li>
-	<li><a href="/about">About</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/archives">Archives</a></li>
-	<li><a href="/about">About</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-        <a href="http://twitter.com/xiaogaozi" title="Twitter"><i class="icon-twitter"></i></a>
-		
-		
-        <a href="https://github.com/xiaogaozi" title="GitHub"><i class="icon-github-sign"></i></a>
-		
-		
-		
-		
-		
-        <a href="http://feeds.feedburner.com/xiaogaozi" title="RSS"><i class="icon-rss"></i></a>
-		
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
-	</form>
-</nav>
+<body >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Freedom</a></h1>
+  
+    <h2>淡泊以明志，宁静以致远。</h2>
+  
+</hgroup>
 
 </header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h1 class="title">流浪汉，木偶和厨子</h1>
-	<div class="entry-content"><p>最近要为 Phabricator 搭建虚拟测试环境，<a href="http://www.vagrantup.com">Vagrant</a> 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只<a href="https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Boxes">提供</a> Ubuntu 的 base box，不过 <a href="http://www.vagrantbox.es">Vagrantbox.es</a> 有提供很多其它的系统，甚至还有 Window$。也可以自己根据<a href="http://docs-v1.vagrantup.com/v1/docs/base_boxes.html">官方文档</a>重新搭建一个 base box。</p>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/xiaogaozi" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.xiaogaozi.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
 
-<p><a href="http://docs.vagrantup.com/v2/provisioning/index.html">Provisioning</a> 是 Vagrant 一个很棒的特性，可以通过工具来自动配置和管理虚拟机。目前支持的有 Puppet 和 Chef，这两个都是著名的配置管理工具，其中 Google、Twitter、GitHub 在用 Puppet，Facebook 在用 Chef，知乎目前用的是 Puppet。正好这次两个都了解了一点，可以简单比较一下。</p>
-
-<p>从安装方式来说，因为都是基于 Ruby 的工具，所以都可以通过 <code>gem</code> 来安装，从这一点上来说还是很方便的（话说对于 Mac 用户，千万别用官方提供的烂方法）。Puppet 的命令行工具就叫 <code>puppet</code>，而 Chef 的叫做 <code>knife</code>，这倒是跟 Chef 本身名字很搭。初学工具，肯定要看官方文档，在这一点上我觉得 Puppet 做得更好，至少还有一个像模像样的 <a href="http://docs.puppetlabs.com/learning/">Learning Puppet</a> 系列，由浅入深，循序渐进，基本上看完就可以对 Puppet 有个大概的了解和使用。而 Chef 就只扔给你一个<a href="http://docs.opscode.com">不知道该从哪看起的页面</a>，作为初学者表示很难入门。</p>
-
-<p>Puppet 可以将一系列的配置文件打包成一个 module 供人下载，Chef 对应的则叫做 cookbook，这两者都提供了网站用于集中放置社区贡献的包，分别是 <a href="http://forge.puppetlabs.com">Puppet Forge</a> 和 <a href="http://community.opscode.com/cookbooks">Opscode Community</a>（不得不吐槽，这两个网站都很糙）。对于 module、cookbook 的安装及管理 Chef 略胜一筹，Puppet 的命令行工具可以很方便地安装 module，但是如果需要安装的包比较多，就只能通过自己写脚本来自动处理。而 Chef 有一个很好用的工具 <a href="https://github.com/applicationsonline/librarian">Librarian-Chef</a>，只需要定义好所有依赖包，并放到 Cheffile 中，就可以通过 <code>librarian-chef</code> 命令来安装和管理。</p>
-
-<p>Puppet 在易用性，社区质量和包的扩展性上来说要比 Chef 略优，能查到的文档资料也更多一点，最终我选择了 Puppet，<a href="https://github.com/xiaogaozi/vagrant-phabricator">这里</a>是我的适用于 Phabricator 的配置文件，对 Chef 有兴趣的同学也可以看<a href="https://github.com/grigio/vagrant-chef-solo-bootstrap">这个</a>示例配置。</p>
-</div>
-
-
-<div class="meta">
-	<div class="date">
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">流浪汉，木偶和厨子</h1>
+    
+    
+      <p class="meta">
+        
 
 
 
@@ -102,54 +92,97 @@
   
 
 
-<time datetime="2013-03-21T20:25:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time></div>
-	<div class="tags">
+<time datetime="2013-03-21T20:25:00+08:00" pubdate data-updated="true">Mar 21<sup>st</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
 
 
-	<a class='category' href='/categories/chef/'>Chef</a>, <a class='category' href='/categories/puppet/'>Puppet</a>, <a class='category' href='/categories/vagrant/'>Vagrant</a>
+<div class="entry-content"><p>最近要为 Phabricator 搭建虚拟测试环境，<a href="http://www.vagrantup.com">Vagrant</a> 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只<a href="https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Boxes">提供</a> Ubuntu 的 base box，不过 <a href="http://www.vagrantbox.es">Vagrantbox.es</a> 有提供很多其它的系统，甚至还有 Window$。也可以自己根据<a href="http://docs-v1.vagrantup.com/v1/docs/base_boxes.html">官方文档</a>重新搭建一个 base box。</p>
 
+<p><a href="http://docs.vagrantup.com/v2/provisioning/index.html">Provisioning</a> 是 Vagrant 一个很棒的特性，可以通过工具来自动配置和管理虚拟机。目前支持的有 Puppet 和 Chef，这两个都是著名的配置管理工具，其中 Google、Twitter、GitHub 在用 Puppet，Facebook 在用 Chef，知乎目前用的是 Puppet。正好这次两个都了解了一点，可以简单比较一下。</p>
 
-</div>
-	
-</div></article>
+<p>从安装方式来说，因为都是基于 Ruby 的工具，所以都可以通过 <code>gem</code> 来安装，从这一点上来说还是很方便的（话说对于 Mac 用户，千万别用官方提供的烂方法）。Puppet 的命令行工具就叫 <code>puppet</code>，而 Chef 的叫做 <code>knife</code>，这倒是跟 Chef 本身名字很搭。初学工具，肯定要看官方文档，在这一点上我觉得 Puppet 做得更好，至少还有一个像模像样的 <a href="http://docs.puppetlabs.com/learning/">Learning Puppet</a> 系列，由浅入深，循序渐进，基本上看完就可以对 Puppet 有个大概的了解和使用。而 Chef 就只扔给你一个<a href="http://docs.opscode.com">不知道该从哪看起的页面</a>，作为初学者表示很难入门。</p>
 
-	<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+<p>Puppet 可以将一系列的配置文件打包成一个 module 供人下载，Chef 对应的则叫做 cookbook，这两者都提供了网站用于集中放置社区贡献的包，分别是 <a href="http://forge.puppetlabs.com">Puppet Forge</a> 和 <a href="http://community.opscode.com/cookbooks">Opscode Community</a>（不得不吐槽，这两个网站都很糙）。对于 module、cookbook 的安装及管理 Chef 略胜一筹，Puppet 的命令行工具可以很方便地安装 module，但是如果需要安装的包比较多，就只能通过自己写脚本来自动处理。而 Chef 有一个很好用的工具 <a href="https://github.com/applicationsonline/librarian">Librarian-Chef</a>，只需要定义好所有依赖包，并放到 Cheffile 中，就可以通过 <code>librarian-chef</code> 命令来安装和管理。</p>
+
+<p>Puppet 在易用性，社区质量和包的扩展性上来说要比 Chef 略优，能查到的文档资料也更多一点，最终我选择了 Puppet，<a href="https://github.com/xiaogaozi/vagrant-phabricator">这里</a>是我的适用于 Phabricator 的配置文件，对 Chef 有兴趣的同学也可以看<a href="https://github.com/grigio/vagrant-chef-solo-bootstrap">这个</a>示例配置。</p>
 </div>
 
 
+  <footer>
+    <p class="meta">
+      
+  
 
-<section id="comment">
-    <h1 class="title">Comments</h1>
+<span class="byline author vcard">Posted by <span class="fn">xiaogaozi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-21T20:25:00+08:00" pubdate data-updated="true">Mar 21<sup>st</sup>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/chef/'>chef</a>, <a class='category' href='/categories/puppet/'>puppet</a>, <a class='category' href='/categories/vagrant/'>vagrant</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/" data-via="xiaogaozi" data-counturl="http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2013/03/12/little-tips-redis-monitor-command/" title="Previous Post: Little Tips: Redis MONITOR Command">&laquo; Little Tips: Redis MONITOR Command</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/08/09/hello-thailand/" title="Next Post: 我想骑着摩托载着你就这样在清迈古城闲逛">我想骑着摩托载着你就这样在清迈古城闲逛 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
     <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-</section>
-</div>
-	<footer id="footer" class="inner">&copy; 2014
+  </section>
 
-    xiaogaozi
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2014 - xiaogaozi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
 
 </footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
+  
 
 <script type="text/javascript">
       var disqus_shortname = 'xiaogaozi';
@@ -162,24 +195,45 @@
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
 
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-26507501-1']);
-		_gaq.push(['_trackPageview']);
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
 
 
 

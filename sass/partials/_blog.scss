@@ -1,16 +1,19 @@
 article {
-  padding-top: 1em;
+  padding-top: 2em;
   a { @extend .force-wrap; }
+
   header {
     position: relative;
     padding-top: 2em;
     padding-bottom: 1em;
     margin-bottom: 1em;
     background: $img-border bottom left repeat-x;
+    text-align: center;
+
     h1 {
-      margin: 0;
-      a { text-decoration: none;
-        &:hover { text-decoration: underline; } }
+      font-size: 3em;
+      margin-bottom: 1rem;
+      a { text-decoration: none; }
     }
     p {
       font-size: .9em;
@@ -19,11 +22,9 @@ article {
       &.meta {
         @extend .sans;
         text-transform: uppercase;
-        position: absolute; top: 0;
       }
     }
     @media only screen and (min-width: 768px) {
-      margin-bottom: 1.5em;
       padding-bottom: 1em;
       background: $img-border bottom left repeat-x;
     }
@@ -88,11 +89,11 @@ article + article {
   }
 }
 #content .blog-index {
-  padding: { top: 0; bottom: 0; }
-  article { padding-top: 2em; }
-  article header { background: none; padding-bottom: 0; }
+  article header {
+    background: none;
+  }
   article h1 {
-    font-size: 2.2em;
+    /*font-size: 2.2em;*/
     a { color: inherit; &:hover { color: $link-color-hover; } }
   }
   a[rel=full-article] {

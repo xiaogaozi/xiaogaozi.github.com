@@ -1,91 +1,86 @@
 
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<title>Little Tips: Redis MONITOR Command - Freedom</title>
-	<meta name="author" content="xiaogaozi">
+  <meta charset="utf-8">
+  <title>Little Tips: Redis MONITOR Command - Freedom</title>
+  <meta name="author" content="xiaogaozi">
 
-	
-	<meta name="description" content="前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 MONITOR 命令， &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="description" content="前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 MONITOR 命令， &hellip;">
+  
 
-	<link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="Freedom" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.png" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command">
+  <link href="/favicon.png" rel="shortcut icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="Freedom" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Rambla:700' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26507501-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
 </head>
 
-<body>
-	<header id="header" class="inner"><h1><a href="/">Freedom</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/archives">Archives</a></li>
-	<li><a href="/about">About</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/archives">Archives</a></li>
-	<li><a href="/about">About</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-        <a href="http://twitter.com/xiaogaozi" title="Twitter"><i class="icon-twitter"></i></a>
-		
-		
-        <a href="https://github.com/xiaogaozi" title="GitHub"><i class="icon-github-sign"></i></a>
-		
-		
-		
-		
-		
-        <a href="http://feeds.feedburner.com/xiaogaozi" title="RSS"><i class="icon-rss"></i></a>
-		
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:blog.xiaogaozi.org">
-	</form>
-</nav>
+<body >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Freedom</a></h1>
+  
+    <h2>淡泊以明志，宁静以致远。</h2>
+  
+</hgroup>
 
 </header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h1 class="title">Little Tips: Redis MONITOR Command</h1>
-	<div class="entry-content"><p>前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 <a href="http://redis.io/commands/monitor">MONITOR</a> 命令，可以实时打印出此时正在执行的命令，正合我意，修改缓存的命令我是知道的，只需要监测这个命令，然后就可以查到来源了。</p>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/xiaogaozi" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.xiaogaozi.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
 
-<pre><code>$ redis-cli monitor | grep '"set" "alist"'
-</code></pre>
-</div>
-
-
-<div class="meta">
-	<div class="date">
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Little Tips: Redis MONITOR Command</h1>
+    
+    
+      <p class="meta">
+        
 
 
 
@@ -97,54 +92,92 @@
   
 
 
-<time datetime="2013-03-12T23:47:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time></div>
-	<div class="tags">
+<time datetime="2013-03-12T23:47:00+08:00" pubdate data-updated="true">Mar 12<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
 
 
-	<a class='category' href='/categories/redis/'>Redis</a>
+<div class="entry-content"><p>前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 <a href="http://redis.io/commands/monitor">MONITOR</a> 命令，可以实时打印出此时正在执行的命令，正合我意，修改缓存的命令我是知道的，只需要监测这个命令，然后就可以查到来源了。</p>
 
-
-</div>
-	
-</div></article>
-
-	<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+<pre><code>$ redis-cli monitor | grep '"set" "alist"'
+</code></pre>
 </div>
 
 
+  <footer>
+    <p class="meta">
+      
+  
 
-<section id="comment">
-    <h1 class="title">Comments</h1>
+<span class="byline author vcard">Posted by <span class="fn">xiaogaozi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T23:47:00+08:00" pubdate data-updated="true">Mar 12<sup>th</sup>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/redis/'>redis</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command/" data-via="xiaogaozi" data-counturl="http://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/10/28/big-fish/" title="Previous Post: 给未来的你">&laquo; 给未来的你</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/03/21/vagrant-puppet-and-chef/" title="Next Post: 流浪汉，木偶和厨子">流浪汉，木偶和厨子 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
     <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-</section>
-</div>
-	<footer id="footer" class="inner">&copy; 2014
+  </section>
 
-    xiaogaozi
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2014 - xiaogaozi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
 
 </footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
+  
 
 <script type="text/javascript">
       var disqus_shortname = 'xiaogaozi';
@@ -157,24 +190,45 @@
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
 
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-26507501-1']);
-		_gaq.push(['_trackPageview']);
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
 
 
 
