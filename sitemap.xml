@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.xiaogaozi.org/2014/12/15/saling-in-hk/</loc>
+    <lastmod>2014-12-15T05:28:58+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/</loc>
     <lastmod>2014-01-31T05:07:36+08:00</lastmod>
     <priority>0.8</priority>
@@ -83,28 +89,28 @@
   
   <url>
     <loc>http://blog.xiaogaozi.org/blog/archives/</loc>
-    <lastmod>2014-12-15T05:22:25+08:00</lastmod>
+    <lastmod>2014-12-15T05:31:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.xiaogaozi.org/</loc>
-    <lastmod>2014-12-15T05:22:25+08:00</lastmod>
+    <lastmod>2014-12-15T05:31:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://blog.xiaogaozi.org/archives/</loc>
-    <lastmod>2014-12-15T05:22:25+08:00</lastmod>
+    <lastmod>2014-12-15T05:31:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.xiaogaozi.org/about/</loc>
-    <lastmod>2014-12-15T05:22:25+08:00</lastmod>
+    <lastmod>2014-12-15T05:31:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
