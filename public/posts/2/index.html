@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Freedom</title>
+  <meta name="author" content="xiaogaozi">
+
+  
+  <meta name="description" content="说起项目构建工具，Linux 用户最熟悉的恐怕就是 Autotools，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autotools 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autotools &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.xiaogaozi.org/posts/2">
+  <link href="/favicon.png" rel="shortcut icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="Freedom" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Rambla:700' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26507501-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Freedom</a></h1>
+  
+    <h2>淡泊以明志，宁静以致远。</h2>
+  
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/xiaogaozi" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.xiaogaozi.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/10/29/introduction-to-gyp/">GYP 简介</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-29T22:55:00+08:00" pubdate data-updated="true">Oct 29<sup>th</sup>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://en.wikipedia.org/wiki/GNU_build_system">Autotools</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autotools 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autotools 天生对于跨平台支持不佳。</p>
+
+<p>后来我从<a href="https://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autotools 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
+
+<p><a href="http://code.google.com/p/gyp/">GYP</a>（Generate Your Projects）是由 Chromium 团队开发的跨平台自动化项目构建工具，Chromium 便是通过 GYP 进行项目构建管理。为什么我要选择 GYP，而放弃 CMake 呢？功能上 GYP 和 CMake 很是相似，在我看来，它们的最大区别在于配置文件的编写方式和其中蕴含的思想。</p>
+
+<p>编写 CMake 配置文件相比 Autotools 来说已经简化很多，一个最简单的配置文件只需要写上源文件及生成类型（可执行文件、静态库、动态库等）即可。对分支语句和循环语句的支持也使得 CMake 更加灵活。但是，CMake 最大的问题也是在这个配置文件，请看下面这个示例文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='cmake'><span class='line'><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span>
+</span><span class='line'><span class="nb">project</span><span class="p">(</span><span class="s">VP8</span> <span class="s">CXX</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-Wall</span><span class="p">)</span>
+</span><span class='line'><span class="nb">cmake_policy</span><span class="p">(</span><span class="s">SET</span> <span class="s">CMP0015</span> <span class="s">NEW</span><span class="p">)</span>
+</span><span class='line'><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&quot;include&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">link_directories</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_ARCHIVE_OUTPUT_DIRECTORY</span> <span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">VP8SRC</span> <span class="s">VP8Encoder.cpp</span> <span class="s">VP8Decoder.cpp</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">if</span><span class="p">(</span><span class="s">X86</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Darwin</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">i386</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="s2">&quot;i386&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">add_library</span><span class="p">(</span><span class="s">vp8</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">VP8SRC</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'><span class="nb">elseif</span><span class="p">(</span><span class="s">IPHONE</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">if</span><span class="p">(</span><span class="s">SIMULATOR</span><span class="p">)</span>
+</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PLATFORM</span> <span class="s2">&quot;iPhoneSimulator&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PROCESSOR</span> <span class="s">i386</span><span class="p">)</span>
+</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">ARCH</span> <span class="s2">&quot;i386&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">else</span><span class="p">()</span>
+</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PLATFORM</span> <span class="s2">&quot;iPhoneOS&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PROCESSOR</span> <span class="s">arm</span><span class="p">)</span>
+</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">ARCH</span> <span class="s2">&quot;armv7&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">endif</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">SDKVER</span> <span class="s2">&quot;4.0&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">DEVROOT</span> <span class="s2">&quot;/Developer/Platforms/${PLATFORM}.platform/Developer&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">SDKROOT</span> <span class="s2">&quot;${DEVROOT}/SDKs/${PLATFORM}${SDKVER}.sdk&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_SYSROOT</span> <span class="s2">&quot;${SDKROOT}&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Generic</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="o">${</span><span class="nv">PROCESSOR</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s2">&quot;${DEVROOT}/usr/bin/g++&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="o">${</span><span class="nv">ARCH</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">include_directories</span><span class="p">(</span><span class="s">SYSTEM</span> <span class="s2">&quot;${SDKROOT}/usr/include&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">link_directories</span><span class="p">(</span><span class="s">SYSTEM</span> <span class="s2">&quot;${SDKROOT}/usr/lib&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_PHONE</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">add_library</span><span class="p">(</span><span class="s">vp8-armv7-darwin</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">VP8SRC</span><span class="o">}</span><span class="p">)</span>
+</span><span class='line'><span class="nb">endif</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你能一眼看出这个配置文件干了什么吗？其实这个配置文件想要产生的目标（target）只有一个，就是通过 <code>${VP8SRC}</code> 编译生成的静态库，但因为加上了条件判断，及各种平台相关配置，使得这个配置文件看起来很是复杂。在我看来，编写 CMake 配置文件是一种线性思维，对于同一个目标的配置可能会零散分布在各个地方。而 GYP 则相当不同，GYP 的配置文件更多地强调模块化、结构化。看看下面这个示例文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s">&#39;targets&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s">&#39;target_name&#39;</span><span class="p">:</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;&lt;(library)&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s">&#39;dependencies&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;bar&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;DEFINE_FOO&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s">&#39;DEFINE_A_VALUE=value&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="s">&#39;include_dirs&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;..&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="s">&#39;sources&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s">&#39;file1.cc&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s">&#39;file2.cc&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="s">&#39;conditions&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">[</span><span class="s">&#39;OS==&quot;linux&quot;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>          <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s">&#39;LINUX_DEFINE&#39;</span><span class="p">,</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>          <span class="s">&#39;include_dirs&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s">&#39;include/linux&#39;</span><span class="p">,</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>        <span class="p">}],</span>
+</span><span class='line'>        <span class="p">[</span><span class="s">&#39;OS==&quot;win&quot;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>          <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s">&#39;WINDOWS_SPECIFIC_DEFINE&#39;</span><span class="p">,</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>        <span class="p">},</span> <span class="p">{</span> <span class="c"># OS != &quot;win&quot;,</span>
+</span><span class='line'>          <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s">&#39;NON_WINDOWS_DEFINE&#39;</span><span class="p">,</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>        <span class="p">}]</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以立马看出上面这个配置文件的输出目标只有一个，也就是 <code>foo</code>，它是一个库文件（至于是静态的还是动态的这需要在生成项目时指定），它依赖的目标、宏定义、包含的头文件路径、源文件是什么，以及根据不同平台设定的不同配置等。这种定义配置文件的方式相比 CMake 来说，让我觉得更加舒服，也更加清晰，特别是当一个输出目标的配置越来越多时，使用 CMake 来管理可能会愈加混乱。</p>
+
+<p>配置文件的编写方式是我区分 GYP 和 CMake 之间最大的不同点，当然 GYP 也有一些小细节值得注意，比如支持跨平台项目工程文件输出，Windows 平台默认是 Visual Studio，Linux 平台默认是 Makefile，Mac 平台默认是 Xcode，这个功能 CMake 也同样支持<del>，只是缺少了 Xcode</del>。Chromium 团队成员也撰文详细<a href="http://code.google.com/p/gyp/wiki/GypVsCMake">比较</a>了 GYP 和 CMake 之间的优缺点，在开发 GYP 之前，他们也曾试图转到 <a href="http://www.scons.org/">SCons</a>（这个我没用过，有经验的同学可以比较一下），但是失败了，于是 GYP 就诞生了。</p>
+
+<p>当然 GYP 也不是没有缺点，相反，我觉得它的「缺点」一大堆：</p>
+
+<ul>
+<li>文档不够完整，项目不够正式，某些地方还保留着 Chromium 的影子，看起来像是还没有完全独立出来。</li>
+<li>大量的括号嵌套，很容易让人看晕，有过 Lisp 使用经验的同学可以对号入座。对于有括号恐惧症，或者不使用现代编辑器的同学基本可以绕行。</li>
+<li>为了支持跨平台，有时不得不加入某些特定平台的配置信息，比如只适用于 Visual Studio 的 <code>RuntimeLibrary</code> 配置，这不利于跨平台配置文件的编写，也无形中增加了编写复杂度。</li>
+<li>不支持 <code>make clean</code>，唯一的方法就是将输出目录整个删除或者手动删除其中的某些文件。</li>
+</ul>
+
+
+<p>如果你已经打算尝试 GYP，那一定记得在生成项目工程文件时加上 <code>--depth</code> 参数，譬如：</p>
+
+<pre><code>$ gyp --depth=. foo.gyp
+</code></pre>
+
+<p>这也是一个从 Chromium 项目遗留下来的历史问题。</p>
+
+<p>也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的<a href="https://github.com/xiaogaozi/princess-alist/blob/master/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl">模板</a>，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的「风格」，至于孰优孰劣，还得仁者见仁，智者见智。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/10/23/octopress-rocks/">Octopress Rocks!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-23T17:12:00+08:00" pubdate data-updated="true">Oct 23<sup>rd</sup>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天开始尝试 <a href="http://octopress.org/">Octopress</a>，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers」。我用了多年的 Blogger <a href="http://xiaogaozi.blogspot.com">博客</a>也终于寿终正寝，如果你是一个非 hacker 博客作者，<a href="http://www.blogger.com/">Blogger</a> 绝对值得推荐（满足 <a href="http://www.dbanotes.net/review/gfw_rule.html">GFW 三定律</a>）。</p>
+
+<h2>Another WordPress?</h2>
+
+<p>Yes。Octopress 具备一个博客应当具备的所有功能，文章、评论、页面、分享、RSS、搜索、Archives 等等。</p>
+
+<p>No。正如 Octopress 网站介绍所说：A blogging framework for hackers，重点就在最后那个 hackers。没有了 WordPress 的后台界面，写博客需要的工具仅仅是 Ruby、Git、Markdown 和你喜爱的编辑器。如果你是一个 hacker，那你对这些工具不会陌生，相比 WordPress 蹩脚的后台页面，Octopress 提供的写作方式会让你非常喜爱。</p>
+
+<h2>写作</h2>
+
+<p>博客最重要的功能就是写作，写作就像程序员编写代码，如果不能提供舒服的方式，那简直是一种自虐。事实已经证明 HTML 不是一种好的写作方式，因此 WordPress 这类博客提供了所见即所得编辑器，但对于喜欢精确掌控的 hacker 来说这还不够，于是类似于 Markdown 这样的标记语言逐渐在圈内盛行。这类标记语言最大的好处就是让作者不用关心文章的样式，而专注于文章的内容。这很重要，一篇文章的精髓在于文字，如果过多地被样式困扰，精力便会分散，也必然不会思考出更好的文字。类似的比较还有 Word 和 LaTeX，当然这种观点也是仁者见仁，智者见智。</p>
+
+<p>Octopress 原生为我们提供了 Markdown 支持，需要写一篇新博客了？打开你喜欢的编辑器，使用 Markdown 语法开始书写即可。WordPress？虽然也可以添加 Markdown 支持，但不免显得蹩脚。</p>
+
+<h2>语法高亮</h2>
+
+<p>这个功能对程序员来说尤为重要，但至今没有博客提供原生支持，这也是最大的遗憾。Octopress 彻底颠覆了这种局面，语法高亮变得如此顺其自然。</p>
+
+<figure class='code'><figcaption><span>rename.py</span><a href='https://raw.github.com/xiaogaozi/princess-alist/master/home/xiaogaozi/src/Python/rename.py'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Batch rename utility. &lt;https://github.com/xiaogaozi/princess-alist&gt;</span>
+</span><span class='line'><span class="c"># Copyright (C) &lt;2011&gt;  xiaogaozi &lt;gaochangjian@gmail.com&gt;</span>
+</span><span class='line'><span class="c"># </span>
+</span><span class='line'><span class="c"># This program is free software: you can redistribute it and/or modify</span>
+</span><span class='line'><span class="c"># it under the terms of the GNU General Public License as published by</span>
+</span><span class='line'><span class="c"># the Free Software Foundation, either version 3 of the License, or</span>
+</span><span class='line'><span class="c"># (at your option) any later version.</span>
+</span><span class='line'><span class="c"># </span>
+</span><span class='line'><span class="c"># This program is distributed in the hope that it will be useful,</span>
+</span><span class='line'><span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+</span><span class='line'><span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+</span><span class='line'><span class="c"># GNU General Public License for more details.</span>
+</span><span class='line'><span class="c"># </span>
+</span><span class='line'><span class="c"># You should have received a copy of the GNU General Public License</span>
+</span><span class='line'><span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">os</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">re</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">usage</span><span class="p">():</span>
+</span><span class='line'>    <span class="sd">&quot;&quot;&quot;Usage&quot;&quot;&quot;</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&quot;Usage: rename.py expr files&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span><span class='line'>    <span class="sd">&quot;&quot;&quot;Main progress.&quot;&quot;&quot;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">usage</span><span class="p">()</span>
+</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">expr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;^[sy]/([^/]*)/([^/]*)/$&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;expression incorrect</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">re1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">re2</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c"># actually in substitute mode this portion is not regular expression</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="n">oldfile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">oldfile</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">oldname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">oldfile</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">newname</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+</span><span class='line'>        <span class="n">newfile</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;s&#39;</span><span class="p">:</span>  <span class="c"># substitute</span>
+</span><span class='line'>            <span class="n">newname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">re1</span><span class="p">,</span> <span class="n">re2</span><span class="p">,</span> <span class="n">oldname</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">newfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">newname</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">oldfile</span><span class="p">,</span> <span class="n">newfile</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">elif</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>  <span class="c"># transliterate</span>
+</span><span class='line'>            <span class="k">pass</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">oldfile</span><span class="p">,</span> <span class="s">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">newfile</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">main</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>版本控制</h2>
+
+<p>程序员已经被版本控制惯坏了，只要能纳入版本库，就统统放进去。WordPress 拥有同样蹩脚的版本控制，显然不足以满足 hacker 的需求，Octopress 为我们提供了 Git 原生支持，一切一切都为你所控，放在你喜欢的版本控制库里即可。</p>
+
+<h2>部署</h2>
+
+<p>Octopress 为我们提供了三种部署方式：GitHub Pages，Heroku，Rsync，在我看来，其实就两种：免费和收费。GitHub Pages 和 Heroku 都是免费使用，Rsync 则需要你拥有自己的虚拟主机。<del>我选择了 Heroku，毕竟 GitHub Pages 本意是用来放项目介绍页面的，结果被强大的 hacker 们发掘来作为博客了⋯⋯</del> 我现在使用的是 GitHub Pages。</p>
+
+<h2>Continue?</h2>
+
+<p>开始享受写作的乐趣吧～</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/06/11/introduction-to-spdy/">SPDY 简介</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-11T11:26:00+08:00" pubdate data-updated="true">Jun 11<sup>th</sup>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天在看 CTF write-up 时发现<a href="http://michele.spagnuolo.me/articles/web-security/defcon-ctf19-quals-grab-bag-100-writeup.html">有人提到</a> <a href="http://dev.chromium.org/spdy">SPDY</a> 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。</p>
+
+<p>首先 SPDY 是一个应用层协议，它被创造出来的唯一目的就是让 Web 更快，更快，还是更快。Google 这家公司似乎很喜欢「快」这个东西，Chrome 从诞生到现在每次几乎必定宣传自己有多么得快，搞得大家已经产生了某种心理暗示。SPDY 诞生于 2009 年，其实这是对外公开发布的时间，开始研究的时间应该更早。众所周知，如今的 Web 是通过 HTTP 协议和 TCP 协议进行传输，但种种因素导致 HTTP 传输变得很慢：</p>
+
+<ul>
+<li>每一个 TCP 连接一次只能发一个 HTTP 请求，这个估计是 HTTP 协议的最大弊端。想象一下如今的网站已经包含大量的图片、CSS、JS 需要加载，如果一个请求一个请求地发，那肯定会慢死，所以浏览器通常都是通过建立多个连接来回避这个问题，但毕竟治标不治本。</li>
+<li>只能由客户端主动发起 HTTP 请求，即时有时服务器知道还需要回复其它资源，它也只能等客户端先发起再回复。服务器真可怜，太被动了。</li>
+<li>HTTP 头没有压缩，而且 HTTP 头也有一些冗余信息，比如 User-Agent 就没有必要每次都发来发去，太浪费带宽了。</li>
+<li>数据压缩是可选的，Google 认为必须强制要求。</li>
+</ul>
+
+
+<p>既然 HTTP 有这么多缺点，那应该不止 Google 自己想要解决，其实是有的，本着不重复造轮子的原则 Google 列举了现有的一些改进方案：</p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a>：以流水线的形式传输请求和数据，这里吐槽一下，以前在公司时 Facebook 的某牛来介绍时谈到了他们开发的 BigPipe，思想也是流水线，同样也是为了优化 Web 性能，不知道他们是不是借鉴了 HTTP pipelining，:)</li>
+<li><a href="http://www.sctp.org/">SCTP</a>：用于替代 TCP 的传输层协议，提供了 multiplexed streams（多路复用流）和 stream-aware congestion control（流感知拥塞控制）</li>
+<li><a href="http://pdos.csail.mit.edu/uia/sst/">SST</a>：同样用于替代 TCP 协议（TCP 同学真是众矢之的⋯⋯），也可以运行在 UDP 协议之上。</li>
+<li><a href="http://www.w3.org/Protocols/MUX/">MUX</a> 和 <a href="http://www.w3.org/TR/WD-mux">SMUX</a>：运行在传输层和应用层之间的中间协议，同样提供了复用流。</li>
+</ul>
+
+
+<p>但是 Google 同学觉得以上这些都还不够，它要追求更大程度的性能提升。考虑到 TCP 现在应用还很广泛，想替代也不是一天两天的事情，但 HTTP 就不一样了，它是应用层的！所以说有自家的浏览器就是好办，发明个应用层协议马上就可以上线。SPDY 在刚出来的时候 Google 还在说这并不是用来替代 HTTP 协议的，它只是一个中间协议，但看看<a href="http://dev.chromium.org/spdy/spdy-protocol">最新的协议文档</a>里面已经将 SPDY 分为了两层，其中一层被描述为 HTTP-like，大有取代 HTTP 的意图（Google 最近的<a href="http://googledevelopers.blogspot.com/2012/05/spdy-performance-on-mobile-networks.html">一篇文章</a>已经直呼 SPDY 为「a replacement for HTTP」）。可以想到 Google 已经将提议提交给 IETF，也许未来的某一天我们就不再使用 HTTP 协议了。SPDY 主要有以下一些特性：</p>
+
+<ul>
+<li>multiplexed streams，一个 TCP 连接将支持无限的并发 HTTP 请求</li>
+<li>请求优先级，因为现在支持并发请求，就必须得为每一个请求设置一定的优先级</li>
+<li>压缩 HTTP 头，去掉多余的头信息</li>
+<li>全部请求都是通过 SSL 加密，Google 认为安全网络连接必定是未来的发展方向，即使加密会微微增加一些传输时间</li>
+<li>Web 服务器将能够主动发起通信，也就是 server push</li>
+<li>还有一个类似的叫 server hint，不同于 server push 的是它仅仅向客户端发送一个 suggest，提示客户端需要发送一个 HTTP 请求</li>
+</ul>
+
+
+<p>这些改进到底能有多大提升？Google 给出的数据是 39%～55%，在丢包严重或高延迟环境下，SPDY 表现更加出色。</p>
+
+<p>要支持 SPDY，除了客户端必须支持外，还要有相应的 Web 服务器。现在已经有 <a href="http://wiki.eclipse.org/Jetty/Feature/SPDY">Java</a>、<a href="http://code.google.com/p/mod-spdy/">Apache module</a>、<a href="http://github.com/mnot/nbhttp/tree/spdy">Python</a>、<a href="https://github.com/igrigorik/spdy">Ruby</a>、<a href="https://github.com/indutny/node-spdy">node.js</a> 等各种实现。</p>
+
+<p>最后，如果你正在使用 Chrome 浏览器，并且访问 Google 的网站，那你已经开始使用 SPDY 了，输入 <a href="chrome://net-internals/#spdy">chrome://net-internals/#spdy</a> 还可以了解更加详细的信息。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="1">Newer &rarr;</a>
+    
+  </div>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2014 - xiaogaozi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'xiaogaozi';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
