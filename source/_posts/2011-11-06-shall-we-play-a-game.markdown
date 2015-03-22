@@ -16,7 +16,7 @@ WarGames 对于此后的黑客文化产生了深远的影响。它创造了「fi
 
 还有一个人「深受」这部电影的影响，[Kevin Mitnick](http://en.wikipedia.org/wiki/Kevin_Mitnick)，这个计算机安全界传说级的人物。当然不是说 Kevin 同学是因为这部电影走上的不归路，Kevin 同学搞入侵那会儿 WarGames 还没上映呢。Kevin 同学后来入狱时被拒绝接触任何电子设备，包括电话，是因为控诉律师相信他可以通过电话连接到 NORAD。据 Kevin 同学分析 WarGames 这部电影很大程度上使得公众相信这件事情是可以很容易办到的，其实他根本就没有入侵过 NORAD，通过电话来入侵也过于夸张。尽管如此，他还是被判单独监禁，从此传为计算机安全界的一段「佳话」⋯⋯
 
-游戏界也从 WarGames 获益不少，1984 年[同名游戏][]发布。2006 年一款叫做 [DEFCON][] 的即时战略游戏发布，游戏画面与电影中 NORAD 指挥中心的大屏幕极为相似。DEFCON（defense readiness condition）是美国军方采用的警报等级，在 WarGames 电影中 NORAD 曾因模拟的苏联进攻一度将 DEFCON 等级提升到最高等级 1。著名的黑客大会 [DEF CON](https://www.defcon.org/) 的名字也是来源于此。
+游戏界也从 WarGames 获益不少，1984 年[同名游戏][]发布。2006 年一款叫做 [DEFCON][] 的即时战略游戏发布，游戏画面与电影中 NORAD 指挥中心的大屏幕极为相似。DEFCON（defense readiness condition）是美国军方采用的警报等级，在 WarGames 电影中 NORAD 曾因模拟的苏联进攻一度将 DEFCON 等级提升到最高等级 1。著名的黑客大会 [DEF CON](https://www.defcon.org) 的名字也是来源于此。
 
 或许 WarGames 对于电影史并没有太大的贡献，但却深深影响着那一代的 Geek 们。谨以此文献给那些逝去的先驱，RIP
 

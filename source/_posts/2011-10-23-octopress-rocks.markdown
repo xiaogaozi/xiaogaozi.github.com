@@ -3,7 +3,7 @@ layout: post
 title: "Octopress Rocks!"
 date: 2011-10-23 17:12
 comments: true
-categories: [C'EST LA VIE]
+categories: [octopress, blog]
 ---
 
 今天开始尝试 [Octopress](http://octopress.org/)，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers」。我用了多年的 Blogger [博客](http://xiaogaozi.blogspot.com)也终于寿终正寝，如果你是一个非 hacker 博客作者，[Blogger](http://www.blogger.com/) 绝对值得推荐（满足 [GFW 三定律](http://www.dbanotes.net/review/gfw_rule.html)）。

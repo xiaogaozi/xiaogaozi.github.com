@@ -3,7 +3,7 @@ layout: post
 title: "SPDY 简介"
 date: 2011-06-11 11:26
 comments: true
-categories: [Google]
+categories: [google, spdy]
 ---
 
 今天在看 CTF write-up 时发现[有人提到](http://michele.spagnuolo.me/articles/web-security/defcon-ctf19-quals-grab-bag-100-writeup.html) [SPDY](http://dev.chromium.org/spdy) 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。
