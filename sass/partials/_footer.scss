@@ -1,5 +1,5 @@
 footer[role="contentinfo"] {
-  display: table;
+  display: flex;
   height: 8em;
   @extend .sans;
   font-size: .8em;
@@ -13,8 +13,5 @@ footer[role="contentinfo"] {
 
   p {
     margin: auto;
-    display: table-cell;
-    vertical-align: middle;
-    width: 100%;
   }
 }
