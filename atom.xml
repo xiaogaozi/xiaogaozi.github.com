@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Freedom]]></title>
-  <link href="https://blog.xiaogaozi.org/atom.xml" rel="self"/>
-  <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2016-04-17T14:09:49+08:00</updated>
-  <id>https://blog.xiaogaozi.org/</id>
+  <link href="http://blog.xiaogaozi.org/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2016-04-17T14:18:01+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[A Little Throught About Microservices]]></title>
-    <link href="https://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices/"/>
+    <link href="http://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices/"/>
     <updated>2015-03-22T23:25:05+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices</id>
+    <id>http://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices</id>
     <content type="html"><![CDATA[<p>知乎在 4 年前已经开始尝试服务化，至今也经历了好几个架构的变迁演化。我大约是 2013 年开始在知乎负责服务化的工作，对服务化的理解也从最初的模糊逐渐变得清晰，前段时间看了一篇叫做 <a href="http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html">Microservices &ndash; Not A Free Lunch!</a> 的文章，也想趁着这个机会梳理总结目前为止我的一些感悟和想法。</p>
 
 <!-- more -->
@@ -106,9 +106,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hadoop Best Practices: Scheduling in YARN]]></title>
-    <link href="https://blog.xiaogaozi.org/2014/12/27/hadoop-best-practices-scheduling-in-yarn/"/>
+    <link href="http://blog.xiaogaozi.org/2014/12/27/hadoop-best-practices-scheduling-in-yarn/"/>
     <updated>2014-12-27T19:01:55+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2014/12/27/hadoop-best-practices-scheduling-in-yarn</id>
+    <id>http://blog.xiaogaozi.org/2014/12/27/hadoop-best-practices-scheduling-in-yarn</id>
     <content type="html"><![CDATA[<blockquote><p>这篇文章基本上是对<a href="https://www.safaribooksonline.com/library/view/hadoop-the-definitive/9781491901687/ch04.html#YARNScheduling">《Hadoop: The Definitive Guide, 4th Edition》第 4 章</a>的转述，版权归作者所有。</p></blockquote>
 
 <p>YARN 提供了三种任务调度策略：FIFO Scheduler，Capacity Scheduler 和 Fair Scheduler，下面会分别详细介绍。</p>
@@ -337,9 +337,9 @@
   
   <entry>
     <title type="html"><![CDATA[香港帆船培训记录]]></title>
-    <link href="https://blog.xiaogaozi.org/2014/12/15/saling-in-hk/"/>
+    <link href="http://blog.xiaogaozi.org/2014/12/15/saling-in-hk/"/>
     <updated>2014-12-15T05:28:58+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2014/12/15/saling-in-hk</id>
+    <id>http://blog.xiaogaozi.org/2014/12/15/saling-in-hk</id>
     <content type="html"><![CDATA[<p><img class="center" src="https://farm4.staticflickr.com/3947/14961313994_9fea8b7503_z.jpg"></p>
 
 <p>曾经对香港的印象就是便宜的苹果电脑和遍地的茶餐厅，竟忘记了这是一个靠海的岛屿。作为一个在西部长大的孩子，对于海总是有很多憧憬。从小到大见过很多地方的海，有浑浊的，有碧蓝的，有挤满游客的，也有波涛汹涌的。其实海不一定就是蓝色的，只是人们习惯性地把自己的愿望加诸在别的东西身上，所以如果某一天你见到了不是蓝色的海，请不要抱怨它。</p>
@@ -371,9 +371,9 @@
   
   <entry>
     <title type="html"><![CDATA[Auto Open Browser After Copy URL]]></title>
-    <link href="https://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/"/>
+    <link href="http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/"/>
     <updated>2014-01-31T05:07:36+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url</id>
+    <id>http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url</id>
     <content type="html"><![CDATA[<p>前段时间看过一篇叫 <a href="http://sc5.io/blog/2014/01/automate-everyday-tasks">Automate Everyday Tasks</a> 的博客，其中的一些见解很有意思，我们日常工作中有很多细小但是重复的事情，如果能够将某些工作自动完成，会让生活更加舒适。我很喜欢 Mac 上一个叫 <a href="http://pilotmoon.com/popclip">PopClip</a> 的小 app，可以大大减少很多重复的操作。这篇博客就是介绍如何制作一个 app，当复制 URL 时自动在浏览器中打开。</p>
 
 <!-- more -->
@@ -444,9 +444,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hello, Goodbye]]></title>
-    <link href="https://blog.xiaogaozi.org/2014/01/01/hello-goodbye/"/>
+    <link href="http://blog.xiaogaozi.org/2014/01/01/hello-goodbye/"/>
     <updated>2014-01-01T06:38:26+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2014/01/01/hello-goodbye</id>
+    <id>http://blog.xiaogaozi.org/2014/01/01/hello-goodbye</id>
     <content type="html"><![CDATA[<p>2014 年第一天的清晨我改了一个 bug，买了一个 app，喝着已经凉了的白水，加湿器冒着白烟。这座城市还在熟睡，这个每天生活、工作、恋爱的地方，它的气息吸引着我，人们仿佛只能看到它的丑，殊不知都是我们自己种下的恶果。平安夜，临下车前我把苹果送给了司机师傅，一声谢谢让我们似乎都有了对于未来的企盼。2013 年的最后一天，吃饭时朋友特意点了鱼，喻为「年年有余」，三个「孤独」的男人就这样就着玉米汁品味这一年的最后一顿饭。也许我们对于未来都有不同的打算，但是如果能互相陪伴，彼此的人生也不会孤单。我相信人性的善，当一个人告诉我他再也不相信时，或许是你还没有遇到那个人，经历那件事。从来没有觉得自己如此重要，当被另一个人视若珍宝，我只能不争气地泣不成声。</p>
 
 <blockquote><p>You don&#8217;t know about real loss, cause it only occurs when you&#8217;ve loved something more than you love yourself.</p><footer><strong>Good Will Hunting</strong> <cite><a href='http://www.imdb.com/title/tt0119217'>www.imdb.com/title/tt0119217/&hellip;</a></cite></footer></blockquote>
@@ -458,9 +458,9 @@
   
   <entry>
     <title type="html"><![CDATA[我想骑着摩托载着你就这样在清迈古城闲逛]]></title>
-    <link href="https://blog.xiaogaozi.org/2013/08/09/hello-thailand/"/>
+    <link href="http://blog.xiaogaozi.org/2013/08/09/hello-thailand/"/>
     <updated>2013-08-09T02:18:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2013/08/09/hello-thailand</id>
+    <id>http://blog.xiaogaozi.org/2013/08/09/hello-thailand</id>
     <content type="html"><![CDATA[<p>作为人生中的第一次境外游就献给了泰国，大约一周的时间，不长不短，遇见了很多人，经历了很多事，这恐怕是独自旅行才有的福利。对于泰国，几乎每一个交谈的人的第一印象都是「friendly」，这里的人们悠闲自在，热情好客，因为有着虔诚的信仰，会让你感受到每个人的善。作为一个历史更加悠久的国度，我们理应更加虔诚，但是如今的中国，信仰早已变质，我们也都是没有信仰的一代。</p>
 
 <!-- more -->
@@ -780,9 +780,9 @@
   
   <entry>
     <title type="html"><![CDATA[流浪汉，木偶和厨子]]></title>
-    <link href="https://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/"/>
+    <link href="http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/"/>
     <updated>2013-03-21T20:25:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef</id>
+    <id>http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef</id>
     <content type="html"><![CDATA[<p>最近要为 Phabricator 搭建虚拟测试环境，<a href="http://www.vagrantup.com">Vagrant</a> 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只<a href="https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Boxes">提供</a> Ubuntu 的 base box，不过 <a href="http://www.vagrantbox.es">Vagrantbox.es</a> 有提供很多其它的系统，甚至还有 Window$。也可以自己根据<a href="http://docs-v1.vagrantup.com/v1/docs/base_boxes.html">官方文档</a>重新搭建一个 base box。</p>
 
 <p><a href="http://docs.vagrantup.com/v2/provisioning/index.html">Provisioning</a> 是 Vagrant 一个很棒的特性，可以通过工具来自动配置和管理虚拟机。目前支持的有 Puppet 和 Chef，这两个都是著名的配置管理工具，其中 Google、Twitter、GitHub 在用 Puppet，Facebook 在用 Chef，知乎目前用的是 Puppet。正好这次两个都了解了一点，可以简单比较一下。</p>
@@ -797,9 +797,9 @@
   
   <entry>
     <title type="html"><![CDATA[Little Tips: Redis MONITOR Command]]></title>
-    <link href="https://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command/"/>
+    <link href="http://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command/"/>
     <updated>2013-03-12T23:47:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command</id>
+    <id>http://blog.xiaogaozi.org/2013/03/12/little-tips-redis-monitor-command</id>
     <content type="html"><![CDATA[<p>前段时间知乎的 cache 服务器中的某个数据总是错乱，想到了几个可能修改缓存的源头，同时在代码中搜索相关代码，把这些服务都重启了。但是问题依旧，只是没有之前那么严重。好吧，这下肯定是某个不知名的地方仍然在访问缓存。那就从根源查起，猛然发现 Redis 的 <a href="http://redis.io/commands/monitor">MONITOR</a> 命令，可以实时打印出此时正在执行的命令，正合我意，修改缓存的命令我是知道的，只需要监测这个命令，然后就可以查到来源了。</p>
 
 <pre><code>$ redis-cli monitor | grep '"set" "alist"'
@@ -809,9 +809,9 @@
   
   <entry>
     <title type="html"><![CDATA[给未来的你]]></title>
-    <link href="https://blog.xiaogaozi.org/2012/10/28/big-fish/"/>
+    <link href="http://blog.xiaogaozi.org/2012/10/28/big-fish/"/>
     <updated>2012-10-28T17:27:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2012/10/28/big-fish</id>
+    <id>http://blog.xiaogaozi.org/2012/10/28/big-fish</id>
     <content type="html"><![CDATA[<p>孩子，你的一生会遇见很多不一样的人，在陌生的城市和环境里结交着朋友，找寻着恋人。你每天都会很忙，忙到没有时间喝水，没有时间吃饭，没有时间思考。你会羡慕那些生活得悠闲自在的人，仿佛他们生来如此。看到街上的情侣你也会想她是否也在想着你，因为你们仰望着同一片星空。你向往着有一天和她一起生活，你们想要的生活。</p>
 
 <p>孩子，还记得我讲过的怎样遇见你母亲的故事吗？那是一个明媚的午后，记忆中的阳光总是很灿烂。当那个女生出现时，时间仿佛凝固，她没有注意到你，你知道这是一个需要你用一生去爱的女人。是的，一生。年轻人总是有无尽的诺言，但是诺言是沉重的，兑现诺言的过程是洗礼，也是炼狱，你们虽然彼此伤害，却靠得更近。</p>
@@ -826,9 +826,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用 Bootstrap 的几个问题]]></title>
-    <link href="https://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/"/>
+    <link href="http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/"/>
     <updated>2012-10-13T21:24:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap</id>
+    <id>http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap</id>
     <content type="html"><![CDATA[<h2>Responsive 与 Modal</h2>
 
 <p>在开启 responsive 后，小屏幕设备上显示 modal 时会变成一闪而过，然后浮动窗口就不见了。具体效果可以缩小浏览器尺寸，在<a href="http://twitter.github.com/bootstrap/javascript.html#modals">这个页面</a>的 Live demo 点击「Launch demo modal」看到。<a href="https://github.com/twitter/bootstrap/issues/2130">Issue #2130</a> 专门讨论了这个问题，目前比较好的解决办法是使用<a href="http://niftylettuce.github.com/twitter-bootstrap-jquery-plugins">这个插件</a>，根据页面大小来动态调整 modal 的位置，不过貌似用了之后 modal 那个由上至下显示的动画就没有了。这个 issue 现在还处于开启状态，看来官方短期内是不会解决这个问题的。</p>
@@ -862,9 +862,9 @@
   
   <entry>
     <title type="html"><![CDATA[理解 tornado.gen]]></title>
-    <link href="https://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen/"/>
+    <link href="http://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen/"/>
     <updated>2012-09-21T01:56:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen</id>
+    <id>http://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen</id>
     <content type="html"><![CDATA[<p>Tornado 通过 <code>@asynchronous</code> decorator 来实现异步请求，但使用的时候必须将 request handler 和 callback 分离开，<code>tornado.gen</code> 模块可以帮助我们在一个函数里完成这两个工作。下面是官方的一个例子：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -998,9 +998,9 @@
   
   <entry>
     <title type="html"><![CDATA[幸福]]></title>
-    <link href="https://blog.xiaogaozi.org/2012/04/22/hello-xiamen/"/>
+    <link href="http://blog.xiaogaozi.org/2012/04/22/hello-xiamen/"/>
     <updated>2012-04-22T02:53:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2012/04/22/hello-xiamen</id>
+    <id>http://blog.xiaogaozi.org/2012/04/22/hello-xiamen</id>
     <content type="html"><![CDATA[<p>三月的深圳已经渐渐有了夏天的感觉，选择这个时候出游其实是为了给自己，还有兰姐一个清明小长假前的悠闲假期。曾经的惨痛经历告诉我，如果在公共假期旅行，即使再美丽的地方也会被摩肩接踵的人群弄得失去了本来的韵味。这不是一篇攻略，虽然我会穿插着讲述一些在旅行途中的境遇。我用我的双眼，Twitter，Instagram 和 foursqure 记录下了这短暂的三天旅程。</p>
 
 <!-- more -->
@@ -1060,9 +1060,9 @@
   
   <entry>
     <title type="html"><![CDATA[Shall We Play a Game?]]></title>
-    <link href="https://blog.xiaogaozi.org/2011/11/06/shall-we-play-a-game/"/>
+    <link href="http://blog.xiaogaozi.org/2011/11/06/shall-we-play-a-game/"/>
     <updated>2011-11-06T16:24:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2011/11/06/shall-we-play-a-game</id>
+    <id>http://blog.xiaogaozi.org/2011/11/06/shall-we-play-a-game</id>
     <content type="html"><![CDATA[<p><img class="center" src="http://farm7.static.flickr.com/6235/6317821194_c76b0fd4cf.jpg" title="The IMSAI 8080 computer used in WarGames." ></p>
 
 <p>「<a href="http://www.imdb.com/title/tt0086567/">WarGames</a>」是一部 1983 年上映的科幻电影，作为投资仅 1200 万美元的小制作，在当年赢得了近 8000 万的票房。故事发生在美苏冷战时期，那个年代的电影，多多少少都会跟核威慑有关。这两个国家不管谁先发射导弹，那第三次世界大战就会爆发。电影中 NORAD（北美防空司令部）使用了一台叫做 WOPR 的超级计算机进行战事控制，这台计算机特别的地方在于它能自己模拟战争，模拟的过程就像在玩一个游戏（game）。某一天，我们的男主角天才高中生无意中侵入了这台电脑，出于好奇和好玩，启动了核战争游戏。不料这场模拟战争误使 NORAD 以为苏联发动了袭击，一度差点引爆真正的核对抗。最后在男主角和 WOPR 创造者的共同努力下及时终止了这场「战争」。</p>
@@ -1081,9 +1081,9 @@
   
   <entry>
     <title type="html"><![CDATA[GYP 简介]]></title>
-    <link href="https://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/"/>
+    <link href="http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/"/>
     <updated>2011-10-29T22:55:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp</id>
+    <id>http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp</id>
     <content type="html"><![CDATA[<p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://en.wikipedia.org/wiki/GNU_build_system">Autotools</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autotools 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autotools 天生对于跨平台支持不佳。</p>
 
 <p>后来我从<a href="https://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autotools 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
@@ -1293,9 +1293,9 @@
   
   <entry>
     <title type="html"><![CDATA[Octopress Rocks!]]></title>
-    <link href="https://blog.xiaogaozi.org/2011/10/23/octopress-rocks/"/>
+    <link href="http://blog.xiaogaozi.org/2011/10/23/octopress-rocks/"/>
     <updated>2011-10-23T17:12:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2011/10/23/octopress-rocks</id>
+    <id>http://blog.xiaogaozi.org/2011/10/23/octopress-rocks</id>
     <content type="html"><![CDATA[<p>今天开始尝试 <a href="http://octopress.org/">Octopress</a>，之前也有耳闻，当时立马被它的 Geek 气息吸引，今天详细了解，Octopress 真不愧为「A blogging framework for hackers」。我用了多年的 Blogger <a href="http://xiaogaozi.blogspot.com">博客</a>也终于寿终正寝，如果你是一个非 hacker 博客作者，<a href="http://www.blogger.com/">Blogger</a> 绝对值得推荐（满足 <a href="http://www.dbanotes.net/review/gfw_rule.html">GFW 三定律</a>）。</p>
 
 <h2>Another WordPress?</h2>
@@ -1445,9 +1445,9 @@
   
   <entry>
     <title type="html"><![CDATA[SPDY 简介]]></title>
-    <link href="https://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy/"/>
+    <link href="http://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy/"/>
     <updated>2011-06-11T11:26:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy</id>
+    <id>http://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy</id>
     <content type="html"><![CDATA[<p>今天在看 CTF write-up 时发现<a href="http://michele.spagnuolo.me/articles/web-security/defcon-ctf19-quals-grab-bag-100-writeup.html">有人提到</a> <a href="http://dev.chromium.org/spdy">SPDY</a> 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。</p>
 
 <p>首先 SPDY 是一个应用层协议，它被创造出来的唯一目的就是让 Web 更快，更快，还是更快。Google 这家公司似乎很喜欢「快」这个东西，Chrome 从诞生到现在每次几乎必定宣传自己有多么得快，搞得大家已经产生了某种心理暗示。SPDY 诞生于 2009 年，其实这是对外公开发布的时间，开始研究的时间应该更早。众所周知，如今的 Web 是通过 HTTP 协议和 TCP 协议进行传输，但种种因素导致 HTTP 传输变得很慢：</p>

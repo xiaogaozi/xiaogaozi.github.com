@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Soa | Freedom]]></title>
-  <link href="https://blog.xiaogaozi.org/categories/soa/atom.xml" rel="self"/>
-  <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2016-04-17T14:09:49+08:00</updated>
-  <id>https://blog.xiaogaozi.org/</id>
+  <link href="http://blog.xiaogaozi.org/categories/soa/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2016-04-17T14:18:01+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[A Little Throught About Microservices]]></title>
-    <link href="https://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices/"/>
+    <link href="http://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices/"/>
     <updated>2015-03-22T23:25:05+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices</id>
+    <id>http://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices</id>
     <content type="html"><![CDATA[<p>知乎在 4 年前已经开始尝试服务化，至今也经历了好几个架构的变迁演化。我大约是 2013 年开始在知乎负责服务化的工作，对服务化的理解也从最初的模糊逐渐变得清晰，前段时间看了一篇叫做 <a href="http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html">Microservices &ndash; Not A Free Lunch!</a> 的文章，也想趁着这个机会梳理总结目前为止我的一些感悟和想法。</p>
 
 <!-- more -->

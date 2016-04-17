@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Applescript | Freedom]]></title>
-  <link href="https://blog.xiaogaozi.org/categories/applescript/atom.xml" rel="self"/>
-  <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2016-04-17T14:09:49+08:00</updated>
-  <id>https://blog.xiaogaozi.org/</id>
+  <link href="http://blog.xiaogaozi.org/categories/applescript/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2016-04-17T14:18:01+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Auto Open Browser After Copy URL]]></title>
-    <link href="https://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/"/>
+    <link href="http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url/"/>
     <updated>2014-01-31T05:07:36+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url</id>
+    <id>http://blog.xiaogaozi.org/2014/01/31/auto-open-browser-after-copy-url</id>
     <content type="html"><![CDATA[<p>前段时间看过一篇叫 <a href="http://sc5.io/blog/2014/01/automate-everyday-tasks">Automate Everyday Tasks</a> 的博客，其中的一些见解很有意思，我们日常工作中有很多细小但是重复的事情，如果能够将某些工作自动完成，会让生活更加舒适。我很喜欢 Mac 上一个叫 <a href="http://pilotmoon.com/popclip">PopClip</a> 的小 app，可以大大减少很多重复的操作。这篇博客就是介绍如何制作一个 app，当复制 URL 时自动在浏览器中打开。</p>
 
 <!-- more -->
