@@ -112,13 +112,13 @@
 
 <p>这种调度策略很容易理解，但缺点也很明显。耗时的长任务会导致后提交的任务一直处于等待状态，如果这个集群是多人共享的，显然不太合理。因此 YARN 提供了另外两种调度策略，更加适合共享集群。下图是 FIFO Scheduler 执行过程的示意图：</p>
 
-<p><img src="https://farm2.staticflickr.com/1497/26202066020_5dc08aea51_o_d.png" width="400"></p>
+<p><img src="https://farm8.staticflickr.com/7562/16118318715_13c5427d15_o.png" alt="FIFO Scheduler" /></p>
 
 <h2>Capacity Scheduler</h2>
 
 <p>既然需要多人共享，那 Capacity Scheduler 就为每个人分配一个队列，每个队列占用的集群资源是固定的，但是可以不同，队列内部还是采用 FIFO 调度的策略。下图是 Capacity Scheduler 执行过程的示意图：</p>
 
-<p><img src="https://farm2.staticflickr.com/1478/26382613472_c9fa589f06_o_d.png" width="400"></p>
+<p><img src="https://farm8.staticflickr.com/7559/15495992404_c03bc4d9a8_o.png" alt="Capacity Scheduler" /></p>
 
 <p>可以看到，队列 A 和 B 享有独立的资源，但是 A 所占的资源比重更多。如果任务在被执行的时候，集群恰好有空闲资源，比如队列 B 为空，那么调度器就可能分配更多的资源给队列 A，以更好地利用空闲资源。这种处理方式被叫做「queue elasticity」（弹性队列）。</p>
 
@@ -205,13 +205,13 @@
 
 <p>当然 Fair Scheduler 也支持队列的概念，下图是执行过程的示意图：</p>
 
-<p><img src="https://www.safaribooksonline.com/library/view/hadoop-the-definitive/9781491901687/images/hddg_0404.png" width="400"></p>
+<p><img src="https://www.safaribooksonline.com/library/view/hadoop-the-definitive/9781491901687/images/yarn_fair_scheduling.png" alt="Fair Scheduler" /></p>
 
 <p>队列 A 首先执行任务，任务 1 拥有整个集群资源，随后队列 B 增加任务 2，这两个队列均分资源，接着任务 3 被提交到队列 B，但这并不会影响队列 A，任务 3 将会跟任务 2 一起均分资源。</p>
 
 <h3>开启 Fair Scheduler</h3>
 
-<p>设置 <code>yarn.resourcemanager.scheduler.class</code> 为 <code>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</code>（在 <code>yarn-site.xml</code>），如果你使用的是 CDH，那默认就是 Fair Scheduler<del>（事实上，CDH 也<a href="http://www.cloudera.com/content/cloudera/en/documentation/cdh5/v5-1-x/CDH5-Installation-Guide/cdh5ig_mapreduce_to_yarn_migrate.html#concept_nqs_pmy_xl_unique_3">不支持 Capacity Scheduler</a>）</del>。</p>
+<p>设置 <code>yarn.resourcemanager.scheduler.class</code> 为 <code>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</code>（在 <code>yarn-site.xml</code>），如果你使用的是 CDH，那默认就是 Fair Scheduler（事实上，CDH 也<a href="http://www.cloudera.com/content/cloudera/en/documentation/cdh5/v5-1-x/CDH5-Installation-Guide/cdh5ig_mapreduce_to_yarn_migrate.html#concept_nqs_pmy_xl_unique_3">不支持 Capacity Scheduler</a>）。</p>
 
 <h3>队列设置</h3>
 
@@ -391,7 +391,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  &copy; 2016 - xiaogaozi -
+  &copy; 2020 - xiaogaozi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
