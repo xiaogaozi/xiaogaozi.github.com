@@ -247,88 +247,6 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/2014/01/01/hello-goodbye/">Hello, Goodbye</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-01T06:38:26+08:00" pubdate data-updated="true">Jan 1<sup>st</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>2014 年第一天的清晨我改了一个 bug，买了一个 app，喝着已经凉了的白水，加湿器冒着白烟。这座城市还在熟睡，这个每天生活、工作、恋爱的地方，它的气息吸引着我，人们仿佛只能看到它的丑，殊不知都是我们自己种下的恶果。平安夜，临下车前我把苹果送给了司机师傅，一声谢谢让我们似乎都有了对于未来的企盼。2013 年的最后一天，吃饭时朋友特意点了鱼，喻为「年年有余」，三个「孤独」的男人就这样就着玉米汁品味这一年的最后一顿饭。也许我们对于未来都有不同的打算，但是如果能互相陪伴，彼此的人生也不会孤单。我相信人性的善，当一个人告诉我他再也不相信时，或许是你还没有遇到那个人，经历那件事。从来没有觉得自己如此重要，当被另一个人视若珍宝，我只能不争气地泣不成声。</p>
-
-<blockquote><p>You don&#8217;t know about real loss, cause it only occurs when you&#8217;ve loved something more than you love yourself.</p><footer><strong>Good Will Hunting</strong> <cite><a href='http://www.imdb.com/title/tt0119217'>www.imdb.com/title/tt0119217/&hellip;</a></cite></footer></blockquote>
-
-
-<p>这段话我想很难做到，但我们都会尽力实现它，因为有些事情是不能重来的。如果你要问我有什么新年愿望，我会说「Believe love, believe dream」。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2013/08/09/hello-thailand/">我想骑着摩托载着你就这样在清迈古城闲逛</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-09T02:18:00+08:00" pubdate data-updated="true">Aug 9<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>作为人生中的第一次境外游就献给了泰国，大约一周的时间，不长不短，遇见了很多人，经历了很多事，这恐怕是独自旅行才有的福利。对于泰国，几乎每一个交谈的人的第一印象都是「friendly」，这里的人们悠闲自在，热情好客，因为有着虔诚的信仰，会让你感受到每个人的善。作为一个历史更加悠久的国度，我们理应更加虔诚，但是如今的中国，信仰早已变质，我们也都是没有信仰的一代。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/08/09/hello-thailand/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/2013/03/21/vagrant-puppet-and-chef/">流浪汉，木偶和厨子</a></h1>
     
     
@@ -514,6 +432,217 @@
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2012/09/21/understanding-tornado-dot-gen/">理解 tornado.gen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-21T01:56:00+08:00" pubdate data-updated="true">Sep 21<sup>st</sup>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Tornado 通过 <code>@asynchronous</code> decorator 来实现异步请求，但使用的时候必须将 request handler 和 callback 分离开，<code>tornado.gen</code> 模块可以帮助我们在一个函数里完成这两个工作。下面是官方的一个例子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">GenAsyncHandler</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@asynchronous</span>
+</span><span class='line'>    <span class="nd">@gen.engine</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">http_client</span> <span class="o">=</span> <span class="n">AsyncHTTPClient</span><span class="p">()</span>
+</span><span class='line'>        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">gen</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="n">http_client</span><span class="o">.</span><span class="n">fetch</span><span class="p">,</span> <span class="s">&quot;http://example.com&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">do_something_with_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s">&quot;template.html&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里用到了两个 decorator 稍显复杂，第一个 <code>@asynchronous</code> 会首先被执行，它的主要工作就是将 <code>RequestHandler</code> 的 <code>_auto_finish</code> 属性置为 <code>false</code>，如下：</p>
+
+<figure class='code'><figcaption><span>web.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/web.py#L1116'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">asynchronous</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">_wsgi</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;@asynchronous is not supported for WSGI apps&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">_auto_finish</span> <span class="o">=</span> <span class="bp">False</span>
+</span><span class='line'>        <span class="k">with</span> <span class="n">stack_context</span><span class="o">.</span><span class="n">ExceptionStackContext</span><span class="p">(</span>
+</span><span class='line'>            <span class="bp">self</span><span class="o">.</span><span class="n">_stack_context_handle_exception</span><span class="p">):</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">wrapper</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着就是最重要的 <code>@gen.engine</code>，这里充分利用了 generator 的各种特性，首先来看 <code>@gen.engine</code> 的实现（我删减了部分代码以简化理解）：</p>
+
+<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L91'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">engine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">gen</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
+</span><span class='line'>            <span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span class='line'>            <span class="k">return</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">wrapper</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>局部变量 <code>gen</code> 代表第一段代码里的 <code>get</code> 函数，因为 <code>get</code> 包含了 <code>yield</code> 语句，因此成为了一个 generator。注意这里 <code>get</code> 并没有被执行，只是赋给了 <code>gen</code>。接下来是运行 <code>Runner</code> 对象的 <code>run</code> 函数。在理解 <code>run</code> 之前需要知道 generator 是通过调用 <code>next()</code> 或者 <code>send()</code> 来启动，启动之后会在遇到 <code>yield</code> 的地方 hold 住，然后将 <code>yield</code> 后面的语句的返回值返回给调用者，generator 此时即处于暂停运行状态，所有上下文都会保存。再次调用 <code>next()</code> 或 <code>send()</code> 便会恢复 generator 的运行，如果不再遇到 <code>yield</code> 语句就会抛出 <code>StopIteration</code> 异常。在恢复运行的同时 <code>yield</code> 语句本身会有返回值，如果是通过调用 <code>next()</code> 来恢复的，那么返回值永远是 <code>None</code>，而如果是通过 <code>send()</code> 则返回值取决于传给 <code>send()</code> 的参数。更多关于 generator 的说明请参考<a href="http://docs.python.org/reference/expressions.html#yield-expressions">官方文档</a>。</p>
+
+<p>结合第一段的示例代码，可以想到 <code>run</code> 干的工作可能就是启动 generator，然后获得 <code>gen.Task</code> 对象并调用 <code>http_client.fetch</code> 函数，等回调回来之后恢复 generator 的运行，最后将回调的返回值通过 <code>send()</code> 赋给 <code>response</code>。下面是我简化后的代码。</p>
+
+<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L322'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span><span class="o">.</span><span class="n">is_ready</span><span class="p">():</span>
+</span><span class='line'>            <span class="k">return</span>
+</span><span class='line'>        <span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">yielded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">next</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">return</span>
+</span><span class='line'>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yielded</span><span class="p">,</span> <span class="n">YieldPoint</span><span class="p">):</span>
+</span><span class='line'>            <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span> <span class="o">=</span> <span class="n">yielded</span>
+</span><span class='line'>            <span class="bp">self</span><span class="o">.</span><span class="n">yield_point</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第 3 行检查回调是否完成，第一次运行 <code>run</code> 总是会返回 <code>True</code>。第 5 行获取回调的返回值，同样的第一次运行返回的是 <code>None</code>。将 <code>None</code> 传给 <code>send()</code> 启动 generator，<code>yielded</code> 即是 <code>gen.Task</code> 对象，第 12 行调用 <code>start</code> 开始运行我们真正需要运行的函数，对应到示例代码就是 <code>http_client.fetch</code> 函数，同时将 <code>Runner</code> 的 <code>result_callback</code> 作为回调函数。如下：</p>
+
+<figure class='code'><figcaption><span>gen.py</span><a href='https://github.com/facebook/tornado/blob/master/tornado/gen.py#L374'>download </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">result_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Arguments</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">elif</span> <span class="n">args</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'>        <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">inner</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在得到回调返回值之后再次调用 <code>run</code>，通过 <code>get_result</code> 获取返回值，最后将返回值返回赋给 <code>response</code>，继续 request handler 的代码流程。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/11/06/shall-we-play-a-game/">Shall We Play a Game?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-06T16:24:00+08:00" pubdate data-updated="true">Nov 6<sup>th</sup>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="center" src="http://farm7.static.flickr.com/6235/6317821194_c76b0fd4cf.jpg" title="The IMSAI 8080 computer used in WarGames." ></p>
+
+<p>「<a href="http://www.imdb.com/title/tt0086567/">WarGames</a>」是一部 1983 年上映的科幻电影，作为投资仅 1200 万美元的小制作，在当年赢得了近 8000 万的票房。故事发生在美苏冷战时期，那个年代的电影，多多少少都会跟核威慑有关。这两个国家不管谁先发射导弹，那第三次世界大战就会爆发。电影中 NORAD（北美防空司令部）使用了一台叫做 WOPR 的超级计算机进行战事控制，这台计算机特别的地方在于它能自己模拟战争，模拟的过程就像在玩一个游戏（game）。某一天，我们的男主角天才高中生无意中侵入了这台电脑，出于好奇和好玩，启动了核战争游戏。不料这场模拟战争误使 NORAD 以为苏联发动了袭击，一度差点引爆真正的核对抗。最后在男主角和 WOPR 创造者的共同努力下及时终止了这场「战争」。</p>
+
+<p>电影中男主角的人物原型来自一位叫做 David Scott Lewis 的黑客，这位老兄之后一直在搞机器人，后来按照他自己的话来说是「sold my soul to the bigger corporations」，分别在三星、Microsoft 和 Oracle 工作一段时间之后，他来到了中国，跟清华大学合作。现在貌似又搞太阳能去了。WOPR 的创造者 Dr. Stephen Falken 的原型来自著名的物理学家 Steven Hawking（是不是名字也很像？），WarGames 最初的剧本就是根据 Hawking 来写的，曾经还打算塑造一个坐在轮椅上的天体物理学家，但因为太容易让人联想到另一部讲述冷战的电影「Dr. Strangelove」而作罢。其实 Dr. Stephen Falken 对于人工智能的深入研究，倒让我觉得更像是 Alan Turing。</p>
+
+<p>WarGames 对于此后的黑客文化产生了深远的影响。它创造了「firewall」这个词汇（方校长表示感谢）。电影中男主角入侵 NORAD 时使用的技术衍生出了「<a href="http://en.wikipedia.org/wiki/War_dialing">wardialing</a>」术语。wardialing 是指通过程序不断扫描电话号码来发现计算机 modem，早期的电话黑客即是使用的这种技术。著名的电话黑客（phone phreak）<a href="http://en.wikipedia.org/wiki/John_Draper">John Draper</a> 因为通过 wardialing 免费打电话而闻名，后来他将这项技术教给了 Steve Jobs 和 Steve Wozniak（是的，没错，就是乔帮主），帮主他们还因此赚了不少钱（帮主果然是个好商人，从小就懂得怎么把技术转为商业利益）。John Draper 后来受雇于 Apple，但这是后话了。wardialing 之后又衍生出了 <a href="http://en.wikipedia.org/wiki/Wardriving">wardriving</a>，通过扫描和收集 Wi-Fi 热点来进行攻击，之所以叫这个名字，是因为通常是在汽车里一边行驶，一边收集（这样说来 Google 的街景小车也算是 wardriving 了一把）。现在你可以在你的 iPhone 或者 Android 手机里装上一款 wardriving 软件试试看，我曾经试过，但是貌似效果不是很好。</p>
+
+<p>还有一个人「深受」这部电影的影响，<a href="http://en.wikipedia.org/wiki/Kevin_Mitnick">Kevin Mitnick</a>，这个计算机安全界传说级的人物。当然不是说 Kevin 同学是因为这部电影走上的不归路，Kevin 同学搞入侵那会儿 WarGames 还没上映呢。Kevin 同学后来入狱时被拒绝接触任何电子设备，包括电话，是因为控诉律师相信他可以通过电话连接到 NORAD。据 Kevin 同学分析 WarGames 这部电影很大程度上使得公众相信这件事情是可以很容易办到的，其实他根本就没有入侵过 NORAD，通过电话来入侵也过于夸张。尽管如此，他还是被判单独监禁，从此传为计算机安全界的一段「佳话」⋯⋯</p>
+
+<p>游戏界也从 WarGames 获益不少，1984 年<a href="http://en.wikipedia.org/wiki/WarGames_(video_game)">同名游戏</a>发布。2006 年一款叫做 <a href="http://en.wikipedia.org/wiki/Defcon_(video_game)">DEFCON</a> 的即时战略游戏发布，游戏画面与电影中 NORAD 指挥中心的大屏幕极为相似。DEFCON（defense readiness condition）是美国军方采用的警报等级，在 WarGames 电影中 NORAD 曾因模拟的苏联进攻一度将 DEFCON 等级提升到最高等级 1。著名的黑客大会 <a href="https://www.defcon.org">DEF CON</a> 的名字也是来源于此。</p>
+
+<p>或许 WarGames 对于电影史并没有太大的贡献，但却深深影响着那一代的 Geek 们。谨以此文献给那些逝去的先驱，RIP</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -526,7 +655,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  &copy; 2015 - xiaogaozi -
+  &copy; 2020 - xiaogaozi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
