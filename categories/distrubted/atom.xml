@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Distrubted | Freedom]]></title>
+  <link href="http://blog.xiaogaozi.org/categories/distrubted/atom.xml" rel="self"/>
+  <link href="http://blog.xiaogaozi.org/"/>
+  <updated>2020-04-21T18:06:12+08:00</updated>
+  <id>http://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[xiaogaozi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何设计与实现一个分布式索引框架（一）：概览]]></title>
+    <link href="http://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1/"/>
+    <updated>2020-04-21T17:08:24+08:00</updated>
+    <id>http://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1</id>
+    <content type="html"><![CDATA[<blockquote><p>这是一个系列文章，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
+
+<p>在介绍什么是索引框架之前先了解一下我们当时面临的业务场景<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>，业界现在的 <a href="https://en.wikipedia.org/wiki/Activity_stream">feed 流</a>产品已经逐步从非个性化全面过渡到个性化，所谓的个性化 feed 其实就是<strong>基于机器学习的推荐系统</strong>。</p>
+
+<!-- more -->
+
+
+<p>先讲讲什么是推荐系统，用一个词概括就是「投其所好」。当你遇到一个跟你志趣相投的人时，那这个人感兴趣的东西很有可能也是你感兴趣的，这是「基于人」的维度进行推荐，微信的「朋友圈」就是这么一个简单的思路<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>。也有可能一个人他从来没见过你，你们也不互相认识，但是如果他能够知道你过去看过、喜欢过的东西，那他也很有可能可以推断出你未来感兴趣的东西，这是「基于历史行为」的维度进行推荐。我们可以通过制定一些人工的规则来实现推荐，但是用户的喜好是千奇百怪的<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>，有大量长尾的需求是人工规则无法覆盖的<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>。因此我们需要让计算机学习如何制定这些规则，这是对「机器学习」这个概念非常浅显的解释。一个完整的机器学习流程简单概括包含「离线」和「在线」两部分，离线部分是通过大量的用户数据来让计算机找寻其中的规律和共性，最终产出「模型」；在线部分是通过输入当前用户的数据给模型，让模型计算出一个预测值，这个预测值用来衡量我们想要推荐的内容是否符合这个用户的兴趣。这个系列的文章将会主要围绕在线部分，离线部分如果有机会会在以后的文章中介绍。</p>
+
+<p>前面提到在线部分的核心逻辑是模型计算<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>，但在计算之前还有一个非常重要的工作是筛选候选集，通常叫做「召回（recall）」。所谓召回就是从一个很大的集合中通过一定的条件选取一个子集，为什么要有召回这一步呢？本质上是因为模型计算是一个非常耗费时间及资源的过程，如果每次用户请求都对整个集合中的条目进行计算，不仅浪费资源，所需的时间对于用户来说也是无法接受的<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>。大部分情况<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>下我们对于推荐系统一次请求的时间要求是控制在 100~200ms 左右，如果超过这个时间对业务指标一定会有负面影响。因此有针对性地进行召回就非常关键了，召回需要尽量确保筛选出来的候选集是符合当前用户兴趣的，但同时耗时又是非常短的<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>。总结一下一次推荐请求的流程如下图所示。</p>
+
+<p><img src="/images/posts/recommendation_system_arch.png" alt="recommendation system architecture" /></p>
+
+<p>实现快速召回的关键是「索引（index）」，正如大部分数据库系统一样，索引是为了实现快速查找的重要组件。在推荐系统中主要有两类索引：正排索引（forward index）和倒排索引（inverted index）<sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>。正排索引通常是用来通过一个主键（primary key）查询一个条目，是「一对一的映射」；倒排索引是用来通过跟条目关联的某些属性查询多个条目，是「一对多的映射」。举个实际的例子，小红书上用户发布的内容叫做「笔记」，每一篇笔记都会生成一个唯一的 ID，这个 ID 就是这篇笔记的主键，正排索引即是一个从笔记 ID 到笔记的映射。而每篇笔记都会有一些同笔记本身相关的属性，比如分类（category），一些常见的分类有：旅行、美妆、摄影、美食等。倒排索引即是一个从多个属性到多篇笔记的映射，如「旅行」分类可以映射到所有属于这个类别的笔记列表。对于召回来说主要依赖倒排索引，而正排索引将会在模型计算的前置步骤特征提取中用到<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>。</p>
+
+<p><img src="/images/posts/rec_sys_index.png" alt="recommendation system index" /></p>
+
+<p>讲到这里也基本上把索引框架需要实现的功能介绍得差不多了，其实需求很简单：给定一个集合然后在这个集合上创建正排和倒排索引，并暴露相应的查询接口。下一篇将会详细介绍如何定义索引、框架的 API 应该有哪些以及如何实现一个简单的倒排索引。</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>但其实能真正应用到业务中才是检验设计的唯一标准<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p><del>刚说完不聊业务就打脸</del><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>当然前提是你的好友数得像<a href="https://baike.baidu.com/item/%E5%BD%AD%E7%A3%8A/6238051">彭磊</a>一样少<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>这几年有一个很恶心的词叫「千人千面」也是同样的意思<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>满足好长尾需求也是推荐系统面临的一大挑战<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>你可能看到的表示模型计算的术语有：推理（inference）、预测（prediction）<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>想象一下你打开某个 app 的首页需要等待数分钟才能显示出来<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>大部分情况 = P95/P99<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<li id="fn:9">
+<p>召回的耗时通常比模型计算小一到两个数量级<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<li id="fn:10">
+<p>如果你接触过搜索引擎，对于这两类索引也不会感到陌生。<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
+<li id="fn:11">
+<p>特征提取（feature extraction）是一个非常重要的步骤，这里暂时不会过多介绍。<a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>
