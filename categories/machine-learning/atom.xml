@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Machine Learning | Freedom]]></title>
   <link href="http://blog.xiaogaozi.org/categories/machine-learning/atom.xml" rel="self"/>
   <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-04-21T18:06:12+08:00</updated>
+  <updated>2020-04-21T18:44:50+08:00</updated>
   <id>http://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -18,7 +18,7 @@
     <link href="http://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1/"/>
     <updated>2020-04-21T17:08:24+08:00</updated>
     <id>http://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1</id>
-    <content type="html"><![CDATA[<blockquote><p>这是一个系列文章，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
+    <content type="html"><![CDATA[<blockquote><p>这是一个<a href="/categories/htdadif">系列文章</a>，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
 
 <p>在介绍什么是索引框架之前先了解一下我们当时面临的业务场景<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>，业界现在的 <a href="https://en.wikipedia.org/wiki/Activity_stream">feed 流</a>产品已经逐步从非个性化全面过渡到个性化，所谓的个性化 feed 其实就是<strong>基于机器学习的推荐系统</strong>。</p>
 
