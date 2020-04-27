@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.xiaogaozi.org/2020/04/26/weekly-reading-list-issue-1/</loc>
+    <lastmod>2020-04-26T12:22:08+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.xiaogaozi.org/2020/04/24/how-to-design-a-distributed-index-framework-part-3/</loc>
     <lastmod>2020-04-24T16:29:40+08:00</lastmod>
     <priority>0.8</priority>
@@ -101,28 +107,28 @@
   
   <url>
     <loc>http://blog.xiaogaozi.org/</loc>
-    <lastmod>2020-04-24T16:51:16+08:00</lastmod>
+    <lastmod>2020-04-27T15:18:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://blog.xiaogaozi.org/archives/</loc>
-    <lastmod>2020-04-24T16:51:16+08:00</lastmod>
+    <lastmod>2020-04-27T15:18:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.xiaogaozi.org/blog/archives/</loc>
-    <lastmod>2020-04-24T16:51:16+08:00</lastmod>
+    <lastmod>2020-04-27T15:18:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.xiaogaozi.org/about/</loc>
-    <lastmod>2020-04-24T16:51:16+08:00</lastmod>
+    <lastmod>2020-04-27T15:18:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

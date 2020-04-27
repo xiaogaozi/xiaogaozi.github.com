@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Weekly Reading List Issue #1 - Freedom</title>
+  <meta name="author" content="xiaogaozi">
+
+  
+  <meta name="description" content="FoundationDB Record Layer: A Multi-Tenant Structured Datastore [链接] FoundationDB 2015 年被 Apple 收购并于 2018 年开源，作为 Apple 为数不多的开源项目受到广泛关注。简单介绍 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.xiaogaozi.org/2020/04/26/weekly-reading-list-issue-1">
+  <link href="/favicon.png" rel="shortcut icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="http://feeds.feedburner.com/xiaogaozi" rel="alternate" title="Freedom" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='//fonts.googleapis.com/css?family=Rambla:700' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26507501-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Freedom</a></h1>
+  
+    <h2>淡泊以明志，宁静以致远。</h2>
+  
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/xiaogaozi" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.xiaogaozi.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Weekly Reading List Issue #1</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2020-04-26T12:22:08+08:00" pubdate data-updated="true">Apr 26<sup>th</sup>, 2020</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><!-- more -->
+
+
+<h2>FoundationDB Record Layer: A Multi-Tenant Structured Datastore</h2>
+
+<p><a href="https://arxiv.org/abs/1901.04452">[链接]</a></p>
+
+<p>FoundationDB 2015 年被 Apple <a href="https://techcrunch.com/2015/03/24/apple-acquires-durable-database-company-foundationdb">收购</a>并于 2018 年<a href="https://www.foundationdb.org/blog/foundationdb-is-open-source">开源</a>，作为 Apple 为数不多的开源项目受到广泛关注。简单介绍 FoundationDB 是一个基于 Paxos 的分布式 KV 存储，底层存储结构是 B-tree（是的，并不是 LSM tree），定位上跟 Google 的 Spanner 非常相似。这篇论文发表在 <a href="https://sigmod2019.org/sigmod_industry_list">SIGMOD 2019</a>，介绍的是基于 FoundationDB 的 record-oriented 结构化存储框架（也已经<a href="https://github.com/FoundationDB/fdb-record-layer">开源</a>）。<a href="https://apple.github.io/foundationdb/layer-concept.html">Layer</a> 是 FoundationDB 一个很有特色的概念，在最基本的 KV 上无限扩展更加复杂的数据模型。这个框架整体上有几个亮点：</p>
+
+<ul>
+<li>基于 Protocol Buffers 的数据模型定义</li>
+<li>丰富的索引类型支持（单字段索引、嵌套字段索引、列表字段索引、聚合索引、rank 索引、全文索引、多字段联合索引等），并且索引是可以跨表的（这里简单将 record type 理解为表）。</li>
+<li>基于 Java 的查询 API（并不是 SQL）</li>
+</ul>
+
+
+<p>目前已经被应用在 <a href="https://developer.apple.com/icloud/cloudkit">CloudKit</a>，替代旧的 Cassandra + Solr 架构（旧架构也有<a href="https://dl.acm.org/doi/10.1145/3164135.3164138">一篇论文</a>介绍）。CloudKit 作为一个庞大的存储服务供所有 Apple 生态的应用和用户使用，这也就是论文标题中 Multi-Tenant 的含义。</p>
+
+<h2>Introducing Dispatch</h2>
+
+<p><a href="https://netflixtechblog.com/introducing-dispatch-da4b8a2a8072">[链接]</a></p>
+
+<p>Incident 管理一直是 DevOps 领域比较热门的话题，Netflix 开源了他们自己的 incident 管理工具 <a href="https://github.com/Netflix/dispatch">Dispatch</a>，更早之前 LinkedIn 也<a href="https://engineering.linkedin.com/blog/2017/06/open-sourcing-iris-and-oncall">开源</a>过类似的东西。</p>
+
+<h2>Agent57: Outperforming the human Atari benchmark</h2>
+
+<p><a href="https://deepmind.com/blog/article/Agent57-Outperforming-the-human-Atari-benchmark">[链接]</a></p>
+
+<p>大众对于 DeepMind 的认知恐怕就是<a href="https://en.wikipedia.org/wiki/AlphaGo">下下围棋</a>、<a href="https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii">打打星际</a>，最近又搞起了雅达利的游戏，可以说是把强化学习玩儿出花儿了。最新一代的 Agent57 已经可以在全部 57 个游戏里战胜人类玩家。</p>
+
+<h2>An Illustrated Guide to Graph Neural Networks</h2>
+
+<p><a href="https://medium.com/dair-ai/an-illustrated-guide-to-graph-neural-networks-d5564a551783">[链接]</a></p>
+
+<p>Graph Neural Networks（GNN）最近几年已经火得不行，Amazon 也开源了相关的框架 <a href="https://www.dgl.ai/">DGL</a>。这篇文章以一种简单的示意图的形式介绍什么是 GNN，帮助不了解 GNN 的人建立一个简单的认知。</p>
+
+<h2>Debugging with Delve</h2>
+
+<p><a href="https://tpaschalis.github.io/delve-debugging">[链接]</a></p>
+
+<p><a href="https://github.com/go-delve/delve">Delve</a> 是一个 Go 语言的 debugger，Go 官方也<a href="https://golang.org/doc/gdb">推荐</a>优先考虑使用它而不是 GDB。这篇文章简单介绍了 Delve 的基本功能，其实跟 GDB 的使用方式很类似，但是 Delve 的亮点在于可以理解 Go 语言的语义以及调试 goroutine。</p>
+
+<h2>gofiber/fiber</h2>
+
+<p><a href="https://github.com/gofiber/fiber">[链接]</a></p>
+
+<p>Fiber 是（又）一个 Go 语言的 HTTP 框架，设计上很大程度受了 Node.js 中非常流行的 <a href="https://expressjs.com">Express</a> 启发（API 非常相似）。得益于底层使用的 <a href="https://github.com/valyala/fasthttp">fasthttp</a> 库，在 Fiber 自己的<a href="https://docs.gofiber.io/benchmarks">评测</a>中超越了很多市面上现有的框架。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">xiaogaozi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2020-04-26T12:22:08+08:00" pubdate data-updated="true">Apr 26<sup>th</sup>, 2020</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/wrl/'>wrl</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.xiaogaozi.org/2020/04/26/weekly-reading-list-issue-1/" data-via="xiaogaozi" data-counturl="http://blog.xiaogaozi.org/2020/04/26/weekly-reading-list-issue-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2020/04/24/how-to-design-a-distributed-index-framework-part-3/" title="Previous Post: 如何设计与实现一个分布式索引框架（三）：正排索引">&laquo; 如何设计与实现一个分布式索引框架（三）：正排索引</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2020 - xiaogaozi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'xiaogaozi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.xiaogaozi.org/2020/04/26/weekly-reading-list-issue-1/';
+        var disqus_url = 'http://blog.xiaogaozi.org/2020/04/26/weekly-reading-list-issue-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
