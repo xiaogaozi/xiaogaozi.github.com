@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Gyp | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/gyp/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T14:54:01+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/gyp/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T16:31:35+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[GYP 简介]]></title>
-    <link href="http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/"/>
+    <link href="https://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/"/>
     <updated>2011-10-29T22:55:00+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp</id>
+    <id>https://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp</id>
     <content type="html"><![CDATA[<p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://en.wikipedia.org/wiki/GNU_build_system">Autotools</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autotools 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autotools 天生对于跨平台支持不佳。</p>
 
 <p>后来我从<a href="https://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autotools 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>

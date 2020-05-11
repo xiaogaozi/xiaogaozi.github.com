@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Python | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/python/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T14:54:01+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/python/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T16:31:35+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[理解 tornado.gen]]></title>
-    <link href="http://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen/"/>
+    <link href="https://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen/"/>
     <updated>2012-09-21T01:56:00+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen</id>
+    <id>https://blog.xiaogaozi.org/2012/09/21/understanding-tornado-dot-gen</id>
     <content type="html"><![CDATA[<p>Tornado 通过 <code>@asynchronous</code> decorator 来实现异步请求，但使用的时候必须将 request handler 和 callback 分离开，<code>tornado.gen</code> 模块可以帮助我们在一个函数里完成这两个工作。下面是官方的一个例子：</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Chef | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/chef/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T14:54:01+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/chef/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T16:31:35+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[流浪汉，木偶和厨子]]></title>
-    <link href="http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/"/>
+    <link href="https://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef/"/>
     <updated>2013-03-21T20:25:00+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef</id>
+    <id>https://blog.xiaogaozi.org/2013/03/21/vagrant-puppet-and-chef</id>
     <content type="html"><![CDATA[<p>最近要为 Phabricator 搭建虚拟测试环境，<a href="http://www.vagrantup.com">Vagrant</a> 是一个不错的选择（话说官网现在更新以后，变得颇为华丽）。Vagrant 官方只<a href="https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Boxes">提供</a> Ubuntu 的 base box，不过 <a href="http://www.vagrantbox.es">Vagrantbox.es</a> 有提供很多其它的系统，甚至还有 Window$。也可以自己根据<a href="http://docs-v1.vagrantup.com/v1/docs/base_boxes.html">官方文档</a>重新搭建一个 base box。</p>
 
 <p><a href="http://docs.vagrantup.com/v2/provisioning/index.html">Provisioning</a> 是 Vagrant 一个很棒的特性，可以通过工具来自动配置和管理虚拟机。目前支持的有 Puppet 和 Chef，这两个都是著名的配置管理工具，其中 Google、Twitter、GitHub 在用 Puppet，Facebook 在用 Chef，知乎目前用的是 Puppet。正好这次两个都了解了一点，可以简单比较一下。</p>
