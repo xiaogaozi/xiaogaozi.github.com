@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Spdy | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/spdy/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T15:10:17+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/spdy/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T17:48:48+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[SPDY 简介]]></title>
-    <link href="http://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy/"/>
+    <link href="https://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy/"/>
     <updated>2011-06-11T11:26:00+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy</id>
+    <id>https://blog.xiaogaozi.org/2011/06/11/introduction-to-spdy</id>
     <content type="html"><![CDATA[<p>今天在看 CTF write-up 时发现<a href="http://michele.spagnuolo.me/articles/web-security/defcon-ctf19-quals-grab-bag-100-writeup.html">有人提到</a> <a href="http://dev.chromium.org/spdy">SPDY</a> 这样一个东西，貌似跟 Chrome 项目有关，于是在 Geek 原始冲动的驱使下了解了一下。</p>
 
 <p>首先 SPDY 是一个应用层协议，它被创造出来的唯一目的就是让 Web 更快，更快，还是更快。Google 这家公司似乎很喜欢「快」这个东西，Chrome 从诞生到现在每次几乎必定宣传自己有多么得快，搞得大家已经产生了某种心理暗示。SPDY 诞生于 2009 年，其实这是对外公开发布的时间，开始研究的时间应该更早。众所周知，如今的 Web 是通过 HTTP 协议和 TCP 协议进行传输，但种种因素导致 HTTP 传输变得很慢：</p>

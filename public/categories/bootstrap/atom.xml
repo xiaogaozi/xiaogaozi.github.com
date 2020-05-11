@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Bootstrap | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/bootstrap/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T15:10:17+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/bootstrap/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T17:48:48+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用 Bootstrap 的几个问题]]></title>
-    <link href="http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/"/>
+    <link href="https://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/"/>
     <updated>2012-10-13T21:24:00+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap</id>
+    <id>https://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap</id>
     <content type="html"><![CDATA[<h2>Responsive 与 Modal</h2>
 
 <p>在开启 responsive 后，小屏幕设备上显示 modal 时会变成一闪而过，然后浮动窗口就不见了。具体效果可以缩小浏览器尺寸，在<a href="http://twitter.github.com/bootstrap/javascript.html#modals">这个页面</a>的 Live demo 点击「Launch demo modal」看到。<a href="https://github.com/twitter/bootstrap/issues/2130">Issue #2130</a> 专门讨论了这个问题，目前比较好的解决办法是使用<a href="http://niftylettuce.github.com/twitter-bootstrap-jquery-plugins">这个插件</a>，根据页面大小来动态调整 modal 的位置，不过貌似用了之后 modal 那个由上至下显示的动画就没有了。这个 issue 现在还处于开启状态，看来官方短期内是不会解决这个问题的。</p>

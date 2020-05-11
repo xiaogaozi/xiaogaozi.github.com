@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Maybe News | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/maybe-news/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T15:10:17+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/maybe-news/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T17:48:48+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #0]]></title>
-    <link href="http://blog.xiaogaozi.org/2020/05/11/maybe-news-issue-0/"/>
+    <link href="https://blog.xiaogaozi.org/2020/05/11/maybe-news-issue-0/"/>
     <updated>2020-05-11T14:44:52+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2020/05/11/maybe-news-issue-0</id>
+    <id>https://blog.xiaogaozi.org/2020/05/11/maybe-news-issue-0</id>
     <content type="html"><![CDATA[<blockquote><p>前言：从这一期开始这个系列将会有一个正式的名字「Maybe News」，名字来源于我非常喜欢的一个国内的音乐厂牌<a href="https://en.wikipedia.org/wiki/Maybe_Mars">「兵马司」</a>（Maybe Mars）。本身我分享的内容也很有可能是一些旧闻，只不过对于我来说是还未了解的知识罢了。<a href="/2020/04/26/weekly-reading-list-issue-1/">上一期</a>的名字还是维持原样就不做修改。</p></blockquote>
 
 <!-- more -->

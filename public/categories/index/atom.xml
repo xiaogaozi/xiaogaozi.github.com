@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Index | Freedom]]></title>
-  <link href="http://blog.xiaogaozi.org/categories/index/atom.xml" rel="self"/>
-  <link href="http://blog.xiaogaozi.org/"/>
-  <updated>2020-05-11T15:10:17+08:00</updated>
-  <id>http://blog.xiaogaozi.org/</id>
+  <link href="https://blog.xiaogaozi.org/categories/index/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-05-11T17:48:48+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何设计与实现一个分布式索引框架（三）：正排索引]]></title>
-    <link href="http://blog.xiaogaozi.org/2020/04/24/how-to-design-a-distributed-index-framework-part-3/"/>
+    <link href="https://blog.xiaogaozi.org/2020/04/24/how-to-design-a-distributed-index-framework-part-3/"/>
     <updated>2020-04-24T16:29:40+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2020/04/24/how-to-design-a-distributed-index-framework-part-3</id>
+    <id>https://blog.xiaogaozi.org/2020/04/24/how-to-design-a-distributed-index-framework-part-3</id>
     <content type="html"><![CDATA[<blockquote><p>这是一个<a href="/categories/htdadif/">系列文章</a>，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
 
 <p><a href="/2020/04/22/how-to-design-a-distributed-index-framework-part-2/">上一篇文章</a>介绍了如何定义 schema、查询 API 以及怎样实现倒排索引，本篇将会着重介绍另一种重要的索引类型「正排索引」，以及跟正排索引密切相关的「二级索引」。</p>
@@ -106,9 +106,9 @@ table SecondaryKey {
   
   <entry>
     <title type="html"><![CDATA[如何设计与实现一个分布式索引框架（二）：Schema、API 及倒排索引]]></title>
-    <link href="http://blog.xiaogaozi.org/2020/04/22/how-to-design-a-distributed-index-framework-part-2/"/>
+    <link href="https://blog.xiaogaozi.org/2020/04/22/how-to-design-a-distributed-index-framework-part-2/"/>
     <updated>2020-04-22T18:16:55+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2020/04/22/how-to-design-a-distributed-index-framework-part-2</id>
+    <id>https://blog.xiaogaozi.org/2020/04/22/how-to-design-a-distributed-index-framework-part-2</id>
     <content type="html"><![CDATA[<blockquote><p>这是一个<a href="/categories/htdadif/">系列文章</a>，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
 
 <p>在<a href="/2020/04/21/how-to-design-a-distributed-index-framework-part-1/">上一篇文章</a>中简单介绍了什么是推荐系统以及实现一个推荐系统的核心组件有哪些，文章最后引入了一个非常重要的概念「索引」，本篇将会首先从框架使用者的角度介绍如何定义索引，框架有哪些 API 可以使用以及从设计者的角度介绍如何实现一个简单的倒排索引。</p>
@@ -258,9 +258,9 @@ public Object getAttribute(String attrName) {
   
   <entry>
     <title type="html"><![CDATA[如何设计与实现一个分布式索引框架（一）：概览]]></title>
-    <link href="http://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1/"/>
+    <link href="https://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1/"/>
     <updated>2020-04-21T17:08:24+08:00</updated>
-    <id>http://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1</id>
+    <id>https://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1</id>
     <content type="html"><![CDATA[<blockquote><p>这是一个<a href="/categories/htdadif/">系列文章</a>，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
 
 <p>在介绍什么是索引框架之前先了解一下我们当时面临的业务场景<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>，业界现在的 <a href="https://en.wikipedia.org/wiki/Activity_stream">feed 流</a>产品已经逐步从非个性化全面过渡到个性化，所谓的个性化 feed 其实就是<strong>基于机器学习的推荐系统</strong>。</p>

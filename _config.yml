@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://blog.xiaogaozi.org
+url: https://blog.xiaogaozi.org
 title: Freedom
 subtitle: 淡泊以明志，宁静以致远。
 author: xiaogaozi
@@ -18,7 +18,6 @@ date_format: "ordinal"
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: /atom.xml
 subscribe_email:
-category_feeds: true
 # RSS feeds can list your email address if you like
 email:
 

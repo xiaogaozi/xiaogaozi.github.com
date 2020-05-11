@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://blog.xiaogaozi.org/sitemap.xml 
+Sitemap: https://blog.xiaogaozi.org/sitemap.xml 
