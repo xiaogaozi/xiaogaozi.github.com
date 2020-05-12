@@ -6,7 +6,7 @@ comments: true
 categories: [maybe news]
 ---
 
-> 前言：从这一期开始这个系列将会有一个正式的名字「Maybe News」，名字来源于我非常喜欢的一个国内的音乐厂牌[「兵马司」](https://en.wikipedia.org/wiki/Maybe_Mars)（Maybe Mars）。本身我分享的内容也很有可能是一些旧闻，只不过对于我来说是还未了解的知识罢了。[上一期](/2020/04/26/weekly-reading-list-issue-1/)的名字还是维持原样就不做修改。
+> 前言：从这一期开始这个系列将会有一个正式的名字「Maybe News」，名字来源于我非常喜欢的一个国内的音乐厂牌[「兵马司」](https://en.wikipedia.org/wiki/Maybe_Mars)（Maybe Mars）。本身我分享的内容也很有可能是一些旧闻，只不过对于我来说是还未了解的知识罢了。[上一期](/2020/04/26/weekly-reading-list-issue-1/)的名字还是维持原样就不做修改。你也可以通过[邮件订阅](https://mailchi.mp/da42a0763093/maybe-news)这个系列的文章。
 
 <!-- more -->
 
