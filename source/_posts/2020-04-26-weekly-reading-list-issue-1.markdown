@@ -3,7 +3,7 @@ layout: post
 title: "Weekly Reading List Issue #1"
 date: 2020-04-26 12:22:08 +0800
 comments: true
-categories: [wrl]
+categories: [wrl, maybe news]
 ---
 
 <!-- more -->
