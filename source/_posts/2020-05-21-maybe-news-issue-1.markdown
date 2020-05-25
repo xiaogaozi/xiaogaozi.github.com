@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Maybe News Issue #1"
-date: 2020-05-20 17:34:22 +0800
+date: 2020-05-21 17:34:22 +0800
 comments: true
 categories: [maybe news]
 ---
