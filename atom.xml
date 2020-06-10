@@ -4,7 +4,7 @@
   <title><![CDATA[Freedom]]></title>
   <link href="https://blog.xiaogaozi.org/atom.xml" rel="self"/>
   <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2020-06-02T10:26:24+08:00</updated>
+  <updated>2020-06-10T17:57:38+08:00</updated>
   <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maybe News Issue #3]]></title>
+    <link href="https://blog.xiaogaozi.org/2020/06/10/maybe-news-issue-3/"/>
+    <updated>2020-06-10T17:37:27+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2020/06/10/maybe-news-issue-3</id>
+    <content type="html"><![CDATA[<blockquote><p>「Maybe News」是一个定期（或许不定期）分享一些可能是新闻的知识的<a href="https://blog.xiaogaozi.org/categories/maybe-news/">系列文章</a>，名字来源于我非常喜欢的一个国内的音乐厂牌<a href="https://en.wikipedia.org/wiki/Maybe_Mars">「兵马司」</a>（Maybe Mars）。你也可以通过<a href="https://digest.xiaogaozi.org/maybe-news">邮件订阅</a>它。</p></blockquote>
+
+<!-- more -->
+
+
+<h2>Kudu: Storage for Fast Analytics on Fast Data</h2>
+
+<p><a href="https://kudu.apache.org/kudu.pdf">[链接]</a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/Online_analytical_processing">OLAP</a>（Online Analytical Processing）一直是大数据领域非常重要的应用场景，光有数据也不行，你得「分析」啊。自从有了 Hadoop，OLAP 的工具就一直在演变，从最早的裸写 MapReduce 任务，到 <a href="https://pig.apache.org">Pig</a>、<a href="https://hive.apache.org">Hive</a>、<a href="https://prestosql.io">Presto</a>、<a href="https://impala.apache.org">Impala</a>、<a href="https://druid.apache.org">Druid</a>、<a href="https://clickhouse.tech">ClickHouse</a>，以及今天要介绍的 <a href="https://kudu.apache.org">Kudu</a>。一个明显的趋势是 OLAP 引擎在逐步朝着「去 Hadoop 化」和「实时化」发展，当然这些项目里最新的也已经是 2016 年发布的了，接下来会怎么变化还是个未知数。</p>
+
+<p>先讲讲为什么会有类似 Kudu 这样的项目诞生。传统的 OLAP 引擎因为是构建在 HDFS 上的，要想分析数据首先得将数据存储到 HDFS 上，而这个过程（通常叫做 ETL）往往是比较耗时以及复杂的。同时由于 HDFS 天生不支持随机读写，为了弥补这个「缺陷」，有了 HBase 这样的项目。但 HBase 对于 OLAP 场景是不够友好的，因此往往需要把数据从 HBase 再导入到 HDFS 中，这个过程也可能比较耗时，维护成本也比较高。因此 Kudu 的目标是实现一个即支持随机读写（主要是写），又针对大批量查询进行优化的存储引擎。这种时候 HDFS 就显得很累赘了，这也是为什么越来越多引擎选择不依赖 HDFS 的缘故（Kudu 官网也在 FAQ 中专门<a href="https://kudu.apache.org/faq.html#why-doesnt-kudu-store-its-data-in-hdfs">解释</a>了为什么不用 HDFS）。当然并不是说 HDFS 就没用了，有很多数据还是非常静态的，对于实时性要求也不高，此时用 HDFS 是一种简单经济的选择。</p>
+
+<p>这篇论文虽然介绍的是 Kudu 早期的一些设计思想，但基本上属于最核心的功能。跟很多分布式数据库一样，Kudu 也是受 <a href="https://research.google/pubs/pub39966">Spanner</a> 启发。系统架构上分为一个 Master 服务和若干 Tablet 服务。Master 负责维护元信息，包括 Tablet 节点和数据的。Tablet 服务则负责数据存储，每台节点上会有几十至数百个 tablet，每个 tablet 中包含了若干数据，最大可以达到几十 GB 的规模（这里你可以把 tablet 类比为很多别的系统中的 region 概念）。</p>
+
+<p>跟很多关系数据库一样，Kudu 是有 table 的概念的。但跟很多 NoSQL 数据库不一样的地方是，强制用户必须显式定义 schema。Kudu 一个有意思的设计在于同时支持了 hash 和 range 这两种数据 partition 方法，而不像别的系统只支持其中一种（有关这两种 partition 的介绍可以看我之前的<a href="https://blog.xiaogaozi.org/2020/05/25/how-to-design-a-distributed-index-framework-part-5/">一篇文章</a>）。这样设计的好处是即保留了 hash 的数据均匀分配特点，可以在一定程度上防止读写热点，又保留了 range 对于范围扫描的友好性。</p>
+
+<p>Tablet 服务之间是通过 Raft 来进行数据复制，因此可以认为 Kudu 是一个保证强一致性的存储系统。值得注意的是 Kudu 的默认设置是 500 毫秒的心跳间隔以及 1.5 秒的选举超时，这个跟 Raft 论文推荐的时间相比长了不少（推荐的选举超时是 150~300 毫秒）。当集群扩容时，新节点将会首先进入 <code>PRE_VOTER</code> 状态，等到 log 追上以后再变成 <code>VOTER</code> 状态，这个设计也是 Raft 论文中建议的，不过论文中叫做 learner 或者 non-voting member。Master 服务虽然是单点设计（即状态不是分布式存储），但为了保障高可用也可以通过 Raft 实现多节点状态复制，只不过任意时间只能有一个节点工作。</p>
+
+<p>Kudu 的数据存储引擎是完全自己设计的，没有直接用任何现有的引擎，虽然也能多少看出一些别的引擎的影子。关于这一点可以理解，OLAP 系统区别于 <a href="https://en.wikipedia.org/wiki/Online_transaction_processing">OLTP</a> （Online Transactional Processing）系统的最大不同即在于数据存储的形式，简单理解后者是行式（row-oriented）存储，而前者是列式（column-oriented）存储。著名的 <a href="https://parquet.apache.org">Parquet</a> 就是广泛被用于 OLAP 场景的列式存储格式，Kudu 在实现上也复用了很多 Parquet 的代码。</p>
+
+<p>每个 table 在存储级别会被分割为多个 RowSets，顾名思义每个 RowSets 是由很多行（row）组成，RowSets 之间不会有重复的数据，但主键的范围可能会交叉。</p>
+
+<p>当有新的数据时会首先存储到内存中的 MemRowSets，底层实现是一个使用乐观锁（optimistic locking）的并发（concurrent）B 树。比较特别的一点是数据并不是一开始就按照列式进行存储，MemRowSets 中还是用的行式存储。当数据累积到一定程度 MemRowSets 就会持久化到磁盘上，称之为 DiskRowSets，每个 DiskRowSet 大小上限是 32MB。DiskRowSet 由两部分组成：基础数据（base data）和增量数据（delta stores）。</p>
+
+<p>基础数据是列式格式，即每一列都单独连续存储，每一列内部又划分成了多个小的页（page），有一个 B 树根据行号索引了这些页。每一列可以由用户指定不同的编码（encoding）方法（如 dictionary encoding、bitshuffle、front coding），同时也可以使用通用的压缩算法对数据进行压缩（如 LZ4、gzip、bzip2），基于列的编码及数据压缩是列式存储非常大的一个特点。</p>
+
+<p>增量数据也分为内存和磁盘两种形式。内存中的叫做 DeltaMemStores，这个跟 MemRowSets 的实现一样。磁盘中的叫做 DeltaFiles，是一个二进制类型的列块（column block）。不管是内存还是磁盘上的数据都会有一个额外的从 <code>(row_offset, timestamp)</code> 到 RowChangeList 的映射，<code>row_offset</code> 是某一行在一个 RowSet 中的偏移，RowChangList 是二进制编码以后的增量操作（如更新某一列、删除某一行）列表。同样的，DeltaMemStores 也会持久化到磁盘上变成 DeltaFiles。</p>
+
+<p>这些增量数据会定期跟基础数据进行合并（compation），以防止过多的增量文件。同时 DiskRowSets 之间也会进行合并，目的是清理已经被删除的行以及减少 DiskRowSets 之间的主键交叉范围。</p>
+
+<p>前面提到的将内存中的数据持久化到磁盘及对数据进行合并操作，都是由一组单独的后台任务来完成，但是什么时候执行什么操作是由一个调度器来控制的。有趣的是 Kudu 将调度器的逻辑抽象成了一个<a href="https://en.wikipedia.org/wiki/Knapsack_problem">背包问题</a>，只不过需要权衡的不是背包容量，而是 I/O 带宽。</p>
+
+<p>Kudu 本身只提供编程语言级别的 API（如 Java、C++），而 OLAP 系统中常用的 SQL 需要配合其它项目来实现。Kudu 原生已经跟 Spark 和 Impala 集成，也就是说你可以在这两个系统中通过 SQL 来查询。</p>
+
+<p>最后是性能评测。在 <a href="http://www.tpc.org/tpch">TPC-H</a> 数据集上与 Parquet 进行对比测试，Kudu 平均有 31% 的性能提升，尽管如此 Kudu 团队认为随着 Parquet 的迭代这个差距可能会逐渐缩小。在与 <a href="http://phoenix.apache.org">Phoenix</a> 的对比测试中也有 16~187 倍的性能提升。最后与 HBase 进行的 <a href="https://github.com/brianfrankcooper/YCSB">YCSB</a> 测试是为了看看 Kudu 在 OLTP 场景的性能，虽然它本身并不是为 OLTP 场景而设计，结果上的确也是 HBase 表现更好，但 Kudu P99 6 毫秒的响应时间在某些时候也许可以代替 OLTP 系统。</p>
+
+<p>Kudu 由 Cloudera 公司开发并于 2016 年正式发布，现已捐献给 Apache 基金会，整个系统使用 C++ 语言编写。</p>
+
+<p>顺带说个题外话这两年炒得比较火的 <a href="https://en.wikipedia.org/wiki/Hybrid_transactional/analytical_processing">HTAP</a>（Hybrid Transactional/Analytical Processing），本质上是希望在一个引擎中同时适配 OLTP 和 OLAP 这两个场景。但在我看来就目前的技术现状这个愿景实现起来还是比较困难，软件工程界的名言<a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">「没有银弹」</a>告诉我们不存在一个可以通吃的、完美的方案，因此 HTAP 目前更多还只是一个营销概念吧。</p>
+
+<h2>字节跳动自研强一致在线 KV &amp; 表格存储实践</h2>
+
+<p><a href="https://mp.weixin.qq.com/s/jdPE9WClBuimIHVxJnwwUw">[上篇]</a> <a href="https://mp.weixin.qq.com/s/DvUBnWBqb0XGnicKUb-iqg">[下篇]</a></p>
+
+<p><a href="https://github.com/cockroachdb/cockroach">又</a><a href="https://github.com/pingcap/tidb">又</a><a href="https://github.com/dgraph-io/dgraph">又</a><a href="https://kudu.apache.org">又</a><a href="https://github.com/vesoft-inc/nebula">又</a>一个受 Spanner 启发的分布式存储（Google 功德无量！Jeff Dean 万寿无疆！），这次的项目来自字节跳动。关键词：range 分割、Raft、RocksDB、MVCC、分布式事务、SQL 层，看看这些也基本能对整体设计猜个八九不离十了，比较有价值的信息是学习学习字节跳动在他们的实践中的一些经验。项目使用 C++ 语言编写，目前没有开源。</p>
+
+<h2>Challenges Supporting MIG in Kubernetes</h2>
+
+<p><a href="https://docs.google.com/document/d/1Dxx5MwG_GiBeKOuMNwv4QbO8OqA7XFdzn7fzzI7AQDg">[链接]</a></p>
+
+<p>随着深度学习的蓬勃发展，GPU 共享逐渐成为了 K8s 社区的一个<a href="https://github.com/kubernetes/kubernetes/issues/52757">热门话题</a>。目前 NVIDIA 官方提供的<a href="https://github.com/NVIDIA/k8s-device-plugin">设备插件</a>可以申请的最小资源粒度还是 1 个 GPU，但很多时候资源是浪费的。为了提升 GPU 的资源利用率，社区已经出现了多种解决方案，例如分别来自<a href="https://github.com/AliyunContainerService/gpushare-scheduler-extender">阿里云</a>、<a href="https://github.com/tkestack/gpu-manager">腾讯云</a>以及 <a href="https://github.com/awslabs/aws-virtual-gpu-device-plugin">AWS</a> 的实现。现在 NVIDIA 官方终于在新一代的 Ampere 架构硬件上原生支持了共享，也就是标题中的 MIG（Multi-Instance GPUs）。这篇文档来自 NVIDIA 团队，首先介绍了当前是如何在 K8s 中管理 GPU 资源的，然后介绍了 MIG 的一些概念，最后提议了 4 个支持 MIG 的可能的解决方案。整体感觉 GPU 共享还是没有 CPU 灵活，不少地方设置了限制，但毕竟这是 NVIDIA 官方迈出的第一步。</p>
+
+<h2>How to read deep learning papers?</h2>
+
+<p><a href="https://www.reddit.com/r/MachineLearning/comments/gi3ihe/d_how_to_read_deep_learning_papers">[链接]</a></p>
+
+<p>Reddit 上一个有趣的讨论：如何阅读深度学习的论文？我们常常调侃机器学习就是在「炼丹」，没有人能解释为什么结果就是有效的，反正<a href="https://www.youtube.com/watch?v=YPN0qhSyWy8">「it just works」</a>。最高票的评论说你不需要接受论文中的每一个观点，只要把注意力集中在作者提供的证据并有选择性地调整你的想法就好了。正好前段时间前微软执行副总裁沈向洋博士做了一个主题名为<a href="https://www.bilibili.com/video/BV1df4y1m74k">「You are how you read」</a>的演讲，主要内容就是一些阅读论文的经验（有趣的是沈博士在几年前还写过一篇叫做<a href="https://www.linkedin.com/pulse/you-what-write-harry-shum">「You are what you write」</a>的博客）。</p>
+
+<h2>Farewell, TensorFlow</h2>
+
+<p><a href="https://mrry.github.io/2020/05/10/farewell-tensorflow.html">[链接]</a></p>
+
+<p>TensorFlow 核心开发者、Google Brain 团队的 Derek Murray 宣布离开，这位大哥在 GitHub 和 Stack Overflow 上都很活跃，如果你经常浏览社区应该对他的头像不陌生。在这篇告别文中 Murray 提到了很多 Google 内部帮助工程师解决问题的工具，并详细介绍了近期对 TensorFlow 底层运行时进行的一项性能优化的过程，在部分评测中可以提升 10% 的推理性能。这个优化目前已经合入 master，并将在 TensorFlow 2.3 发布。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #2]]></title>
@@ -1429,218 +1501,6 @@
 <p>游戏界也从 WarGames 获益不少，1984 年<a href="http://en.wikipedia.org/wiki/WarGames_(video_game)">同名游戏</a>发布。2006 年一款叫做 <a href="http://en.wikipedia.org/wiki/Defcon_(video_game)">DEFCON</a> 的即时战略游戏发布，游戏画面与电影中 NORAD 指挥中心的大屏幕极为相似。DEFCON（defense readiness condition）是美国军方采用的警报等级，在 WarGames 电影中 NORAD 曾因模拟的苏联进攻一度将 DEFCON 等级提升到最高等级 1。著名的黑客大会 <a href="https://www.defcon.org">DEF CON</a> 的名字也是来源于此。</p>
 
 <p>或许 WarGames 对于电影史并没有太大的贡献，但却深深影响着那一代的 Geek 们。谨以此文献给那些逝去的先驱，RIP</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[GYP 简介]]></title>
-    <link href="https://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/"/>
-    <updated>2011-10-29T22:55:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp</id>
-    <content type="html"><![CDATA[<p>说起项目构建工具，Linux 用户最熟悉的恐怕就是 <a href="http://en.wikipedia.org/wiki/GNU_build_system">Autotools</a>，它将编译安装这个步骤大大简化。但对于项目作者来说，想要使用 Autotools 生成有效的配置文件着实需要下一番功夫，用现在流行的话来说就是用户体验不够友好。对 Unix shell 的依赖，也使得 Autotools 天生对于跨平台支持不佳。</p>
-
-<p>后来我从<a href="https://twitter.com/zhzhxtrrk">大猫</a>同学那里听说了 <a href="http://www.cmake.org/">CMake</a>，CMake 使用 C++ 编写，原生支持跨平台，不需要像 Autotools 那样写一堆的配置文件，只需一个 CMakeLists.txt 文件即可。简洁的使用方式，强大的功能使得我立马对 CMake 情有独钟。在后来的使用过程中，虽然会遇到一些因为使用习惯带来的小困扰，但我对于 CMake 还是基本满意的。直到我发现了 GYP。</p>
-
-<p><a href="http://code.google.com/p/gyp/">GYP</a>（Generate Your Projects）是由 Chromium 团队开发的跨平台自动化项目构建工具，Chromium 便是通过 GYP 进行项目构建管理。为什么我要选择 GYP，而放弃 CMake 呢？功能上 GYP 和 CMake 很是相似，在我看来，它们的最大区别在于配置文件的编写方式和其中蕴含的思想。</p>
-
-<p>编写 CMake 配置文件相比 Autotools 来说已经简化很多，一个最简单的配置文件只需要写上源文件及生成类型（可执行文件、静态库、动态库等）即可。对分支语句和循环语句的支持也使得 CMake 更加灵活。但是，CMake 最大的问题也是在这个配置文件，请看下面这个示例文件：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class='cmake'><span class='line'><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span>
-</span><span class='line'><span class="nb">project</span><span class="p">(</span><span class="s">VP8</span> <span class="s">CXX</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-Wall</span><span class="p">)</span>
-</span><span class='line'><span class="nb">cmake_policy</span><span class="p">(</span><span class="s">SET</span> <span class="s">CMP0015</span> <span class="s">NEW</span><span class="p">)</span>
-</span><span class='line'><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&quot;include&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="nb">link_directories</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_ARCHIVE_OUTPUT_DIRECTORY</span> <span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="nb">set</span><span class="p">(</span><span class="s">VP8SRC</span> <span class="s">VP8Encoder.cpp</span> <span class="s">VP8Decoder.cpp</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">if</span><span class="p">(</span><span class="s">X86</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Darwin</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">i386</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="s2">&quot;i386&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nb">add_library</span><span class="p">(</span><span class="s">vp8</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">VP8SRC</span><span class="o">}</span><span class="p">)</span>
-</span><span class='line'><span class="nb">elseif</span><span class="p">(</span><span class="s">IPHONE</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">if</span><span class="p">(</span><span class="s">SIMULATOR</span><span class="p">)</span>
-</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PLATFORM</span> <span class="s2">&quot;iPhoneSimulator&quot;</span><span class="p">)</span>
-</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PROCESSOR</span> <span class="s">i386</span><span class="p">)</span>
-</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">ARCH</span> <span class="s2">&quot;i386&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">else</span><span class="p">()</span>
-</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PLATFORM</span> <span class="s2">&quot;iPhoneOS&quot;</span><span class="p">)</span>
-</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">PROCESSOR</span> <span class="s">arm</span><span class="p">)</span>
-</span><span class='line'>        <span class="nb">set</span><span class="p">(</span><span class="s">ARCH</span> <span class="s2">&quot;armv7&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">endif</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">SDKVER</span> <span class="s2">&quot;4.0&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">DEVROOT</span> <span class="s2">&quot;/Developer/Platforms/${PLATFORM}.platform/Developer&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">SDKROOT</span> <span class="s2">&quot;${DEVROOT}/SDKs/${PLATFORM}${SDKVER}.sdk&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_SYSROOT</span> <span class="s2">&quot;${SDKROOT}&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Generic</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="o">${</span><span class="nv">PROCESSOR</span><span class="o">}</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s2">&quot;${DEVROOT}/usr/bin/g++&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="o">${</span><span class="nv">ARCH</span><span class="o">}</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nb">include_directories</span><span class="p">(</span><span class="s">SYSTEM</span> <span class="s2">&quot;${SDKROOT}/usr/include&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">link_directories</span><span class="p">(</span><span class="s">SYSTEM</span> <span class="s2">&quot;${SDKROOT}/usr/lib&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_PHONE</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">add_library</span><span class="p">(</span><span class="s">vp8-armv7-darwin</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">VP8SRC</span><span class="o">}</span><span class="p">)</span>
-</span><span class='line'><span class="nb">endif</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>你能一眼看出这个配置文件干了什么吗？其实这个配置文件想要产生的目标（target）只有一个，就是通过 <code>${VP8SRC}</code> 编译生成的静态库，但因为加上了条件判断，及各种平台相关配置，使得这个配置文件看起来很是复杂。在我看来，编写 CMake 配置文件是一种线性思维，对于同一个目标的配置可能会零散分布在各个地方。而 GYP 则相当不同，GYP 的配置文件更多地强调模块化、结构化。看看下面这个示例文件：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s">&#39;targets&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>      <span class="s">&#39;target_name&#39;</span><span class="p">:</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;&lt;(library)&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s">&#39;dependencies&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="s">&#39;bar&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="p">],</span>
-</span><span class='line'>      <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="s">&#39;DEFINE_FOO&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="s">&#39;DEFINE_A_VALUE=value&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="p">],</span>
-</span><span class='line'>      <span class="s">&#39;include_dirs&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="s">&#39;..&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="p">],</span>
-</span><span class='line'>      <span class="s">&#39;sources&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="s">&#39;file1.cc&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="s">&#39;file2.cc&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="p">],</span>
-</span><span class='line'>      <span class="s">&#39;conditions&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">[</span><span class="s">&#39;OS==&quot;linux&quot;&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span><span class='line'>          <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s">&#39;LINUX_DEFINE&#39;</span><span class="p">,</span>
-</span><span class='line'>          <span class="p">],</span>
-</span><span class='line'>          <span class="s">&#39;include_dirs&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s">&#39;include/linux&#39;</span><span class="p">,</span>
-</span><span class='line'>          <span class="p">],</span>
-</span><span class='line'>        <span class="p">}],</span>
-</span><span class='line'>        <span class="p">[</span><span class="s">&#39;OS==&quot;win&quot;&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span><span class='line'>          <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s">&#39;WINDOWS_SPECIFIC_DEFINE&#39;</span><span class="p">,</span>
-</span><span class='line'>          <span class="p">],</span>
-</span><span class='line'>        <span class="p">},</span> <span class="p">{</span> <span class="c"># OS != &quot;win&quot;,</span>
-</span><span class='line'>          <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s">&#39;NON_WINDOWS_DEFINE&#39;</span><span class="p">,</span>
-</span><span class='line'>          <span class="p">],</span>
-</span><span class='line'>        <span class="p">}]</span>
-</span><span class='line'>      <span class="p">],</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">],</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>我们可以立马看出上面这个配置文件的输出目标只有一个，也就是 <code>foo</code>，它是一个库文件（至于是静态的还是动态的这需要在生成项目时指定），它依赖的目标、宏定义、包含的头文件路径、源文件是什么，以及根据不同平台设定的不同配置等。这种定义配置文件的方式相比 CMake 来说，让我觉得更加舒服，也更加清晰，特别是当一个输出目标的配置越来越多时，使用 CMake 来管理可能会愈加混乱。</p>
-
-<p>配置文件的编写方式是我区分 GYP 和 CMake 之间最大的不同点，当然 GYP 也有一些小细节值得注意，比如支持跨平台项目工程文件输出，Windows 平台默认是 Visual Studio，Linux 平台默认是 Makefile，Mac 平台默认是 Xcode，这个功能 CMake 也同样支持<del>，只是缺少了 Xcode</del>。Chromium 团队成员也撰文详细<a href="http://code.google.com/p/gyp/wiki/GypVsCMake">比较</a>了 GYP 和 CMake 之间的优缺点，在开发 GYP 之前，他们也曾试图转到 <a href="http://www.scons.org/">SCons</a>（这个我没用过，有经验的同学可以比较一下），但是失败了，于是 GYP 就诞生了。</p>
-
-<p>当然 GYP 也不是没有缺点，相反，我觉得它的「缺点」一大堆：</p>
-
-<ul>
-<li>文档不够完整，项目不够正式，某些地方还保留着 Chromium 的影子，看起来像是还没有完全独立出来。</li>
-<li>大量的括号嵌套，很容易让人看晕，有过 Lisp 使用经验的同学可以对号入座。对于有括号恐惧症，或者不使用现代编辑器的同学基本可以绕行。</li>
-<li>为了支持跨平台，有时不得不加入某些特定平台的配置信息，比如只适用于 Visual Studio 的 <code>RuntimeLibrary</code> 配置，这不利于跨平台配置文件的编写，也无形中增加了编写复杂度。</li>
-<li>不支持 <code>make clean</code>，唯一的方法就是将输出目录整个删除或者手动删除其中的某些文件。</li>
-</ul>
-
-
-<p>如果你已经打算尝试 GYP，那一定记得在生成项目工程文件时加上 <code>--depth</code> 参数，譬如：</p>
-
-<pre><code>$ gyp --depth=. foo.gyp
-</code></pre>
-
-<p>这也是一个从 Chromium 项目遗留下来的历史问题。</p>
-
-<p>也许你根本用不上跨平台特性，但是 GYP 依然值得尝试。我编写了一份 GYP 配置文件的<a href="https://github.com/xiaogaozi/princess-alist/blob/master/home/xiaogaozi/.templates/TEMPLATE.gyp.tpl">模板</a>，有兴趣的同学可以参考。GYP 和 CMake 分别代表了两种迥异的「风格」，至于孰优孰劣，还得仁者见仁，智者见智。</p>
 ]]></content>
   </entry>
   
