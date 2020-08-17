@@ -4,7 +4,7 @@
   <title><![CDATA[Freedom]]></title>
   <link href="https://blog.xiaogaozi.org/atom.xml" rel="self"/>
   <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2020-08-17T16:01:08+08:00</updated>
+  <updated>2020-08-17T16:31:46+08:00</updated>
   <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Introduction to DL Platform]]></title>
+    <link href="https://blog.xiaogaozi.org/2020/08/17/introduction-to-dl-platform/"/>
+    <updated>2020-08-17T16:25:32+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2020/08/17/introduction-to-dl-platform</id>
+    <content type="html"><![CDATA[<p>最近在团队内部做了一次关于深度学习平台的分享，内容上一方面来自过去的工作经验，另一方面也有很多过去想做但是由于各种原因没来得及实现的想法。</p>
+
+<!-- more -->
+
+
+
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/mux6PLZygjwwrE" width="700" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen></iframe>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #5]]></title>
@@ -1450,42 +1467,6 @@
 <p>我们都会老去，我们也曾年轻，你的困惑就是我们曾经的困惑，你的烦恼就是我们曾经的烦恼。如果你想倾诉，别忘了在远方还有你的母亲，还有我，不管发生什么，我们永远都是你最亲的人。我知道你曾经也恨过我们，但那不是真正的恨，我相信有那么一天我们能彼此释然。</p>
 
 <p>到那时，你会了解，我们是如此深深地爱着你。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Bootstrap 的几个问题]]></title>
-    <link href="https://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap/"/>
-    <updated>2012-10-13T21:24:00+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2012/10/13/some-issues-about-using-bootstrap</id>
-    <content type="html"><![CDATA[<h2>Responsive 与 Modal</h2>
-
-<p>在开启 responsive 后，小屏幕设备上显示 modal 时会变成一闪而过，然后浮动窗口就不见了。具体效果可以缩小浏览器尺寸，在<a href="http://twitter.github.com/bootstrap/javascript.html#modals">这个页面</a>的 Live demo 点击「Launch demo modal」看到。<a href="https://github.com/twitter/bootstrap/issues/2130">Issue #2130</a> 专门讨论了这个问题，目前比较好的解决办法是使用<a href="http://niftylettuce.github.com/twitter-bootstrap-jquery-plugins">这个插件</a>，根据页面大小来动态调整 modal 的位置，不过貌似用了之后 modal 那个由上至下显示的动画就没有了。这个 issue 现在还处于开启状态，看来官方短期内是不会解决这个问题的。</p>
-
-<h2>Responsive 与 Navbar</h2>
-
-<p><del>responsive 模式下的 navbar 显示效果很赞，但是有一个很令人费解的事情，默认情况下所有 dropdown menu 都是展开的，对于使用多个菜单项，且子菜单条目很多的场景这是不能接受的。于是 <a href="https://github.com/twitter/bootstrap/issues/3184">Issue #3184</a> 出现了，这次的方案比较 hack，需要修改 bootstrap-responsive.css，将 <code>.nav-collapse .dropdown-menu</code> 里的 <code>display: block;</code> 注释掉。这时你会惊喜地发现 dropdown menu 默认折叠了，点击也能展开子菜单。</del> 最新版 Bootstrap 已经修复了 dropdown menu 默认展开的问题，但是（总是有很多但是），在触屏设备上子菜单是选不中的。托 <a href="http://www.filod.net">filod</a> 同学的福，修改 bootstrap-dropdown.js 中的一段代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/* APPLY TO STANDARD DROPDOWN ELEMENTS</span>
-</span><span class='line'><span class="cm"> * =================================== */</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown.data-api touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="nx">clearMenus</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="s1">&#39;.dropdown form&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span> <span class="p">})</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.dropdown.data-api touchstart.dropdown.data-api&#39;</span>  <span class="p">,</span> <span class="nx">toggle</span><span class="p">,</span> <span class="nx">Dropdown</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toggle</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;keydown.dropdown.data-api touchstart.dropdown.data-api&#39;</span><span class="p">,</span> <span class="nx">toggle</span> <span class="o">+</span> <span class="s1">&#39;, [role=menu]&#39;</span> <span class="p">,</span> <span class="nx">Dropdown</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">keydown</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里同时监听了 click 和 touchstart 事件，于是在触屏设备上先有 touchstart 将子菜单隐藏，再有 click 点击到隐藏后该位置的菜单项，因此你永远都不可能点到想点的子菜单。<del>根本原因也是因为我们之前注释了 <code>display: block;</code> 引起，改变了 Bootstrap 的使用场景，于是 JS 出现如此纰漏。解决方法便是不监听 touchstart 事件，虽然会造成些小问题，不过也算基本满足要求。这个 issue 官方明确<a href="https://github.com/twitter/bootstrap/issues/3184#issuecomment-8072507">表示</a>不会采纳，不过还是希望以后有机会增加一个开关选项给用户。</del> 关于这个问题的讨论可以看 <a href="https://github.com/twitter/bootstrap/issues/4550">Issue #4550</a>，不明白为什么官方一直不解决，我的修改可以见<a href="https://github.com/xiaogaozi/bootstrap/commit/7bd46eadbcb8730d588676c538712f4f57ffebab">这个</a>和<a href="https://github.com/xiaogaozi/bootstrap/commit/2c4eb4b678490973f92d574b397758aadbc7bf8f">这个</a> commit。</p>
 ]]></content>
   </entry>
   
