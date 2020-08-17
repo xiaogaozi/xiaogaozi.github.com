@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Kubeflow | Freedom]]></title>
+  <link href="https://blog.xiaogaozi.org/categories/kubeflow/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-08-17T16:31:46+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[xiaogaozi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Introduction to DL Platform]]></title>
+    <link href="https://blog.xiaogaozi.org/2020/08/17/introduction-to-dl-platform/"/>
+    <updated>2020-08-17T16:25:32+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2020/08/17/introduction-to-dl-platform</id>
+    <content type="html"><![CDATA[<p>最近在团队内部做了一次关于深度学习平台的分享，内容上一方面来自过去的工作经验，另一方面也有很多过去想做但是由于各种原因没来得及实现的想法。</p>
+
+<!-- more -->
+
+
+
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/mux6PLZygjwwrE" width="700" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen></iframe>
+
+]]></content>
+  </entry>
+  
+</feed>
