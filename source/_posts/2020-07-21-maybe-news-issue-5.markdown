@@ -64,7 +64,7 @@ Jupyter Notebooks 是当下数据科学家或者算法工程师日常工作非�
 
 [[链接]](https://github.com/GoogleCloudPlatform/spark-on-k8s-operator/pull/976)
 
-Spark 3.0 新增了动态伸缩 executor 的特性（默认关闭），具体实现可以查看 [SPARK-27963](https://issues.apache.org/jira/browse/SPARK-27963)，用户使用文档可以查看[这里](http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation)。用户需要预先设定诸如初始、最小和最大 executor 数量这样的参数，之后 Spark 运行时会根据当前任务排队时间和 executor 空闲时间这些指标去创建或者销毁 executor。对于有状态的 executor（如 shuffle 时存储到磁盘的数据、cache 到内存和磁盘的数据）会有一些特殊的策略防止错误回收资源，如设置一个 executor 持有 shuffle 数据的超时时间，或者直接使用外部 shuffle 服务。spark-on-k8s-operator 项目近期也支持了这个特性，可以直接通过 YAML 配置来开启，不过遗憾的是动态资源分配目前还不支持 K8s 模式。
+Spark 3.0 为[动态资源分配](http://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation)（dynamic resource allocation）新增了 shuffle tracking 特性（默认关闭），具体实现可以查看 [SPARK-27963](https://issues.apache.org/jira/browse/SPARK-27963)。当使用动态资源分配时用户需要预先设定诸如初始、最小和最大 executor 数量这样的参数，之后 Spark 运行时会根据当前任务排队时间和 executor 空闲时间这些指标去创建或者销毁 executor。对于有状态的 executor（如 shuffle 时存储到磁盘的数据、cache 到内存和磁盘的数据）会有一些特殊的策略防止错误回收资源，过去的做法是使用外部 shuffle 服务。开启 shuffle tracking 以后就不再依赖外部 shuffle 服务，而是设置一个 executor 持有 shuffle 数据的超时时间。过去 Spark 的 K8s 模式不支持外部 shuffle 服务，有了这个新的特性以后使得动态资源分配在 K8s 模式上成为可能。spark-on-k8s-operator 项目近期也支持了这个特性，可以直接通过 [YAML 配置](https://github.com/GoogleCloudPlatform/spark-on-k8s-operator/blob/master/docs/user-guide.md#dynamic-allocation)来开启。
 
 ## Boiled Hippo
 
