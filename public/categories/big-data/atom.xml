@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Big Data | Freedom]]></title>
+  <link href="https://blog.xiaogaozi.org/categories/big-data/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2020-11-03T12:07:12+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[xiaogaozi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[环球易购数据平台如何做到既提速又省钱？]]></title>
+    <link href="https://blog.xiaogaozi.org/2020/11/03/globalegrow-big-data-platform-user-case/"/>
+    <updated>2020-11-03T11:58:51+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2020/11/03/globalegrow-big-data-platform-user-case</id>
+    <content type="html"><![CDATA[<blockquote><p>这篇文章最初发表在 JuiceFS 官方博客，点击<a href="https://juicefs.com/blog/cn/posts/globalegrow-big-data-platform-user-case">这里</a>查看原文。</p></blockquote>
+
+<!-- more -->
+
+
+<h2>客户简介</h2>
+
+<p><a href="https://www.globalegrow.com">环球易购</a>创建于 2007 年，致力于打造惠通全球的 B2C 跨境电商新零售生态，2014 年通过与百圆裤业并购完成上市，上市公司「跨境通（SZ002640）」是 A 股上市跨境电商第一股。经过多年的努力，在海外市场建立了广阔的销售网络，得到了美国、欧洲等多国客户的广泛认可，公司业务多年来一直保持着 100% 的增长速度。</p>
+
+<h2>数据平台现状及需求</h2>
+
+<p>环球易购提供面向全球的跨境电商服务，选择 AWS 作为云服务商。基于 EC2 和 EBS 自建 CDH 集群，计算引擎使用了 Hive 和 Spark。当时的环球易购大数据平台面临这么几个问题：</p>
+
+<ul>
+<li>基于 EBS 搭建的 HDFS 集群成本很高</li>
+<li>Hadoop 集群缺乏弹性伸缩能力</li>
+</ul>
+
+
+<p>因此希望能够在降低 HDFS 存储成本的同时，不会在性能上造成太大损失。说到降低成本那么很自然地会联想到 S3，S3 在提供高达 11 个 9 的数据持久性的同时也能够做到足够低廉的存储成本。但是大数据集群存储由 HDFS 迁移到 S3 是唯一选择么？迁移和使用中会遇到哪些问题呢？这些我们在后面都会详细介绍，不过首先来看看为什么 EBS 自建的 HDFS 集群成本很高。</p>
+
+<h2>云上自建 HDFS 的痛点</h2>
+
+<p>EBS 是一种易于使用的高性能数据块存储服务，通过挂载到 EC2 上来提供近乎无限容量的存储空间。为了保证 EBS 上数据的可用性，所有数据都会自动在同一可用区内进行复制，防止数据丢失。</p>
+
+<p>HDFS 是目前大数据领域最常使用的分布式文件系统，每个文件由一系列的数据块组成。同样的，为了保证数据的可用性，HDFS 默认会将这些数据块自动复制到集群中的多个节点上，例如当设置副本数为 3 时同一数据块在集群中将会有 3 份拷贝。</p>
+
+<p>通过以上介绍可以看到 EBS 和 HDFS 都会通过复制数据来保证可用性，区别在于 EBS 是只针对每块存储卷（即磁盘）的数据进行复制，而 HDFS 是针对整个集群的数据。这种双重冗余的机制其实有些多余，也变相增加了存储成本。同时 HDFS 的多副本特性使得集群的实际可用容量会小很多，例如当副本数为 3 时实际可用容量其实只有总磁盘空间大小的 1/3，再加上通常会在集群空间到达一定水位时就进行扩容，这会进一步压缩可用容量。<strong>基于以上原因，在云上通过 EBS 自建 HDFS 集群的存储成本通常会高达￥1000/TB/月。</strong></p>
+
+<h2>从 HDFS 迁移到 S3 我们需要考虑什么？</h2>
+
+<p>Hadoop 社区版默认已经支持从 S3 读写数据，即通常所说的「S3A」。但是如果你去看 S3A 的<a href="http://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Warnings">官方文档</a>，会在最开始看到几个大大的警告，里面列举了一些类 S3 的对象存储都会存在的问题。</p>
+
+<h3>一致性模型（Consistency Model）</h3>
+
+<p>S3 的一致性模型是<a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html#ConsistencyModel">最终一致性</a>，也就是说当创建了一个新文件以后，并不一定能立即看到它；当对一个文件执行删除或者更新操作后，有可能还是会读到旧的数据。这些一致性问题会导致程序崩溃，比如常见的 <code>java.io.FileNotFoundException</code>，也可能导致错误的计算结果，更麻烦的是这种错误很难发现。我们在测试过程中就因为 S3 的一致性问题使得执行 DistCp 任务频繁报错，导致数据迁移受到严重影响。</p>
+
+<h3>没有真实的目录</h3>
+
+<p>S3 中的「目录」其实是通过对象名称的前缀模拟出来的，因此它并不等价于通常我们在 HDFS 中见到的目录。例如当遍历一个目录时，S3 的实现是搜索具有相同前缀的对象。这会导致几个比较严重的问题：</p>
+
+<ul>
+<li><strong>遍历目录可能会很慢。</strong>遍历的时间复杂度取决于目录中的总文件数。</li>
+<li><strong>重命名目录也可能会很慢。</strong>跟遍历目录一样，总文件数是影响性能的重要因素。同时 S3 重命名一个文件其实是先拷贝到新路径，再删除原始文件，这个过程也是比较耗时的。</li>
+<li><strong>重命名或者删除目录不是原子操作。</strong>HDFS 上只需要 O(1) 的操作，在 S3 上变成了 O(n)。如果操作过程中任务失败，将会导致数据变成一个不可知的中间状态。</li>
+</ul>
+
+
+<h3>认证模型（Authorization Model）</h3>
+
+<p>S3 的认证模型是在 S3 服务内部基于 IAM 实现的，这区别于传统的文件系统。因此当通过 Hadoop 访问 S3 时会看到文件的 owner 和 group 会随着当前用户的身份而动态变化，文件的权限都是 666，而目录的权限都是 777。这种与 HDFS 大相径庭的认证模型会使得权限管理复杂化，并且也显得不够通用，只能限定在 AWS 内使用。</p>
+
+<h2>JuiceFS 带来了什么？</h2>
+
+<p>JuiceFS 基于对象存储实现了一个<strong>强一致性的分布式文件系统</strong>，一方面保持了 S3 弹性伸缩无限容量，99.999999999% 的数据持久性安全特性，另一方面前面提到的 S3 的种种「问题」都能完美解决。同时 JuiceFS 完整兼容 Hadoop 生态的各种组件，对于用户来说可以做到无缝接入。认证模型上 JuiceFS 遵循与 HDFS 类似的 user/group 权限控制方式，保证数据的安全性，也能对接 Hadoop 生态中常用的如 Kerberos、Ranger、Sentry 这些组件。更加重要的是，相比环球易购现有的基于 EBS 的存储方案，使用 JuiceFS 以后<strong>每 TB 每月的存储成本将会至少节省 70%</strong>。</p>
+
+<p>存储成本大幅下降的同时，性能表现又如何呢？下面分享一下相关的测试结果。</p>
+
+<h2>测试结果</h2>
+
+<p>测试环境是 AWS 上自建的 CDH 集群，CDH 版本为 5.8.5。测试的计算引擎包括 Hive 和 Spark，数据格式包括纯文本和 ORC，使用 TPC-DS 20G 和 100G 这两个规模的数据集。对比的存储系统有 S3A、HDFS 及 JuiceFS。</p>
+
+<h3>创建表</h3>
+
+<p><img src="/images/posts/globalegrow-create-table.png" alt="" />
+这里以创建 <code>store_sales</code> 这个分区表为例</p>
+
+<h3>修复表分区</h3>
+
+<p><img src="/images/posts/globalegrow-repair-table.png" alt="" />
+这里以修复 <code>store_sales</code> 这个表的分区为例</p>
+
+<h3>写入数据</h3>
+
+<p><img src="/images/posts/globalegrow-insert-table.png" alt="" />
+这里以读取 <code>store_sales</code> 这个分区表并插入临时表为例</p>
+
+<h3>读取纯文本格式数据</h3>
+
+<p><img src="/images/posts/globalegrow-text-20g.png" alt="" />
+<img src="/images/posts/globalegrow-text-100g.png" alt="" />
+分别使用 Spark 测试了 20G 和 100G 这两个数据集，取 TPC-DS 前 10 个查询，数据格式为纯文本。</p>
+
+<h3>读取 ORC 格式数据</h3>
+
+<p><img src="/images/posts/globalegrow-orc-20g.png" alt="" />
+<img src="/images/posts/globalegrow-orc-100g.png" alt="" />
+分别使用 Spark 测试了 20G 和 100G 这两个数据集，取 TPC-DS 前 10 个查询，数据格式为 ORC。</p>
+
+<h3>测试结果总结</h3>
+
+<p>对于建表和修复表分区这样的操作，因为依赖对底层元数据的频繁访问（例如遍历目录），JuiceFS 的性能大幅领先于 S3A，<strong>最多有 60 倍的性能提升</strong>。</p>
+
+<p>在写入数据的场景，JuiceFS 的性能相对于 S3A 有 5 倍的提升。这对于 ETL 类型的任务来说非常重要，通常 ETL 任务都会涉及多个临时表的生成和销毁，这个过程会产生大量的元数据操作（例如重命名、删除）。</p>
+
+<p>当读取类似 ORC 这种列式存储格式的数据时，区别于纯文本文件的顺序读取模式，列式存储格式会产生很多随机访问，JuiceFS 的性能再次大幅领先 S3A，<strong>最高可达 63 倍</strong>。同时相比于 HDFS，JuiceFS 也能有最多 2 倍的性能提升。</p>
+
+<h2>数据迁移</h2>
+
+<p>环球易购的大数据平台经过长期的发展已经积攒大量的数据和业务，怎么从现有方案迁移到新的方案也是评估新方案是否合适的重要因素。在这方面，JuiceFS 提供了多种数据迁移方式：</p>
+
+<ul>
+<li><strong>将数据拷贝到 JuiceFS。</strong>这种方式的读取性能最好，可以高效地利用本地磁盘缓存和分布式缓存，也能保证数据的强一致性。但是涉及数据拷贝，因此迁移成本比较高。</li>
+<li><strong>通过 import 命令将 S3 的数据导入。</strong>这种方式只涉及元数据的导入，将 S3 上面的对象导入到 JuiceFS 的目录树。这种方式无需拷贝数据，迁移速度快。但是没有办法保证强一致性，并且不能利用缓存加速功能。</li>
+<li><strong>通过符号链接将已有数据和新数据融合到一起。</strong>JuiceFS 不仅可以在文件系统内部建立符号链接，也可以跨文件系统建立符号链接。例如通过 <code>ln -s hdfs://dir /jfs/hdfs_dir</code> 这行命令可以创建一个指向 HDFS 的符号链接。基于这种方式，可以将历史数据直接链接到 JuiceFS 中，然后通过统一的 JuiceFS 命名空间访问其它所有 Hadoop 文件系统。</li>
+</ul>
+
+
+<h2>选择</h2>
+
+<p>结合测试结果以及综合成本分析，全面对比了 HDFS、S3 和 JuiceFS 的方案，环球易购认为 JuiceFS 相比另外两个方案有显著的性能和成本优势，决定用 JuiceFS 替换自建的 HDFS。这些优势具体体现为以下 3 个方面：</p>
+
+<p>首先，JuiceFS 可以实现从 HDFS 的平滑迁移，对上游的计算引擎可以做到全面兼容，对现有的权限管理体系可以保持一致，同时性能上没有任何下降。这几点对数据平台的迁移可以说是至关重要的，没有这样的基础，数据平台的迁移将是一场耗时耗力的战役。<strong>而有了这样的基础，客户只用不到一个月的时间就完成了业务和数据的迁移。</strong></p>
+
+<p>第二，在成本方面，「云上自建 HDFS 的痛点」一节中已经有过说明，基于 EBS 自建 HDFS 单独计算磁盘成本就大约有￥1000/TB/月，而 JuiceFS 仅为 27%。这还不是 TCO 成本，TCO 还应该包括 HDFS 所消耗的 CPU、内存、运维管理投入的人力成本，按经验值来说至少翻倍。而 JuiceFS 客户使用全托管服务，没有任何运维管理的投入。<strong>这样从 TCO 角度看，可以节省近 90% 的成本。</strong></p>
+
+<p>最后，也是最重要的一点。大数据平台的存储引擎从 HDFS 换成 JuiceFS 后，整个平台就实现了存储计算分离，在 <a href="https://juicefs.com/blog/cn/posts/why-disaggregated-compute-and-storage-is-future">「为什么说存储和计算分离的架构才是未来？」</a> 一文中详细分析了存储计算耦合的痛点，以及业界的一些实践。现在 JuiceFS 作为完全兼容 HDFS 的云原生文件系统，已经是 基于 Hadoop 生态构建的大数据平台的完美存储方案。存储计算分离是大数据平台弹性伸缩的基础，这一步的改造对环球易购数据平台的架构设计来说也有着重要的意义，接下来环球易购的数据团队将深入到集群弹性伸缩、工作负载混合部署等研究和实践中。</p>
+]]></content>
+  </entry>
+  
+</feed>
