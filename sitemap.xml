@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>https://blog.xiaogaozi.org/2020/11/15/maybe-news-issue-7/</loc>
+    <lastmod>2020-11-15T16:37:20+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.xiaogaozi.org/2020/11/03/globalegrow-big-data-platform-user-case/</loc>
     <lastmod>2020-11-03T11:58:51+08:00</lastmod>
     <priority>0.8</priority>
@@ -173,28 +179,28 @@
   
   <url>
     <loc>https://blog.xiaogaozi.org/</loc>
-    <lastmod>2020-11-03T12:07:12+08:00</lastmod>
+    <lastmod>2020-11-15T16:45:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>https://blog.xiaogaozi.org/archives/</loc>
-    <lastmod>2020-11-03T12:07:12+08:00</lastmod>
+    <lastmod>2020-11-15T16:45:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://blog.xiaogaozi.org/blog/archives/</loc>
-    <lastmod>2020-11-03T12:07:12+08:00</lastmod>
+    <lastmod>2020-11-15T16:45:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://blog.xiaogaozi.org/about/</loc>
-    <lastmod>2020-11-03T12:07:12+08:00</lastmod>
+    <lastmod>2020-11-15T16:45:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
