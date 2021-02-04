@@ -9,6 +9,12 @@
   </url>
   
   <url>
+    <loc>https://blog.xiaogaozi.org/2021/02/01/kylin-meetup-write-up/</loc>
+    <lastmod>2021-02-01T17:32:20+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.xiaogaozi.org/2020/11/15/maybe-news-issue-7/</loc>
     <lastmod>2020-11-15T16:37:20+08:00</lastmod>
     <priority>0.8</priority>
@@ -185,28 +191,28 @@
   
   <url>
     <loc>https://blog.xiaogaozi.org/</loc>
-    <lastmod>2021-02-04T11:15:59+08:00</lastmod>
+    <lastmod>2021-02-04T17:41:58+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>https://blog.xiaogaozi.org/archives/</loc>
-    <lastmod>2021-02-04T11:15:59+08:00</lastmod>
+    <lastmod>2021-02-04T17:41:58+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://blog.xiaogaozi.org/blog/archives/</loc>
-    <lastmod>2021-02-04T11:15:59+08:00</lastmod>
+    <lastmod>2021-02-04T17:41:58+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://blog.xiaogaozi.org/about/</loc>
-    <lastmod>2021-02-04T11:15:59+08:00</lastmod>
+    <lastmod>2021-02-04T17:41:58+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
