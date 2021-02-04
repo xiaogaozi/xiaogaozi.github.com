@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maybe News | Freedom]]></title>
   <link href="https://blog.xiaogaozi.org/categories/maybe-news/atom.xml" rel="self"/>
   <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2020-11-15T16:45:23+08:00</updated>
+  <updated>2021-02-04T11:15:59+08:00</updated>
   <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maybe News Issue #8]]></title>
+    <link href="https://blog.xiaogaozi.org/2021/02/04/maybe-news-issue-8/"/>
+    <updated>2021-02-04T10:07:06+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2021/02/04/maybe-news-issue-8</id>
+    <content type="html"><![CDATA[<blockquote><p>「Maybe News」是一个定期（或许不定期）分享一些可能是新闻的知识的<a href="/categories/maybe-news/">系列文章</a>，名字来源于我非常喜欢的一个国内的音乐厂牌<a href="https://en.wikipedia.org/wiki/Maybe_Mars">「兵马司」</a>（Maybe Mars）。你也可以通过<a href="https://digest.xiaogaozi.org/maybe-news">邮件订阅</a>它。</p></blockquote>
+
+<!-- more -->
+
+
+<h2>The Google File System</h2>
+
+<p><a href="https://research.google/pubs/pub51">[链接]</a></p>
+
+<p>2003 年的 SOSP 会议上作为一家刚成立 5 年的创业公司，Google 发表了这篇影响深远的论文。论文的第一作者 Sanjay Ghemawat 相比他的同事 Jeff Dean 可能不太为外界所知，但看过他的履历以后就会发现早在 DEC 工作期间他就已经与 Jeff Dean 共事，当 Jeff Dean 在 1999 年加入 Google 后不久 Sanjay Ghemawat 也随即加入，并一起研发了 Google File System（以下简称 GFS）、MapReduce、Bigtable、Spanner、TensorFlow 这些每一个都鼎鼎大名的系统，是当之无愧的 Google 元老。</p>
+
+<p>18 年后的今天再来回顾这篇论文依然能发现很多值得借鉴的地方，作为 GFS 最著名的开源实现，HDFS 近年来虽然已经有了很多自己的改进，但核心架构依然沿用的是这篇论文的思想。让我们回到十几年前，去探求为什么 Google 当时要研发这样一个分布式文件系统。</p>
+
+<blockquote><p>GFS shares many of the same goals as previous distributed file systems such as performance, scalability, reliability, and availability. However, its design has been driven by key observations of our application workloads and technological environment, both current and anticipated, that reflect a marked departure from some earlier file system design assumptions.</p></blockquote>
+
+<p>论文开篇的第一段话已经很好地概括了 GFS 设计的初衷，这是一个完全基于 Google 业务特点设计的系统。回想一下 Google 的业务是什么？搜索引擎。搜索引擎依靠的是爬虫抓取大量数据，通过用户输入的关键词在这个庞大的数据库中检索，最后通过 Google 独有的<a href="https://en.wikipedia.org/wiki/PageRank">排序算法</a>把搜索结果展示给用户。GFS 面对的业务场景有下面几个特点：</p>
+
+<ul>
+<li><strong>组件故障随处可见</strong>：存储集群由成百上千台普通商用机器组成（与之对应的是昂贵的超级计算机），再加上应用程序和操作系统的 bug、人为错误、各种硬件故障，系统随时都面临着很多不稳定的因素。因此持续监控、错误检测、容错以及自动恢复就显得尤为重要。</li>
+<li><strong>大文件为主</strong>：GB 级文件非常常见，每个文件通常包含很多应用对象（application objects），比如 web 文档。对于数十亿对象的 TB 级数据集来说，把文件切分成 KB 级大小会使得管理变得非常复杂，即使系统能够支撑这样的量级。因此系统设计的假设、文件块的大小都需要重新衡量。</li>
+<li><strong>大多数文件都只是追加写而不是覆盖</strong>：随机写的场景完全不存在，文件一旦写入，只会涉及读操作，且通常是顺序读。多种类型的数据都具有这样的特征，例如某些数据是被数据分析程序批量扫描、某些数据是由数据流持续生成、某些数据是归档数据、某些数据属于中间结果（由某一台机器生成然后被另一台机器处理）。</li>
+</ul>
+
+
+<p>Google 当时已经部署了多个 GFS 集群，最大的一个集群有超过 1000 个存储节点以及超过 300TB 的磁盘，同时被数百个客户端访问。</p>
+
+<p>论文的第二章节详细介绍了 GFS 的设计假设，除了前面提到的 3 个以外还包括：</p>
+
+<ul>
+<li><strong>业务场景主要包含两种读取模式：大批量的流式读取和小量的随机读取。</strong>对于前一种模式，每次请求一般读取数百 KB 或者 MB 级的数据，同一个客户端的连续请求一般也是读取某个文件的连续区域。而后一种模式通常从文件任意偏移位置读取几 KB 数据，对于那些性能敏感的应用会把多个随机读请求排序后批量发送，避免在单个文件中来来回回。</li>
+<li><strong>系统需要针对并发追加写同一个文件的场景设计好的语义</strong>：典型的应用场景是把 GFS 作为消息队列，数百个生产者并发追加数据到同一个文件；或者多路合并文件，想象一下 MapReduce 的 reduce 阶段。这个文件有可能是边写边读，也有可能是写完以后再读。因此用最小的同步开销保证原子性是非常有必要的。</li>
+<li><strong>高吞吐比低延时更重要</strong>：GFS 面对的大多数应用追求的是高速率批量处理数据，只有少部分应用对于点查有严格的延时要求。</li>
+</ul>
+
+
+<p>像传统的文件系统一样，GFS 提供包括创建、删除、打开、关闭、读取、写入这样的接口，但是 GFS 并不提供 POSIX 这样的标准 API。文件通过目录结构组织，可以通过路径名来标识某一个文件。除此之外，GFS 还提供快照（snapshot）和原子追加写（record append）功能。</p>
+
+<p>在介绍完 GFS 的设计背景以及假设以后，接下来是详细的 GFS 架构讲解。<strong>GFS 服务端由一个 master 和多个 chunkserver 组成，通过特定的 client 库（实现了 GFS 的文件系统 API）与应用集成。</strong>GFS 是非常经典的分布式系统架构，影响了后来很多系统的设计。</p>
+
+<p>Master 负责维护整个文件系统的元数据（metadata），包括命名空间（namespace）、访问控制（access control）信息、文件到 chunk 的映射以及每一个 chunk 的具体位置（location）。命名空间可以理解为目录结构、文件名等信息。除此之外，master 还承担一些系统级的活动，例如 chunk 的租约（lease）管理、垃圾回收无效 chunk、在不同 chunkserver 之间迁移 chunk。Master 会周期性地与每一个 chunkserver 进行心跳通信，心跳信息中同时还会包含 master 下发的指令以及 chunkserver 上报的状态。元数据都是保存在 master 的内存中，因此 master 的操作都非常快。每个 chunk 的元数据大约会占用 64 字节内存空间，每个文件的命名空间信息也是占用 64 字节左右（因为 master 针对文件名进行了前缀压缩），相对来说内存的开销是很小的，随着文件数的增加对 master 节点进行纵向扩展即可。比较重要的元数据信息（比如命名空间、文件到 chunk 的映射）还会同步持久化操作日志（operation log）到 master 的本地磁盘以及复制到远端机器，保证系统的可靠性，避免元数据丢失。当操作日志增长到一定大小，master 会生成一个检查点（checkpoint）用于加快状态恢复，检查点文件是一个类似 B 树的结构，可以不经过解析映射到内存直接查询。每个 chunk 的具体位置不会被持久化，master 每次启动时会通过请求所有 chunkserver 来获取这些信息。最初设计时其实考虑过持久化 chunk 的位置信息，但是后来发现在 chunkserver 拓扑经常变化（比如宕机、扩缩容）的情况下如何保持 master 和 chunkserver 之间的数据同步是一个难题。此外 GFS 还提供仅用于只读场景的影子（shadow）master，影子 master 的数据不是实时同步，因此不保证是最新的数据。</p>
+
+<p>采用单 master 的架构极大地简化了 GFS 的设计（也成为了之后被人诟病的因素），master 作为掌握全局信息的唯一入口，必须确保最小程度影响读写操作，否则就会变成整个系统的瓶颈。<strong>因此 GFS 的设计是 client 读写数据永远不会经过 master。</strong>实现方式很简单，client 请求 master 获取到具体需要通信（不管是读还是写）的 chunkserver 列表，把这个列表缓存在本地，之后就直接请求 chunkserver。</p>
+
+<p>Chunkserver 这个名字的来历其实是因为 GFS 把文件分割成了多个固定大小的 chunk。每个 chunk 的大小是 64MiB，相比传统文件系统的块（block）大小大了很多（比如 ext4 默认的块大小是 4KiB），同时 master 会为每一个 chunk 分配一个全局唯一的 64 位 ID。Chunkserver 除了将 chunk 存储到本地磁盘上，还会复制到其它 chunkserver，GFS 默认会存储 3 个副本，当然用户也可以为不同的目录指定不同的复制等级。为什么 GFS 会选择 64MiB 这么大的 chunk 大小呢？论文中列举了几个原因：</p>
+
+<ul>
+<li><strong>减少 client 与 master 的交互</strong>：前面提到 client 不管是读还是写数据都需要首先与 master 通信，GFS 的业务场景通常都是顺序读写大文件，chunk 大小越大 client 就能在 1 次请求中获取到更多的信息。即使是随机读的场景，client 也能更多地缓存 chunk 位置信息。</li>
+<li><strong>降低 chunkserver 的网络开销</strong>：更大的 chunk，client 越可能执行更多的操作，因此可以降低 client 与 chunkserver 之间的 TCP 长连接的网络开销。</li>
+<li><strong>减少 master 维护的元数据大小</strong>：chunk 越大，master 就可以在内存中保存更多元数据。</li>
+</ul>
+
+
+<p>每个 chunk 以及它的副本有两种角色：主副本（primary replica）和从副本（secondary replica），主副本只有 1 个，其它的都是从副本，至于具体哪个是主副本是由 master 决定的。master 会授权一个租约（lease）给主副本，租约的初始超时时间是 60 秒，但是只要 chunk 还在被修改，主副本可以无限续租，master 也可以随时废除租约。基于主从副本和租约的概念，数据写入 GFS 的流程是：</p>
+
+<ol>
+<li>Client 请求 master 获取当前 chunk 所有副本所在的 chunkserver 列表，如果目前还没有租约，master 会授权给其中一个副本（也就是说这个副本升级为主副本）。</li>
+<li>Master 将主副本的 ID 以及从副本的位置回复给 client，client 会将这些信息缓存在本地，只有当主副本无法通信或者租约失效时才会再次请求 master。</li>
+<li>Client 发送<strong>数据</strong>给主从副本所在的全部 chunkserver。发送顺序无所谓，一般是发送给离 client 最近的一个 chunkserver，然后这个 chunkserver 会传递给离它最近的下一个 chunkserver，依此类推。Chunkserver 之间的距离是通过 IP 地址估算出来的，之所以采用这种线性传递数据的方式，目的是最大化网络吞吐。Chunkserver 不会等到一个 chunk 全部接收完毕才发送出去，而是采用管道（pipeline）的方式，只要接收到一定的数据就立即发送。<strong>值得一提的是，当时 Google 的网络带宽是 100Mbps，而现在（2021 年）AWS 上的机器网络带宽能达到 25Gbps，是当年的 250 倍。</strong></li>
+<li>一旦所有副本都回复收到了数据，client 就发送<strong>写请求</strong>给主副本。这个请求包含了上一步发送的所有数据的标识符，主副本会分配连续的序列号给写请求，并按照序列号的顺序修改它的状态。</li>
+<li>主副本转发写请求给其它从副本，从副本也会按照相同的序列号顺序修改状态。</li>
+<li>当所有从副本都回复给主副本，即表示这次写请求已经完成。</li>
+<li>主副本回复请求给 client。如果任何副本发生了错误也会一并回复，GFS 的客户端会尝试重试。步骤 3~步骤 7 执行时也会有一定的重试机制，避免每次都从头开始。</li>
+</ol>
+
+
+<p>原子追加写（record append）的流程大体上和上面介绍的一样，区别在于第 4 步时主副本会检查写入以后是否会超过最后一个 chunk 的大小（64MiB），如果没超过就追加到后面，如果超过了会把最后一个 chunk 填充（pad）满，并回复 client 重试。</p>
+
+<p>快照（snapshot）功能基于 copy-on-write 实现，master 通过仅仅复制元数据的方式能够在短时间内完成快照的创建。当 client 需要修改快照数据时，master 会通知所有 chunkserver 本地复制对应的 chunk，新的修改会在复制后的 chunk 上进行。</p>
+
+<p>限于本期的篇幅，还有很多 GFS 的特性没有介绍，例如命名空间管理与锁、副本放置策略（placement policy）、chunk 重新复制（re-replication）、数据均衡（rebalancing）、垃圾回收、高可用等。最后是一个彩蛋，如果你仔细看论文最后的感谢名单，会发现一个熟悉的名字（当然不是 Jeff Dean）。</p>
+
+<h2>Colossus: Successor to the Google File System</h2>
+
+<p><a href="https://www.systutorials.com/colossus-successor-to-google-file-system-gfs">[链接]</a></p>
+
+<p>自从 GFS 的论文发布以来，Google 的数据已经增长了好几个数量级，很显然 GFS 的架构已经无法支撑如此大规模的数据存储。那 Google 下一代的文件存储是什么呢？答案就是 Colossus。这个神秘的项目直到目前为止都没有在公开场合被全面正式地介绍过，我们只能通过很多碎片的信息来拼凑出它的模样，上面链接中的内容即是通过这些信息整理出来的。一些有趣的信息是：元数据服务（Curators）基于 Bigtable；相比 GFS 至少可以横向扩展 100 倍；GFS 依然存在，只不过是用来存储文件系统元数据的元数据（metametadata）；Colossus 可以基于另一个 Colossus 构建，就像俄罗斯套娃一样无限嵌套（让我想到了分形）；存储数据的服务叫做 D server；默认使用 Reed-Solomon 编码存储数据，也就是通常所说的纠删码（erasure code）。建议配合这个 2017 年的 <a href="http://www.pdsw.org/pdsw-discs17/slides/PDSW-DISCS-Google-Keynote.pdf">slide</a> 以及这篇<a href="https://levy.at/blog/22">中文博客</a>一起阅读。</p>
+
+<h2>Storage Reimagined for a Streaming World</h2>
+
+<p><a href="https://blog.pravega.io/2017/04/09/storage-reimagined-for-a-streaming-world">[链接]</a></p>
+
+<p>流式计算这几年应该算是红到发紫？看看 Flink 社区的发展便可知晓。不过本期要介绍的不是流式计算，而是流式存储。说到与流式计算有关的存储，首先想到的可能是 Kafka，作为实时数据流的消息总线，Kafka 承担着非常重要的角色。但是 Kafka 也不是完美的，它的诞生其实比流式计算更早。Kafka 2011 年<a href="https://blog.linkedin.com/2011/01/11/open-source-linkedin-kafka">开源</a>，Spark <a href="https://spark.apache.org/news/spark-0-7-0-released.html">v0.7.0</a> 2013 年发布开始支持 streaming，Flink <a href="https://flink.apache.org/news/2014/11/04/release-0.7.0.html">v0.7.0</a> 2014 年发布开始支持 streaming（跟 Spark 是同一个版本号不知是否是巧合）。因此 Kafka 的很多设计并不是针对流式计算场景优化。比如 topic partition 这个概念，本质上是为了提高读或者写的并发，但是 partition 本身是一个静态配置，并不能做到动态伸缩。再比如 Kafka 的数据存储，目前只支持内存和本地磁盘两种，消费新数据都是从内存，如果是旧数据就可能读磁盘，但是 Kafka 集群的存储容量上限毕竟还是受限于磁盘空间，在流式计算越来越重以及云计算大行其道的今天集群运维是一个难题（某些公司已经自研了 Kafka on HDFS 的方案，比如<a href="https://cloud.tencent.com/developer/news/599446">快手</a>）。Pravega 便这样应运而生，这是一个来自戴尔的<a href="https://github.com/pravega/pravega">开源项目</a>，一些设计亮点是动态 partition 以及自动数据分层（Apache BookKeeper + HDFS）。</p>
+
+<h2>Why We Built lakeFS: Atomic and versioned Data Lake Operations</h2>
+
+<p><a href="https://lakefs.io/why-we-built-lakefs-atomic-and-versioned-data-lake-operations">[链接]</a></p>
+
+<p>在数据库领域 ACID 和 MVCC 已经不是什么新鲜的概念，但是文件系统领域似乎还是一个属于比较「早期」的阶段，虽然过去已经有类似 <a href="https://en.wikipedia.org/wiki/ZFS">ZFS</a>、<a href="https://en.wikipedia.org/wiki/Btrfs">Btrfs</a> 这样创新的设计，但它们并不是广泛被大众了解以及使用的技术。特别是当云计算以及 S3 这样的「傻瓜」方案出现后，人们似乎已经习惯了开箱即用的产品。数据湖（data lake）这个词汇不知道从什么时候开始流行，对象存储的角色变得越来越重（至少云厂商是这样希望的？）。人们对这个「万能」的存储有着越来越多的期望，但是对象存储并不是万能的。为了解决对象存储的各种问题（这里不赘述具体问题）或者说填补它的一些缺失，越来越多基于对象存储的项目诞生。<a href="https://lakefs.io">lakeFS</a> 即是其中一个，lakeFS 希望通过提供类似 Git 的体验来管理对象存储中的数据，并且保证 ACID。比如创建一个数据的「分支」即可实现多版本管理。lakeFS 的开发团队来自以色列（<a href="https://www.treeverse.io">公司官网</a>挺有意思），项目使用 Go 语言实现。一些类似的项目还有 <a href="https://dvc.org">DVC</a>、<a href="https://github.com/quiltdata/quilt">Quilt</a> 以及 <a href="https://github.com/tensorwerk/hangar-py">Hanger</a>。</p>
+
+<h2>Magnet: A scalable and performant shuffle architecture for Apache Spark</h2>
+
+<p><a href="https://engineering.linkedin.com/blog/2020/introducing-magnet">[链接]</a></p>
+
+<p>在<a href="https://blog.xiaogaozi.org/2020/09/15/maybe-news-issue-6/">第 6 期</a> Maybe News 曾经介绍过 Facebook 的 Cosco，一个给 Hive/Spark 使用的 remote shuffle service 实现。本期介绍的 Magnet 来自 LinkedIn，也是一个 shuffle service。跟 Cosco 的区别在于 Magnet 不是存算分离架构，不依赖外部存储，核心思想是 mapper 把 shuffle 数据先写到本地的 shuffle 服务，然后这些 shuffle 数据会根据某种负载均衡算法推到远端的 shuffle 服务上，远端 shuffle 服务会定期合并（merge）数据，最后 reducer 从远端 shuffle 服务读取数据。这里的「远端」其实是一个相对的概念，有可能 reducer 跟 shuffle 服务在同一个节点上，那就不需要发送 RPC 请求而是直接读取本地磁盘的数据。更多技术细节可以参考 VLDB 2020 的<a href="http://www.vldb.org/pvldb/vol13/p3382-shen.pdf">论文</a>，另外 LinkedIn 的工程师也在积极将 Magnet 贡献给 Spark 社区，目前已经合入了几个 PR，具体请参考 <a href="https://issues.apache.org/jira/browse/SPARK-30602">SPARK-30602</a>。</p>
+
+<h2>支付宝研究员王益：Go+ 可有效补全 Python 的不足</h2>
+
+<p><a href="https://tech.antfin.com/community/articles/993">[链接]</a></p>
+
+<p><a href="https://github.com/wangkuiyi">王益</a>目前是蚂蚁集团研究员，同时也是开源项目 <a href="https://github.com/sql-machine-learning/sqlflow">SQLFlow</a> 和 <a href="https://github.com/sql-machine-learning/elasticdl">ElasticDL</a> 的负责人（这两个项目也很有意思，有兴趣的同学可以去了解了解）。这里介绍的 <a href="https://github.com/goplus/gop">Go+</a> 是七牛创始人许式伟发起的开源项目，从 Go+ 的 slogan「the language for data science」就能看出项目的设计初衷。如果说目前什么编程语言在数据科学和机器学习领域最受欢迎，那可能就是 Python 了。但是 Python 的语言特性决定了它可能并不是最适合的，Go+ 依托 Go 语言作为基础，很好地弥补了 Python 的缺失。推荐对机器学习感兴趣的同学看看这篇文章，其中提到的一些八卦历史也很有趣。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #7]]></title>
@@ -342,78 +450,6 @@
 <p><a href="https://github.com/0xfe/vextab">[链接]</a></p>
 
 <p>不管是音乐创作还是音乐演奏，乐谱都是一个必不可少的东西。还记得刚学吉他那会儿非常热衷的一件事情就是去网上搜集各种歌曲的六线谱，这些乐谱的格式从最朴素的纯文本到高级的 <a href="https://www.guitar-pro.com">Guitar Pro</a> 格式都有。再后来开始学习扒歌，也面临把扒下来的谱子纪录下来的需求。虽然 Guitar Pro 很好但毕竟是一个收费软件，文件格式也是私有的。就像我更喜欢 Markdown 而不是直接用 Word 一样，一直希望能有一个类似的标记语言用于编写乐谱。VexTab 即是这样一个专门用于编写五线谱和六线谱的语言，也提供一个 JavaScript 库方便嵌入到网页中。有意思的是 VexTab 的作者同时也是 Google 的一名员工。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Maybe News Issue #3]]></title>
-    <link href="https://blog.xiaogaozi.org/2020/06/10/maybe-news-issue-3/"/>
-    <updated>2020-06-10T17:37:27+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2020/06/10/maybe-news-issue-3</id>
-    <content type="html"><![CDATA[<blockquote><p>「Maybe News」是一个定期（或许不定期）分享一些可能是新闻的知识的<a href="/categories/maybe-news/">系列文章</a>，名字来源于我非常喜欢的一个国内的音乐厂牌<a href="https://en.wikipedia.org/wiki/Maybe_Mars">「兵马司」</a>（Maybe Mars）。你也可以通过<a href="https://digest.xiaogaozi.org/maybe-news">邮件订阅</a>它。</p></blockquote>
-
-<!-- more -->
-
-
-<h2>Kudu: Storage for Fast Analytics on Fast Data</h2>
-
-<p><a href="https://kudu.apache.org/kudu.pdf">[链接]</a></p>
-
-<p><a href="https://en.wikipedia.org/wiki/Online_analytical_processing">OLAP</a>（Online Analytical Processing）一直是大数据领域非常重要的应用场景，光有数据也不行，你得「分析」啊。自从有了 Hadoop，OLAP 的工具就一直在演变，从最早的裸写 MapReduce 任务，到 <a href="https://pig.apache.org">Pig</a>、<a href="https://hive.apache.org">Hive</a>、<a href="https://prestosql.io">Presto</a>、<a href="https://impala.apache.org">Impala</a>、<a href="https://druid.apache.org">Druid</a>、<a href="https://clickhouse.tech">ClickHouse</a>，以及今天要介绍的 <a href="https://kudu.apache.org">Kudu</a>。一个明显的趋势是 OLAP 引擎在逐步朝着「去 Hadoop 化」和「实时化」发展，当然这些项目里最新的也已经是 2016 年发布的了，接下来会怎么变化还是个未知数。</p>
-
-<p>先讲讲为什么会有类似 Kudu 这样的项目诞生。传统的 OLAP 引擎因为是构建在 HDFS 上的，要想分析数据首先得将数据存储到 HDFS 上，而这个过程（通常叫做 ETL）往往是比较耗时以及复杂的。同时由于 HDFS 天生不支持随机读写，为了弥补这个「缺陷」，有了 HBase 这样的项目。但 HBase 对于 OLAP 场景是不够友好的，因此往往需要把数据从 HBase 再导入到 HDFS 中，这个过程也可能比较耗时，维护成本也比较高。因此 Kudu 的目标是实现一个即支持随机读写（主要是写），又针对大批量查询进行优化的存储引擎。这种时候 HDFS 就显得很累赘了，这也是为什么越来越多引擎选择不依赖 HDFS 的缘故（Kudu 官网也在 FAQ 中专门<a href="https://kudu.apache.org/faq.html#why-doesnt-kudu-store-its-data-in-hdfs">解释</a>了为什么不用 HDFS）。当然并不是说 HDFS 就没用了，有很多数据还是非常静态的，对于实时性要求也不高，此时用 HDFS 是一种简单经济的选择。</p>
-
-<p>这篇论文虽然介绍的是 Kudu 早期的一些设计思想，但基本上属于最核心的功能。跟很多分布式数据库一样，Kudu 也是受 <a href="https://research.google/pubs/pub39966">Spanner</a> 启发。系统架构上分为一个 Master 服务和若干 Tablet 服务。Master 负责维护元信息，包括 Tablet 节点和数据的。Tablet 服务则负责数据存储，每台节点上会有几十至数百个 tablet，每个 tablet 中包含了若干数据，最大可以达到几十 GB 的规模（这里你可以把 tablet 类比为很多别的系统中的 region 概念）。</p>
-
-<p>跟很多关系数据库一样，Kudu 是有 table 的概念的。但跟很多 NoSQL 数据库不一样的地方是，强制用户必须显式定义 schema。Kudu 一个有意思的设计在于同时支持了 hash 和 range 这两种数据 partition 方法，而不像别的系统只支持其中一种（有关这两种 partition 的介绍可以看我之前的<a href="https://blog.xiaogaozi.org/2020/05/25/how-to-design-a-distributed-index-framework-part-5/">一篇文章</a>）。这样设计的好处是即保留了 hash 的数据均匀分配特点，可以在一定程度上防止读写热点，又保留了 range 对于范围扫描的友好性。</p>
-
-<p>Tablet 服务之间是通过 Raft 来进行数据复制，因此可以认为 Kudu 是一个保证强一致性的存储系统。值得注意的是 Kudu 的默认设置是 500 毫秒的心跳间隔以及 1.5 秒的选举超时，这个跟 Raft 论文推荐的时间相比长了不少（推荐的选举超时是 150~300 毫秒）。当集群扩容时，新节点将会首先进入 <code>PRE_VOTER</code> 状态，等到 log 追上以后再变成 <code>VOTER</code> 状态，这个设计也是 Raft 论文中建议的，不过论文中叫做 learner 或者 non-voting member。Master 服务虽然是单点设计（即状态不是分布式存储），但为了保障高可用也可以通过 Raft 实现多节点状态复制，只不过任意时间只能有一个节点工作。</p>
-
-<p>Kudu 的数据存储引擎是完全自己设计的，没有直接用任何现有的引擎，虽然也能多少看出一些别的引擎的影子。关于这一点可以理解，OLAP 系统区别于 <a href="https://en.wikipedia.org/wiki/Online_transaction_processing">OLTP</a> （Online Transactional Processing）系统的最大不同即在于数据存储的形式，简单理解后者是行式（row-oriented）存储，而前者是列式（column-oriented）存储。著名的 <a href="https://parquet.apache.org">Parquet</a> 就是广泛被用于 OLAP 场景的列式存储格式，Kudu 在实现上也复用了很多 Parquet 的代码。</p>
-
-<p>每个 table 在存储级别会被分割为多个 RowSets，顾名思义每个 RowSets 是由很多行（row）组成，RowSets 之间不会有重复的数据，但主键的范围可能会交叉。</p>
-
-<p>当有新的数据时会首先存储到内存中的 MemRowSets，底层实现是一个使用乐观锁（optimistic locking）的并发（concurrent）B 树。比较特别的一点是数据并不是一开始就按照列式进行存储，MemRowSets 中还是用的行式存储。当数据累积到一定程度 MemRowSets 就会持久化到磁盘上，称之为 DiskRowSets，每个 DiskRowSet 大小上限是 32MB。DiskRowSet 由两部分组成：基础数据（base data）和增量数据（delta stores）。</p>
-
-<p>基础数据是列式格式，即每一列都单独连续存储，每一列内部又划分成了多个小的页（page），有一个 B 树根据行号索引了这些页。每一列可以由用户指定不同的编码（encoding）方法（如 dictionary encoding、bitshuffle、front coding），同时也可以使用通用的压缩算法对数据进行压缩（如 LZ4、gzip、bzip2），基于列的编码及数据压缩是列式存储非常大的一个特点。</p>
-
-<p>增量数据也分为内存和磁盘两种形式。内存中的叫做 DeltaMemStores，这个跟 MemRowSets 的实现一样。磁盘中的叫做 DeltaFiles，是一个二进制类型的列块（column block）。不管是内存还是磁盘上的数据都会有一个额外的从 <code>(row_offset, timestamp)</code> 到 RowChangeList 的映射，<code>row_offset</code> 是某一行在一个 RowSet 中的偏移，RowChangList 是二进制编码以后的增量操作（如更新某一列、删除某一行）列表。同样的，DeltaMemStores 也会持久化到磁盘上变成 DeltaFiles。</p>
-
-<p>这些增量数据会定期跟基础数据进行合并（compation），以防止过多的增量文件。同时 DiskRowSets 之间也会进行合并，目的是清理已经被删除的行以及减少 DiskRowSets 之间的主键交叉范围。</p>
-
-<p>前面提到的将内存中的数据持久化到磁盘及对数据进行合并操作，都是由一组单独的后台任务来完成，但是什么时候执行什么操作是由一个调度器来控制的。有趣的是 Kudu 将调度器的逻辑抽象成了一个<a href="https://en.wikipedia.org/wiki/Knapsack_problem">背包问题</a>，只不过需要权衡的不是背包容量，而是 I/O 带宽。</p>
-
-<p>Kudu 本身只提供编程语言级别的 API（如 Java、C++），而 OLAP 系统中常用的 SQL 需要配合其它项目来实现。Kudu 原生已经跟 Spark 和 Impala 集成，也就是说你可以在这两个系统中通过 SQL 来查询。</p>
-
-<p>最后是性能评测。在 <a href="http://www.tpc.org/tpch">TPC-H</a> 数据集上与 Parquet 进行对比测试，Kudu 平均有 31% 的性能提升，尽管如此 Kudu 团队认为随着 Parquet 的迭代这个差距可能会逐渐缩小。在与 <a href="http://phoenix.apache.org">Phoenix</a> 的对比测试中也有 16~187 倍的性能提升。最后与 HBase 进行的 <a href="https://github.com/brianfrankcooper/YCSB">YCSB</a> 测试是为了看看 Kudu 在 OLTP 场景的性能，虽然它本身并不是为 OLTP 场景而设计，结果上的确也是 HBase 表现更好，但 Kudu P99 6 毫秒的响应时间在某些时候也许可以代替 OLTP 系统。</p>
-
-<p>Kudu 由 Cloudera 公司开发并于 2016 年正式发布，现已捐献给 Apache 基金会，整个系统使用 C++ 语言编写。</p>
-
-<p>顺带说个题外话这两年炒得比较火的 <a href="https://en.wikipedia.org/wiki/Hybrid_transactional/analytical_processing">HTAP</a>（Hybrid Transactional/Analytical Processing），本质上是希望在一个引擎中同时适配 OLTP 和 OLAP 这两个场景。但在我看来就目前的技术现状这个愿景实现起来还是比较困难，软件工程界的名言<a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">「没有银弹」</a>告诉我们不存在一个可以通吃的、完美的方案，因此 HTAP 目前更多还只是一个营销概念吧。</p>
-
-<h2>字节跳动自研强一致在线 KV &amp; 表格存储实践</h2>
-
-<p><a href="https://mp.weixin.qq.com/s/jdPE9WClBuimIHVxJnwwUw">[上篇]</a> <a href="https://mp.weixin.qq.com/s/DvUBnWBqb0XGnicKUb-iqg">[下篇]</a></p>
-
-<p><a href="https://github.com/cockroachdb/cockroach">又</a><a href="https://github.com/pingcap/tidb">又</a><a href="https://github.com/dgraph-io/dgraph">又</a><a href="https://kudu.apache.org">又</a><a href="https://github.com/vesoft-inc/nebula">又</a>一个受 Spanner 启发的分布式存储（Google 功德无量！Jeff Dean 万寿无疆！），这次的项目来自字节跳动。关键词：range 分割、Raft、RocksDB、MVCC、分布式事务、SQL 层，看看这些也基本能对整体设计猜个八九不离十了，比较有价值的信息是学习学习字节跳动在他们的实践中的一些经验。项目使用 C++ 语言编写，目前没有开源。</p>
-
-<h2>Challenges Supporting MIG in Kubernetes</h2>
-
-<p><a href="https://docs.google.com/document/d/1Dxx5MwG_GiBeKOuMNwv4QbO8OqA7XFdzn7fzzI7AQDg">[链接]</a></p>
-
-<p>随着深度学习的蓬勃发展，GPU 共享逐渐成为了 K8s 社区的一个<a href="https://github.com/kubernetes/kubernetes/issues/52757">热门话题</a>。目前 NVIDIA 官方提供的<a href="https://github.com/NVIDIA/k8s-device-plugin">设备插件</a>可以申请的最小资源粒度还是 1 个 GPU，但很多时候资源是浪费的。为了提升 GPU 的资源利用率，社区已经出现了多种解决方案，例如分别来自<a href="https://github.com/AliyunContainerService/gpushare-scheduler-extender">阿里云</a>、<a href="https://github.com/tkestack/gpu-manager">腾讯云</a>以及 <a href="https://github.com/awslabs/aws-virtual-gpu-device-plugin">AWS</a> 的实现。现在 NVIDIA 官方终于在新一代的 Ampere 架构硬件上原生支持了共享，也就是标题中的 MIG（Multi-Instance GPUs）。这篇文档来自 NVIDIA 团队，首先介绍了当前是如何在 K8s 中管理 GPU 资源的，然后介绍了 MIG 的一些概念，最后提议了 4 个支持 MIG 的可能的解决方案。整体感觉 GPU 共享还是没有 CPU 灵活，不少地方设置了限制，但毕竟这是 NVIDIA 官方迈出的第一步。</p>
-
-<h2>How to read deep learning papers?</h2>
-
-<p><a href="https://www.reddit.com/r/MachineLearning/comments/gi3ihe/d_how_to_read_deep_learning_papers">[链接]</a></p>
-
-<p>Reddit 上一个有趣的讨论：如何阅读深度学习的论文？我们常常调侃机器学习就是在「炼丹」，没有人能解释为什么结果就是有效的，反正<a href="https://www.youtube.com/watch?v=YPN0qhSyWy8">「it just works」</a>。最高票的评论说你不需要接受论文中的每一个观点，只要把注意力集中在作者提供的证据并有选择性地调整你的想法就好了。正好前段时间前微软执行副总裁沈向洋博士做了一个主题名为<a href="https://www.bilibili.com/video/BV1df4y1m74k">「You are how you read」</a>的演讲，主要内容就是一些阅读论文的经验（有趣的是沈博士在几年前还写过一篇叫做<a href="https://www.linkedin.com/pulse/you-what-write-harry-shum">「You are what you write」</a>的博客）。</p>
-
-<h2>Farewell, TensorFlow</h2>
-
-<p><a href="https://mrry.github.io/2020/05/10/farewell-tensorflow.html">[链接]</a></p>
-
-<p>TensorFlow 核心开发者、Google Brain 团队的 Derek Murray 宣布离开，这位大哥在 GitHub 和 Stack Overflow 上都很活跃，如果你经常浏览社区应该对他的头像不陌生。在这篇告别文中 Murray 提到了很多 Google 内部帮助工程师解决问题的工具，并详细介绍了近期对 TensorFlow 底层运行时进行的一项性能优化的过程，在部分评测中可以提升 10% 的推理性能。这个优化目前已经合入 master，并将在 TensorFlow 2.3 发布。</p>
 ]]></content>
   </entry>
   
