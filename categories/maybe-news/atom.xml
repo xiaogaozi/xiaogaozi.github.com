@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maybe News | Freedom]]></title>
   <link href="https://blog.xiaogaozi.org/categories/maybe-news/atom.xml" rel="self"/>
   <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2021-02-04T17:41:58+08:00</updated>
+  <updated>2021-03-23T12:25:15+08:00</updated>
   <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -12,6 +12,82 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maybe News Issue #9]]></title>
+    <link href="https://blog.xiaogaozi.org/2021/03/21/maybe-news-issue-9/"/>
+    <updated>2021-03-21T19:37:00+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2021/03/21/maybe-news-issue-9</id>
+    <content type="html"><![CDATA[<blockquote><p>「Maybe News」是一个定期（或许不定期）分享一些可能是新闻的知识的<a href="/categories/maybe-news/">系列文章</a>，名字来源于我非常喜欢的一个国内的音乐厂牌<a href="https://en.wikipedia.org/wiki/Maybe_Mars">「兵马司」</a>（Maybe Mars）。你也可以通过<a href="https://digest.xiaogaozi.org/maybe-news">邮件订阅</a>它。</p></blockquote>
+
+<!-- more -->
+
+
+<h2>Virtual Consensus in Delos</h2>
+
+<p><a href="https://www.usenix.org/conference/osdi20/presentation/balakrishnan">[链接]</a></p>
+
+<p>一致性协议是分布式系统领域的核心概念，在之前介绍如何设计一个分布式索引框架的<a href="https://blog.xiaogaozi.org/2020/05/25/how-to-design-a-distributed-index-framework-part-5/">一篇文章</a>中已经简单梳理了一致性协议的不同类别以及一些经典的共识算法。今天要介绍的这篇论文并不是发明了一种新的一致性协议，而是对一致性协议进行了拆解和抽象（即论文标题中 Virtual Consensus 的含义），这个抽象可以简化分布式系统的开发和加快迭代速度。Delos 目前已经作为 Facebook 集群调度管理系统 <a href="https://www.usenix.org/conference/osdi20/presentation/tang">Twine</a> 的控制平面（control plane）在生产环境中稳定运行数年（Delos 是希腊 Cyclades 群岛中一个岛屿的名称，离 Paxos 岛不远）。本篇论文发表在 2020 年的 OSDI 会议，并获得了当年的最佳论文。</p>
+
+<p>在介绍 Delos 系统之前先讲讲为什么要有 Virtual Consensus 这个概念。现有的分布式系统通常都是基于某一种一致性协议来开发的，比如 ZooKeeper 是基于 Zab、etcd 是基于 Raft、Chubby 是基于 Paxos。同时学术界对于一致性协议的研究并没有中止，不断会有新的协议出现（<a href="https://vadosware.io/post/paxosmon-gotta-concensus-them-all">大部分</a>可能都是基于 Paxos 进行改良）。因为这些系统的分布式协议层和状态复制层是紧耦合的，如果想要从一种一致性协议切换到另一种，基本上是需要重写系统的（当然很多人也喜欢重复造轮子）。时间回溯到 2017 年，当时的 Facebook 需要一个保证一致性、可用性、持久性的分布式系统作为他们的核心控制平面来存储元数据，这个系统要在 6-9 个月之内上线，并且支持持续的迭代。虽然当时已经有一些现成的系统可以选择，比如 ZooKeeper、<a href="https://www.usenix.org/conference/osdi18/presentation/annamalai">ZippyDB</a>、<a href="https://www.usenix.org/conference/fast20/presentation/cao-zhichao">UDB</a>（分布式 MySQL）、<a href="https://logdevice.io">LogDevice</a>，但这些系统要么不支持复杂的 API（比如 get、put、multi-get、multi-put、scan 等），要么可用性达不到要求。更重要的是每个系统都和某种一致性协议绑定，没法平滑过渡到新的协议。</p>
+
+<p>为了解决上述问题， Delos 提出了 Virtual Consensus 这个概念（以下简称 VC），VC 的目标是可以平滑切换一致性协议（甚至同时使用多种协议），并把一致性协议中很多可以复用的逻辑抽出来，从而降低实现新协议的成本。 VC 把一致性协议分解为了控制平面和数据平面两部分，控制平面负责 leader 选举、配置参数、成员管理等，数据平面负责保证数据的顺序（ordering）以及持久性。在 VC 中控制平面称作「VirtualLog」，这是可以复用的部分；数据平面称作「Loglet」，Loglet 可以用不同的一致性协议（比如 Raft、Paxos）实现，也可以是对其它分布式系统（比如 ZooKeeper、HDFS）的封装。如同虚拟内存一样，VirtualLog 把多个物理的 Logets 映射到一个连续的虚拟的 VirtualLog 地址空间中。对 VirtualLog 的用户来说，这些 Loglets 的细节被 VirtualLog 隐藏了起来 ，看起来就像是一个连续的 log。</p>
+
+<p>VirtualLog 由两部分组成：一个客户端层暴露访问 log 的 API，以及一个管理元数据的 MetaStore。这里的元数据是指从 VirtualLog 地址到 Loglet 的映射关系，多个 Loglets 组成了一个链（chain），类似一个单向链表。随着时间推移，链可能会发生变动（比如从 1 个 Loglet 变成 2 个），MetaStore 在保存每个链时也会有一个对应的版本号，每当需要更新链时需要提供一个更大的版本号，这个更新操作是一个类似 CAS（compare-and-swap）的过程，会和当前版本号进行比较，保证原子性，避免并发冲突。当需要修改链时就会触发「重新配置（reconfiguration）」流程，这个流程分为 3 步：密封（sealing）当前链、把 MetaStore 中的链修改为新的链、从 MetaStore 获取新的链。MetaStore 需要保证容错一致性（fault-tolerant consensus），也就是说得通过类似 Paxos 这样的一致性协议去实现，后面会讲到具体如何实现。</p>
+
+<p>因为 VirtualLog 已经负责了控制平面的工作，Loglet 的职责就比较简单了，只需要保证数据的全局顺序性（total order）以及持久性，不需要承担 leader 选举、成员变更管理等工作，也不需要实现容错一致性，因此实现一个 Loglet 的成本非常低（相比实现一个完整的一致性协议）。但有一个要求必须满足，前面提到在重新配置时需要密封链，这个密封操作是通过发送 <code>seal</code> 命令给 Loglet 实现的，Loglet 负责更新本地的 seal 状态，seal 状态是一个布尔值，也就是说只会有两种取值。为了保证后续不会错误地把新数据添加到已经密封的链，Loglet 需要保证 <code>seal</code> 命令是高可用的（highly available），也就是说确保大多数（quorum）的 Loglet 都更新完成。</p>
+
+<p>在了解完 VC 的概念以后来看看 Delos 是如何实现的。Delos 是一个基于 VC 思想实现的分布式存储系统，可以简单把它理解成类似 etcd、ZooKeeper 的系统。Delos 分为 3 层：API、Core 和 Loglet。API 层提供多种类型的接口，例如 table API、ZooKeeper API；Core 层除了包含 VirtualLog 以外，还有 Delos 自己的 runtime，以及基于 RocksDB 的本地存储；Loglet 层就是各种不同的 Loglet 实现。当 Delos 接收到读写事务（read-write transaction）时会先将数据追加（append）到 VirtualLog，VirtualLog 负责把数据发送给底层的 Loglet（具体 Loglet 怎么处理 append 请求后面会讲），然后 Delos 开始从 VirtualLog 同步（synchronize）日志，每当读到一个事务（这个事务既可能是当前 Delos 节点也可能是其它节点写的）就会执行这个操作并保存到本地的 RocksDB 中，最后当把当前 Delos 节点自己写入的最后一个事务执行完毕后就返回请求。对应的，Delos 接收到只读事务（read-only transaction）时，首先通过 VirtualLog 检查全局日志的末尾（tail）位置是多少，然后与 VirtualLog 同步日志直到达到上一步得到的位置（同步过程中如果遇到写事务就需要更新 RocksDB），最后在本地的 RocksDB 中执行这个读请求并返回结果。可以看到，当处理只读事务时 Delos 节点可能需要与底层 Loglet 同步日志，这显然会对读性能造成影响，为了优化这一步 Delos 会在与 VirtualLog 的一次同步请求中包含多个只读事务，而不是一次同步请求只处理一个事务，极端情况下如果需要同步的日志中不包含任何写事务那其实可以跳过这一步。</p>
+
+<p>前面提到 VirtualLog 需要一个 MetaStore 来保存当前的链状态，Delos 最初是通过外部的 ZooKeeper 服务来作为 MetaStore。后来为了去掉对外部系统的依赖改为了在 Delos 服务中内嵌一个 MetaStore，多个 Delos 服务便构成了一个 MetaStore 集群，并通过 Paxos 来保证容错一致性。</p>
+
+<p>Delos 目前已经实现了 5 种 Loglet：ZKLoglet 基于 ZooKeeper 实现，这是 Delos 最初上线时使用的 Loglet；LogDeviceLoglet 基于 LogDevice 实现；BackupLoglet 基于类似 HDFS 的系统实现，目的是作为日志的冷存；NativeLoglet 顾名思义是最原生的 Loglet，只包含最必要的功能，不依赖任何外部系统，也是目前 Delos 在使用的 Loglet（替代 ZKLoglet）；最后是 StripedLoglet，这个 Loglet 其实是多个其它 Loglet 的组合，可以有多种组合方式。论文中详细介绍了后两种 Loglet。</p>
+
+<p>NativeLoglet 由两个组件组成：LogServer 和 Sequencer，这些组件都是独立的服务，并且和 Delos 服务部署在一起（当然也可以分开）。LogServer 负责处理有关日志的各种请求，并将日志持久化到本地磁盘，LogServer 可以有多个，且需要为奇数个（因为涉及到类似投多数票的场景）；Sequencer 只有 1 个，职责也只有一个，就是处理 <code>append</code> 请求，后面会详细介绍处理流程。</p>
+
+<p>这里有几个概念需要先介绍一下。当说到一个命令被「本地提交（locally committed）」时表示的是一个 LogServer 已经将这个命令同步到了它的本地日志中。当说到一个命令被「全局提交（globally committed）」时表示这个命令已经被大多数的 LogServer 本地提交，并且这个命令之前的所有命令也都已经全局提交。「全局末尾（global tail）」表示最近一个还没有被全局提交的日志位置，NativeLoglet 的日志是没有空隙的，也就是说从位置 0 开始到全局末尾结束中间的每一个位置都有日志数据。同时每个组件（LogServer、Sequencer、Delos 服务等）都维护了一个 <code>knownTail</code> 变量，这个变量保存的是当前这个组件获取到的全局末尾的值，这些组件之间在交互时都会带上各自的 <code>knownTail</code>，如果发现自己本地的值更小就更新到最新的值。</p>
+
+<p>接下来讲一下 NativeLoglet 支持的几种请求。首先是 <code>append</code> 请求，Delos 服务会将请求发送给 Sequencer，Sequencer 会给每个命令分配一个位置（类似一个计数器），然后 Sequencer 负责转发命令给所有 LogServer，当大多数 LogServer 都正常返回时即表示请求成功。如果大多数 LogServer 都返回说已经密封了，请求会失败。除此之外的其它情况（比如超时、LogServer 请求失败等）Sequencer 都会不断重试直到请求成功或者 NativeLoglet 被密封，重试是幂等的，也就是说同样的命令一定会写入同样的位置。Sequencer 维护了一个请求队列，当收到大多数 LogServer 的返回时即认为这个命令已经全局提交，那些发送给还没有返回结果的 LogServer 的请求就可以忽略了，这样处理可以防止某些特别慢的 LogServer 影响整体性能，同时从这里也能看到每个 LogServer 保存的命令可能是不一样的，对于那些缺失的命令也不需要补上。</p>
+
+<p>然后是 <code>seal</code> 请求。正如前面所介绍的，这个请求是用于密封 Loglet。任何客户端都可以发送这个请求给 LogServer，当大多数 LogServer 都正常返回时即表示请求成功，后续的 <code>append</code> 请求也会失败。需要注意的是当 LogServer 被密封以后，每个 LogServer 本地日志的末尾（tail）可能是不同的。</p>
+
+<p>接着是 <code>checkTail</code> 请求。这个请求会返回全局末尾以及当前 NativeLoglet 的密封状态。任何客户端都可以发送这个请求给 LogServer，并等待大多数 LogServer 返回。一旦大多数 LogServer 返回，<code>checkTail</code> 请求会根据返回结果进行不同的后续处理，这些返回结果会有 3 种可能：全部密封、部分密封、全部未密封。「全部密封」即所有 LogServer 都已经处于密封状态，返回结果中同时也会包含每个 LogServer 的末尾位置，前面介绍 <code>seal</code> 请求已经提到不同 LogServer 密封后的末尾可能是不同的，当 <code>checkTail</code> 发现这种情况时会触发一个修复（repair）操作，对那些有漏掉命令的 LogServer 进行补全（通过从其它 LogServer 拷贝数据过来）。「部分密封」即返回结果中同时存在密封和未密封两种状态，针对这种情况客户端会先发送 <code>seal</code> 请求给 LogServer，然后再次发送 <code>checkTail</code>，一般情况下都会得到全部密封的结果。「全部未密封」即所有 LogServer 都处于未密封状态，此时客户端会从所有 LogServer 返回的末尾位置中挑选最大的那个值，然后等待它自己的 <code>knownTail</code> 达到这个值（论文中并没有具体介绍客户端的 <code>knownTail</code> 是如何更新），如果等待过程中有 LogServer 被密封了就会变成「部分密封」的状态，此时就会按照刚才描述的流程进行处理。</p>
+
+<p>最后是 <code>readNext</code> 请求。客户端已经可以通过 <code>checkTail</code> 获取到全局末尾，因此它会根据这个末尾位置首先请求本地的 LogServer（前面提到过 LogServer 和 Delos 服务是部署在一起的），如果本地的 LogServer 没有这个位置的数据，就会再发送请求给其它 LogServer。</p>
+
+<p>以上就是 NativeLoglet 的设计，因为它不需要具备类似容错一致性这样的特性，Facebook 仅仅用了 4 个月就实现完成并部署到生产环境。当然 LogServer、Sequencer 都有可能出问题，这些错误的检测既有一些内部机制来保证，也有一些外部监控系统来触发。一旦发现问题就会进入重新配置流程，即密封现有 Loglet，创建新的 Loglet 并更新链。</p>
+
+<p>StripedLoglet 是多个 Loglet 的组合，实际上只用了 300 行左右的代码就实现完成。Loglet 的组合可以有多种方式，比如为了避免单个 Sequencer 成为瓶颈，可以把相同的一组 LogServer 看作不同的 NativeLoglet 集群，区别在于不同集群的 Sequencer 不一样；再比如为了对 Loglet 进行分片，达到横向扩展的目的，可以用多组 LogServer，每组只存储部分日志。StripedLoglet 目前并没有在实际生产中使用，更多是作为评估阶段的一个方案。</p>
+
+<p>到这里本篇论文中关于 VC 和 Delos 的介绍就差不多讲完了，但其实还有很多细节没有提到，例如 leader 如何选举、如果处理网络分区、集群成员如何变更、为什么要有密封操作、具体什么时候触发重新配置、如何实现一个 RaftLoglet。Delos 其实是建立在论文第一作者 Mahesh Balakrishnan 多年的研究之上，在来到 Facebook 之前他曾经在微软硅谷研究院以及 VMware 研究院工作，Delos 的很多思想来源于 2012 年的「From Paxos to CORFU: A Flash-Speed Shared Log」这篇论文（一个小八卦，这篇论文的第一作者 Dahlia Malkhi 也是学术界大牛，目前是 Diem Association 的 CTO），以及<a href="https://github.com/CorfuDB/CorfuDB/wiki/White-papers">后续多篇论文</a>。有兴趣的同学可以继续阅读这些论文，另外 OSDI 每篇论文都会有一个来自论文作者的演讲，可以点击<a href="https://www.youtube.com/watch?v=wd-GC_XhA2g">这里</a>查看视频。</p>
+
+<p>最后特别感谢 Delos 作者之一 Chen Shen 对本文提出的细致及宝贵的修改意见。</p>
+
+<h2>Virtualizing Consensus in Delos for Rapid Upgrades and Happy Engineers</h2>
+
+<p><a href="https://atscaleconference.com/2021/03/15/virtualizing-consensus">[链接]</a></p>
+
+<p>在支持 table API 并成功在 Twine 上应用之后，Delos 的下一个目标是提供 ZooKeeper API，并替代 Facebook 内部使用 ZooKeeper 的场景。Delos 目前已经成为了一个构建分布式数据库的「平台」，基于这个平台实现不同的 API 即可满足不同的场景需求，大部分逻辑都可以复用，比如支持 table API 的数据库 DelosTable，支持 ZooKeeper API 的数据库 Zelos。把 Delos 平台化以后也能让不同团队更加专注于各自的目标，提高开发效率（软件工程第一准则「高内聚低耦合」）。不过理想归理想，现实归现实，在 Zelos 的开发过程中逐渐发现组件的边界并没有那么清晰，很多时候 Zelos 需要依赖对 Delos 平台核心进行修改，使得开发流程受到了很大阻碍。为了解决这个问题，Delos 团队发明了一个新的抽象叫做「log-structured protocol」（LSP？），一层叠加在 VirtualLog 之上的协议，每个协议都会包含一个引擎（engine），且可以像网络栈一样把不同协议进行组合。当应用在请求时，会自上而下经过不同的协议，每一层协议也能带上自己的协议头（header），最终到达 VirtualLog。这个设计有点类似于把 Delos runtime 插件化，不同团队可以根据自己的需求开发不同的插件，这些插件也可以同时被不同团队共享。</p>
+
+<h2>RFC: Elastic Horovod</h2>
+
+<p><a href="https://docs.google.com/document/d/15ZoHA5AeSI_boeyIBapg9WPXKrYXMRvPytPzQWTCTn4/edit?usp=sharing">[链接]</a></p>
+
+<p>在<a href="https://blog.xiaogaozi.org/2020/11/15/maybe-news-issue-7/">第 7 期</a>介绍过 Horovod 背后的 Ring Allreduce 算法，从 <a href="https://github.com/horovod/horovod/releases/tag/v0.20.0">v0.20.0</a> 开始 Horovod 从框架上原生支持了模型训练弹性伸缩。不管是基于 PS 还是 Ring Allreduce 架构，弹性伸缩一直是分布式模型训练领域的热门问题，特别是对于一个 AI 平台来说，弹性伸缩能最大程度提高集群的资源利用率。当然为了实现弹性并不是说能够动态扩缩容就好了，框架也要做到足够好的容错性，才能不对训练效果造成影响。这篇 RFC 详细介绍了 Elastic Horovod 的设计背景及架构。目前阿里云容器团队开源的 <a href="https://github.com/AliyunContainerService/et-operator">et-operator</a> 已经支持在 K8s 中使用 Elastic Horovod，通过 <code>TrainingJob</code>、<code>ScaleIn</code> 和 <code>ScaleOut</code> 这 3 个 CRD 来动态控制训练集群的规模，不过 et-operator 暂时还不支持自动伸缩，社区有<a href="https://github.com/AliyunContainerService/et-operator/pull/6">一个 PR</a> 正在解决这个问题。</p>
+
+<h2>Scaling Kubernetes to 7,500 Nodes</h2>
+
+<p><a href="https://openai.com/blog/scaling-kubernetes-to-7500-nodes">[链接]</a></p>
+
+<p>OpenAI 团队在这篇文章中分享了他们是如何将 K8s 扩展到 7500 个节点，在 2018 年其实他们已经<a href="https://openai.com/blog/scaling-kubernetes-to-2500-nodes">分享</a>过扩展到 2500 个节点的经验。需要注意的是，OpenAI 的 K8s 集群主要服务于 AI 任务，每个 pod 会独占一个 node 的所有资源，类似资源碎片、bin-packing 这样的问题都不存在，调度器并不会成为瓶颈，因此他们的经验不一定适用于所有场景。几个有趣的地方：当集群规模到达 7500 节点时，API server 占用大约 70GB 的内存；尽量避免任何 DaemonSet 与 API server 进行交互，如果有需要可以借助一个中间的缓存服务；<a href="https://github.com/prometheus-operator/kube-prometheus">kube-prometheus</a> 收集了很多有用的数据，但是其中有很多对于 OpenAI 来说都是没用的，因此他们选择通过 <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config">P8s rules</a> 来丢弃一些指标；P8s 经常性出现 OOM，最终定位到问题出在 Grafana 和 P8s 之间的交互，解决方法是 <a href="https://github.com/openai/prometheus/pull/1">patch P8s</a>；Gang scheduling 用到了 K8s 1.15 以后支持的 scheduling framework 以及其中由阿里云和腾讯贡献的 <a href="https://github.com/kubernetes-sigs/scheduler-plugins/tree/master/pkg/coscheduling">coscheduling 插件</a>（<a href="https://blog.xiaogaozi.org/2020/06/02/maybe-news-issue-2/">第 2 期</a>也有做介绍）。</p>
+
+<h2>播客文字回顾 | Late Troubles 是陈曦的“中年朋克辛酸”吗？</h2>
+
+<p><a href="https://mp.weixin.qq.com/s/ZS5GjlskTBH1DS52iss9yQ">[上集]</a> <a href="https://mp.weixin.qq.com/s/KiuoI6NfCHbTeuceHBggyQ">[下集]</a></p>
+
+<p>本篇又名「微软产品经理教你如何上班摸鱼做音乐」，Late Troubles 是 Snapline 乐队主唱陈曦的个人计划，相比 Snapline 的音乐风格，Late Troubles 更加温和。目前陈曦已经移居西雅图，作为一个音乐人、一个父亲、一个上班族，他在这个访谈中表达了自己作为异乡异客的思考、关于家庭的思考、关于音乐制作的思考、疫情对生活的影响等等内容，可能就像 Late Troubles 的音乐一样，这篇访谈让我觉得平实及坦诚，任何光鲜的外表下都会有不尽相同的故事，希望有一天能在国内看到 Late Troubles 的现场演出。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #8]]></title>
@@ -382,74 +458,6 @@
 <p><a href="https://spacefruityrecords.bandcamp.com/album/boiled-hippo-2">[Bandcamp]</a> <a href="https://music.163.com/#/album?id=91278378">[网易云音乐]</a> <a href="https://www.xiami.com/album/1ttwrEdcce1">[虾米]</a></p>
 
 <p>本期最后推荐一张来自我的一个好朋友的唱片，Boiled Hippo 是一支北京的迷幻摇滚乐队，经过多年的演出积累终于在今年发行了乐队的第一张同名专辑。虽说是迷幻摇滚，但如果从旋律上讲绝对是非常「好听」的。如果你有兴趣购买实体唱片（黑胶、磁带、CD 都有），目前可以在北京的 fRUITYSPACE、fRUITYSHOP、独音唱片，上海的 Daily Vinyl，金华的 Wave 这几个地方购买。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Maybe News Issue #4]]></title>
-    <link href="https://blog.xiaogaozi.org/2020/06/17/maybe-news-issue-4/"/>
-    <updated>2020-06-17T14:07:52+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2020/06/17/maybe-news-issue-4</id>
-    <content type="html"><![CDATA[<blockquote><p>「Maybe News」是一个定期（或许不定期）分享一些可能是新闻的知识的<a href="/categories/maybe-news/">系列文章</a>，名字来源于我非常喜欢的一个国内的音乐厂牌<a href="https://en.wikipedia.org/wiki/Maybe_Mars">「兵马司」</a>（Maybe Mars）。你也可以通过<a href="https://digest.xiaogaozi.org/maybe-news">邮件订阅</a>它。</p></blockquote>
-
-<!-- more -->
-
-
-<h2>AliGraph: A Comprehensive Graph Neural Network Platform</h2>
-
-<p><a href="https://dl.acm.org/doi/10.1145/3292500.3340404">[链接]</a></p>
-
-<p>AliGraph 是阿里巴巴团队研发的 GNN（Graph Neural Network）分布式训练框架（虽然标题里是「平台」但感觉还算不上），论文发表在 KDD 2019 和 PVLDB 2019。</p>
-
-<p>论文开篇便提出了当下 GNN 模型训练的 4 个挑战：</p>
-
-<ol>
-<li>如何提高大规模图模型的训练效率及优化空间占用？</li>
-<li>怎样优雅地将异构（heterogeneous）信息组合到一个统一的 embedding 结果中？</li>
-<li>如何将结构化的拓扑（topological）信息与非结构化的属性（attribute）信息统一来共同定义那些需要保留的信息？</li>
-<li>如何设计一个高效的增量更新动态图的 GNN 方法？</li>
-</ol>
-
-
-<p>后面的篇章便是详细介绍 AliGraph 如何解决以上这 4 个问题。框架从上至下整体分为 3 层：算子（operator）、采样（sampling）、存储（storage）。算子层包含常见的 GNN 运算操作，采样层包含几种预设的采样算法，存储层主要关注如何高效对大规模图进行分布式存储。在这 3 层基础之上可以实现任意的 GNN 算法以及应用。</p>
-
-<p>存储层因为是要解决一个图的分布式存储问题，因此首先要将图进行分割（partition）。AliGraph 内置了 4 种图分割算法：<a href="https://dm.kaist.ac.kr/kse625/resources/metis.pdf">METIS</a>、<a href="https://www.usenix.org/conference/osdi12/technical-sessions/presentation/gonzalez">顶点切割和边切割</a>、<a href="https://dl.acm.org/doi/10.1145/2503210.2503293">2D 分割</a>、<a href="https://dl.acm.org/doi/10.1145/2339530.2339722">流式分割</a>。这 4 种算法分别适用于不同的场景，METIS 适合处理稀疏（sparse）的图，顶点切割和边切割适合密集（dense）的图，2D 分割适合 worker 数量固定的场景，流式分割通常应用在边（edge）频繁更新的图。用户需要根据自己的需求选择恰当的分割算法，当然也可以通过插件的形式自己实现。</p>
-
-<p>另一个存储层关心的问题是如何将图结构和属性（attribute）共同存储。这里讲的图结构即顶点和边的信息，这是最主要的图数据。同时每个顶点也会附加一些独特的属性，例如某个顶点表示一个用户，那附加在这个用户上面的属性就是类似性别、年龄、地理位置这样的信息。如果直接将属性信息和图结构一起存储会造成非常大的空间浪费，因为从全局角度看同一种类型的顶点的属性是高度重合的。并且属性与图结构的大小差异也非常明显，一个顶点 ID 通常占用 8 字节，但是属性信息的大小从 0.1KB 到 1KB 都有可能 。因此 AliGraph 选择将属性信息单独存储，通过两个单独的索引分别存储顶点和边的属性，而图结构中只存储属性索引的 ID。这样设计的好处自然是显著降低了存储所需的空间，但代价就是降低了查询性能，因为需要频繁访问索引来获取属性信息。AliGraph 选择增加一层 LRU 缓存的方式对查询性能进行优化。</p>
-
-<p>存储层关心的最后一个问题也是跟查询性能有关。在图算法中一个顶点的邻居（neighbor）是非常重要的信息，邻居可以是直接（1 跳）的也可以是间接（多跳）的，由于图被分割以后本地只会存储直接的邻居，当需要访问间接邻居的时候就必须通过网络通信与其它存储节点进行交互，这里的网络通信代价在大规模图计算中是不容忽视的。解决思路也很直接，即在每个节点本地缓存顶点的间接邻居，但要缓存哪些顶点的邻居，要缓存几个邻居是需要仔细考量的问题。AliGraph 没有使用目前常见的一些缓存算法（如 LRU），而是提出了一种新的基于顶点重要性（importance）的算法来对间接邻居进行缓存。在有向图中计算一个顶点重要性的公式是 <code>入邻居的个数 / 出邻居的个数</code>，注意这里的邻居个数同样可以是直接的或者间接的。当这个公式的计算结果大于某个用户自定义的阈值时即认为这是一个「重要」的顶点。从实际测试中得出的经验值是通常只需要计算两跳（hop）的邻居个数就够了，而阈值本身不是一个特别敏感的数值，设置在 0.2 左右是对于缓存成本和效果一个比较好的平衡。选出所有重要的顶点以后，最终会在所有包含这些顶点的节点上缓存 <em>k</em> 跳的出邻居（out-neighbor）。</p>
-
-<p>GNN 算法通常可以总结为 3 个步骤：采样（sample）某个顶点的邻居，聚合（aggregate）这些采样后的顶点的 embedding，将聚合后的 embedding 与顶点自己的进行合并（combine）得到新的 embedding。这里可以看到采样是整个流程中的第一步，采样的效果也会直接影响后续计算的 embedding 结果。AliGraph 抽象了 3 类采样方法：遍历采样（traverse）、近邻采样（neighborhood）和负采样（negative）。遍历采样是从本地子图中获取数据；近邻采样对于 1 跳的邻居可以从本地存储中获取，多跳的邻居如果在缓存中就从缓存中获取否则就请求其它节点；负采样通常也是从本地挑选顶点，在某些特殊情况下有可能需要从其它节点挑选。</p>
-
-<p>在采样完邻居顶点以后就是聚合这些顶点的 embedding，常用的聚合方法有：element-wise mean、max-pooling 和 LSTM。最后是将聚合后的 embedding 与顶点自己的进行合并，通常就是将这两个 embedding 进行求和。为了加速聚合和合并这两个算子的计算，AliGraph 应用了一个物化（materialization）中间向量的策略，即每个 mini-batch 中的所有顶点共享采样的顶点，同样的聚合和合并操作的中间结果也共享，这个策略会大幅降低计算成本。</p>
-
-<p>在最后的评估环节用了两个来自淘宝的数据集，两个数据集之间只有大小的区别，大数据集是小数据集的 6 倍左右。大数据集的基础数据是：4.8 亿个用户顶点，968 万个商品顶点，65.8 亿条用户到商品的边，2.3 亿条商品到商品的边，用户平均有 27 个属性，商品平均有 32 个属性。当使用 200 个 worker（节点配置论文中没有说明）时大数据集只需要 5 分钟即可将整个图构建完毕，相比之下以往的一些方案可能需要耗费数小时。基于顶点重要性的缓存算法相比 LRU 这些传统算法也是明显更优。3 类采样方法的性能评估结果从几毫秒到几十毫秒不等，但最长也不超过 60 毫秒，并且采样性能与数据集大小不太相关。聚合和合并算子相比传统的实现也有一个数量级的性能提升，这主要得益于前面提到的物化策略。</p>
-
-<p>AliGraph 目前已经开源（一部分？）但是换了一个名字叫做 <a href="https://github.com/alibaba/graph-learn">graph-learn</a>，跟大多数深度学习框架一样，底层使用 C++ 语言实现并提供 Python 语言的 API，目前支持 TensorFlow，未来会支持 PyTorch。有意思的是刚刚开源不久就有人提了一个 <a href="https://github.com/alibaba/graph-learn/issues/16">issue</a> 希望能够跟另外几个流行的 GNN 框架进行比较，但是项目成员的回答比较含糊。</p>
-
-<h2>Building Uber’s Go Monorepo with Bazel</h2>
-
-<p><a href="https://eng.uber.com/go-monorepo-bazel">[链接]</a></p>
-
-<p>Uber 应该是除了 Google 以外很早选择在后端服务中大规模使用 Go 语言的公司之一，并贡献了很多著名的 Go 语言项目（如 <a href="https://github.com/uber-go/zap">zap</a>、<a href="https://github.com/jaegertracing/jaeger">Jaeger</a>）。早在 2017 年，Uber 的 Android 和 iOS 团队就已经只使用一个代码仓库进行开发，俗称 monorepo。实践 monorepo 最著名的公司应该还是 Google，有兴趣可以看看 <a href="https://research.google/pubs/pub45424">Why Google Stores Billions of Lines of Code in a Single Repository</a> 这篇文章。现在后端团队也开始采用 monorepo 来管理 Go 语言项目，但是和客户端团队的不同之处在于没有用 <a href="https://buck.build">Buck</a> 而是用 <a href="https://bazel.build">Bazel</a>（前者是 Facebook 开源，后者是 Google 开源）。这篇文章介绍了在 monorepo 中将 Go 语言和 Bazel 结合遇到的一些问题。</p>
-
-<h2>Optimising Docker Layers for Better Caching with Nix</h2>
-
-<p><a href="https://grahamc.com/blog/nix-and-layered-docker-images">[链接]</a></p>
-
-<p>恐怕大多数时候接触容器是从构建一个 Docker 镜像开始的，这一步往往也是最容易被忽视的。为什么我的镜像这么大？为什么每次拉取镜像都要从头开始？这些问题可能会随着使用时间越来越长逐渐浮现出来，要回答它们需要了解 Docker 镜像的一个核心概念「layer」，本质上你在 <code>Dockerfile</code> 里写的每一行命令都会生成一个 layer，一个镜像便是由很多 layer 构成。Layer 之间是有层级关系的，当拉取镜像时如果本地已经存在某个 layer 就不会重复拉取。在传统的 Linux 发行版中安装依赖时 Docker 是不知道具体有哪些文件被修改的，而 <a href="https://github.com/NixOS/nix">Nix</a> 这个特殊的包管理器采用了不一样的设计思路使得安装依赖这件事情对于 Docker layer 缓存非常友好。衍生阅读推荐 Jérôme Petazzoni 写的关于如何减少镜像大小的<a href="https://www.ardanlabs.com/blog/2020/02/docker-images-part1-reducing-image-size.html">系列文章</a>。</p>
-
-<h2>Proposal: Permit embedding of interfaces with overlapping method sets</h2>
-
-<p><a href="https://github.com/golang/proposal/blob/master/design/6977-overlapping-interfaces.md">[链接]</a></p>
-
-<p>Interface 是 Go 语言一个重要的特性，类似很多其它语言中的概念，接口定义好以后是需要通过 struct 来实现的。但不同之处又在于 struct 不需要显式声明实现了什么 interface，只要满足 interface 中定义的接口就行，这个关键设计使得 Go 语言的 interface 使用场景可以非常灵活。跟 struct 一样 interface 也允许嵌套，也就是可以在一个 interface 定义中嵌套另一个 interface。如果同时嵌套了多个 interface，并且这些 interface 之间有重复的接口在编译时是会报错的。实际开发过程中为了规避这个限制可能需要修改 interface 的定义，这对于开发者来说不太友好。上面这个提案允许开发者在不修改代码的情况下避开这个限制，目前这个功能已经在 <a href="https://golang.org/doc/go1.14#language">Go 1.14</a> 中发布。</p>
-
-<h2>VexTab</h2>
-
-<p><a href="https://github.com/0xfe/vextab">[链接]</a></p>
-
-<p>不管是音乐创作还是音乐演奏，乐谱都是一个必不可少的东西。还记得刚学吉他那会儿非常热衷的一件事情就是去网上搜集各种歌曲的六线谱，这些乐谱的格式从最朴素的纯文本到高级的 <a href="https://www.guitar-pro.com">Guitar Pro</a> 格式都有。再后来开始学习扒歌，也面临把扒下来的谱子纪录下来的需求。虽然 Guitar Pro 很好但毕竟是一个收费软件，文件格式也是私有的。就像我更喜欢 Markdown 而不是直接用 Word 一样，一直希望能有一个类似的标记语言用于编写乐谱。VexTab 即是这样一个专门用于编写五线谱和六线谱的语言，也提供一个 JavaScript 库方便嵌入到网页中。有意思的是 VexTab 的作者同时也是 Google 的一名员工。</p>
 ]]></content>
   </entry>
   
