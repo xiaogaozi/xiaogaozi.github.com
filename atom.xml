@@ -4,7 +4,7 @@
   <title><![CDATA[Freedom]]></title>
   <link href="https://blog.xiaogaozi.org/atom.xml" rel="self"/>
   <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2021-03-23T12:30:39+08:00</updated>
+  <updated>2021-04-08T18:22:01+08:00</updated>
   <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[我的一些阅读习惯]]></title>
+    <link href="https://blog.xiaogaozi.org/2021/04/08/some-of-my-reading-habits/"/>
+    <updated>2021-04-08T18:20:13+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2021/04/08/some-of-my-reading-habits</id>
+    <content type="html"><![CDATA[<p>不知不觉 <a href="https://blog.xiaogaozi.org/categories/maybe-news/">Maybe News</a> 已经要发布第 10 期了（其实是第 11 期，起始下标为 0），本来计划周更，一度拖延到季度更感觉甚是惭愧，目前的愿望是能尽量保持半月更的节奏。今天这篇是想聊聊我目前的一些阅读习惯，正所谓<a href="https://blog.xiaogaozi.org/2020/06/10/maybe-news-issue-3/">「You are how you read」</a>（你读啥就是啥）。我并不是想要介绍什么「成功经验」，也不是类似《<del>搞笑</del>高效人士的 X 个习惯》这种高浓鸡汤，只是我目前与阅读有关的一些个人总结。</p>
+
+<!-- more -->
+
+
+<h2>论文</h2>
+
+<p>首先讲讲论文阅读。我阅读论文的经历最早应该追溯到本科上学的时候，当时因为毕业设计的需要读了 <a href="https://research.google/pubs/pub27898">Bigtable</a> 的论文，并照猫画虎用 Go 写了一个现在只能称之为玩具的实现。后来工作中断断续续也会听说一些好的论文，但并没有系统地去阅读和整理。最近几年的一份工作因为和 AI 有关，才开始比较频繁地接触业界的论文，并有意识地收集一些我认为比较好的论文。收集的渠道其实可以有很多种，最直接的就是去看每年各个顶会的网站，上面都会列出今年已经接受的论文，类似 OSDI 这种会议还会直接附带 PDF 链接，节省了不少找论文的时间。另外每篇论文最后的「引用」其实也是一个发现宝藏的好场所，一般被好论文引用的论文也都不会差，如果你阅读的都是同一个领域的论文会发现有些论文是会被反复频繁引用的。<a href="https://blog.acolyer.org">The Morning Paper</a> 是我最喜欢的博客之一，作者 <a href="https://accel.com/people/adrian-colyer">Adrian Colyer</a> 目前是 Accel 的合伙人，之前是 Pivotal、VMware 和 SpringSource 的 CTO，去年疫情期间停止更新了一段时间，后来恢复了每月更新 2~5 篇的节奏，不过现在又<a href="https://blog.acolyer.org/2021/02/08/the-ants-and-the-pheromones">停更</a>了（非常悲痛）。国内的话 D 神的<a href="https://draveness.me">「面向信仰编程」</a>博客也是一个不错的地方，不过相比之下论文数就少了很多。</p>
+
+<p>正如各位所看到的，我会固定在每一期 Maybe News 的开头推荐一篇我近期阅读的认为比较好的论文，我关注的领域也基本围绕在分布式系统、数据库、大数据、AI 这几块。这些论文有新有旧，毕竟逃下的课还是得补上的。每次阅读其实都会有很多疑问，如果有机会的话我会尽量联系上作者寻求答案（比如最新的<a href="https://blog.xiaogaozi.org/2021/03/23/maybe-news-issue-9/">第 9 期</a>），或者去翻阅作者以前写的相关论文，如果是开源软件也会去社区或者代码里找找。阅读特别是精读一篇论文是需要非常专注的环境的，我现在比较习惯于在上下班的地铁上阅读，用的设备是一台 6 寸的 Kindle。可能会有人觉得看论文是不是最好用大屏，但根据我的体验 6 寸 Kindle 除了在滑动的时候卡一点以外其它都还好，并且这个尺寸和重量在便携性上是非常有优势的，如果换成一台 10 寸或者更大尺寸的平板就没有这么方便了。为了完成一篇论文的笔记，这篇论文会被至少阅读两遍，多的时候读上四五遍也是有可能的。</p>
+
+<h2>邮件订阅</h2>
+
+<p>邮件订阅是我另一个比较重要的阅读来源，日常订阅了如 <a href="https://golangweekly.com">Golang Weekly</a>、<a href="https://kubeweekly.io">KubeWeekly</a>、<a href="https://sreweekly.com">SRE Weekly</a>、<a href="https://www.datascienceweekly.org">Data Science Weekly</a> 等。这些内容我并不一定会立即查看，大部分时候它们都是呆在我的收件箱里<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>。一般我会定期去查看，如果看到感兴趣的内容会先放到 Instapaper 里（或者类似的 Read It Later 服务）。放到 Instapaper 里有几个好处：首先如果时间来不及可以不用立即都看完，以前我有一个习惯是没看完的浏览器 tab 就这样一直开着，时间长了会发现浏览器里保留了很多 tab，不仅影响机器性能查找的时候也很不方便；另外就是 Instapaper 可以作为一个统一的归档，便于搜索曾经看过的内容；最后我可以用任何我喜欢的阅读器在任何设备上阅读，现在我用的是 <a href="https://reederapp.com">Reeder</a>，支持 macOS 和 iOS，支持 RSS 订阅，也支持包括 Instapaper 在内的多种服务，这样很多碎片时间也可以用来阅读文章。不过 Reeder 有一个需要吐槽的地方在于不能记住文章的阅读位置，这样当我下次打开的时候有可能需要再重新滚动到上次阅读的地方。除此之外，Reeder 是一个体验非常棒的工具，我从最早的版本一直用到现在的 Reeder 5。</p>
+
+<h2>微信公众号</h2>
+
+<p>微信公众号是一个比较特别的存在，不知道从什么时候开始，大家都喜欢通过公众号来发布消息和文章。如果说 Web 2.0 的代表之一是博客，那 Web 3.0 可能就是微信公众号<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>？但我一直认为微信公众号是违背万维网<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>精神的，或者说整个移动互联网都是，也有人<a href="https://www.wired.com/2010/08/ff-webrip">说</a>万维网早就已经死了<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>。我曾经尝试过运营一个自己的公众号，基于种种原因目前已经废弃<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>。一些匪夷所思的限制使得在公众号里撰写和阅读文章变得极不愉快，比如不支持任何形式的外链、发布后不能编辑<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>、强制需要一个头图、每天推送次数限制、阅读过程中没有消息通知<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>、在桌面端没有一个好的阅读入口<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>、封闭的生态<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>。在我看来公众号并不适合深度阅读，更适合发布一些时效性的消息<sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>，但确实有一些好的内容生产者选择了用公众号作为唯一的发布平台。因此很长一段时间关于怎么比较舒适地阅读公众号文章成了困扰我的问题<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>，直到最近在看一篇<a href="https://www.zmonster.me/2020/04/17/wechat-articles-rss-solution.html">文章</a>介绍如何自己搭建一个公众号的 RSS 服务时，知道了一些可以转成 RSS 的方法。本来也想照着弄一个，但是因为老年人比较懒，不太想 DIY，于是试用了文章中提到的付费服务 <a href="https://werss.app">WeRSS</a>。经过一段时间的体验，除了文章更新有一定延时<sup id="fnref:12"><a href="#fn:12" rel="footnote">12</a></sup>以及看不到评论以外，其它都没啥问题。目前我还是会继续用微信来阅读部分公众号，但基本仅限于时效类的消息，让微信回归聊天的本质而不是一个啥都往里塞的大杂烩。</p>
+
+<h2>RSS</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Google_Reader">Google Reader</a> 虽然死了，但是 RSS 还活着。作为 Web 2.0 时代的「遗老」，我依然保留了用 RSS 的习惯。前面提到微信公众号文章目前我已经是通过 RSS 的方式来阅读，除此之外我还订阅了一些感兴趣的至今依然在更新的博客。但总的来说，用 RSS 的频率已经比以前少了很多。</p>
+
+<h2>纸质书籍</h2>
+
+<p>自高中毕业以后，我阅读纸质书籍的频率就开始大幅降低（大学的专业书籍除外），以前保持的每月固定购买期刊杂志的习惯也没能得以延续，豆瓣的<a href="https://book.douban.com/people/xiaogaozi/collect">读书列表</a>也还停留在 2018 年。归根结底可能还是没有养成定期读书的习惯<sup id="fnref:13"><a href="#fn:13" rel="footnote">13</a></sup>，相比之下我的另一个朋友在毕业多年以后依然保持着每年阅读一定数量的书籍。看了下家里书架上的藏书，基本包含这么几类：专业工具书、金融、装修、小说、漫画、吉他谱。最近在蹭老婆的漫画书看，是大友克洋的《阿基拉》，虽然已经看过动画，但感觉漫画的内容更加丰富。这里就不立什么 flag 了，有机会的话还是希望以后尽量多看书，把高中的习惯重新捡起来。</p>
+
+<p>除了阅读，最近几年也养成了听播客的习惯，关于这个可以以后再说，如果你喜欢欢迎订阅我的博客。</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>所以 <a href="https://www.youtube.com/watch?v=z9UjeTMb3Yk">Inbox Zero</a> 基本跟我也没啥关系了<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>不过也有人说 Web 3.0 的代表是区块链，V 神万寿无疆！<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>现在还有多少人提到这个词汇？<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>或者<a href="https://www.wired.com/insights/2014/02/web-dead">没死</a><a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>我当然不会把原因归结为自己太懒<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>只能改几个字也能叫编辑？<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>为此我经常错过重要的消息<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>别跟我提桌面版微信，这玩意儿只能勉强叫能用。<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<li id="fn:9">
+<p>某种程度上来说已经打造了一个闭环！<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<li id="fn:10">
+<p>比如政府又权威发布了什么新闻、你家对面商场的促销活动、你的信用卡该还钱了、你该去拿快递了<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
+<li id="fn:11">
+<p>之前在 Twitter 上有过一个<a href="https://twitter.com/xiaogaozi/status/1270657764709355520">讨论</a><a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
+<li id="fn:12">
+<p>这个是目前大部分解决方案的通病<a href="#fnref:12" rev="footnote">&#8617;</a></p></li>
+<li id="fn:13">
+<p>归根结底还是懒<a href="#fnref:13" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #9]]></title>
@@ -1602,97 +1670,6 @@
 <p>特征提取（feature extraction）是一个非常重要的步骤，这里暂时不会过多介绍。<a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Little Throught About Microservices]]></title>
-    <link href="https://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices/"/>
-    <updated>2015-03-22T23:25:05+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2015/03/22/a-little-throught-about-microservices</id>
-    <content type="html"><![CDATA[<p>知乎在 4 年前已经开始尝试服务化，至今也经历了好几个架构的变迁演化。我大约是 2013 年开始在知乎负责服务化的工作，对服务化的理解也从最初的模糊逐渐变得清晰，前段时间看了一篇叫做 <a href="http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html">Microservices &ndash; Not A Free Lunch!</a> 的文章，也想趁着这个机会梳理总结目前为止我的一些感悟和想法。</p>
-
-<!-- more -->
-
-
-<h2>SOA 与 Microservices</h2>
-
-<p>SOA（Service Oriented Architecture）是一个很「古老」的概念，而 microservices 似乎是这两年才开始流行起来的。很多人把 microservices 看作一个全新的概念（我们都是喜新厌旧的人），Martin Fowler 觉得它跟 SOA <a href="http://martinfowler.com/articles/microservices.html#MicroservicesAndSoa">差别非常大</a>，Netflix 也把他们目前的架构<a href="http://nginx.com/blog/microservices-at-netflix-architectural-best-practices">称作</a> microservices architecture。但是有人站出来<a href="http://service-architecture.blogspot.co.uk/2014/03/microservices-is-soa-for-those-who-know.html">说</a> microservices 根本就是 SOA 很多年前已经提出的概念嘛，甚至还有一份相当冗长的<a href="https://www.oasis-open.org/committees/download.php/19679/soa-rm-cs.pdf">标准文档</a>，SOA 在互联网界的流行很大程度上可能也要归功于 <a href="http://www.infoq.com/news/Amazon-CTO-Werner-Vogels-on-SOA">Amazon</a>。在 microservices（这个单词真的好长。。）这个名词流行之前，我对服务化的理解一直就是 SOA，不过我并不是想说 SOA 跟 microservices 是两个完全不同的东西，对于后者我的理解是它是 SOA 的一个 <a href="http://en.wikipedia.org/wiki/Dialect_(computing)">dialect</a>，很多核心的思想还是来源于 SOA，只不过随着时代的发展必然会产生差异（也可以说是标准制定得太慢）。至于 microservices 的标准定义，我想目前应该没有，就连 Wikipedia 的<a href="http://en.wikipedia.org/wiki/Microservices">条目</a>也讲得不清不楚（还不如看前面提到的 Netflix 的文章，里面与 SOA 比较的文字我也觉得有待商榷），每个人、每个团队、每个公司都应该有自己的理解，后文提到的知乎目前的服务化架构姑且用 microservices 指代。</p>
-
-<h2>Microservices 的代价</h2>
-
-<p>服务化的好处可能很多人都了解了，你可以在任何一篇相关文章中很轻易地找到关于服务化的各种优点，很多人选择服务化的时候也正是被这个「看起来」很美好的概念打动。一切模块都是天然解耦的，这简直就是软件工程的理想境界。但凡事有利必有弊，告诉你这个东西很好的人并不一定会告诉你背后隐含的一些注意事项（所以我特别欣赏那些可以把不管优点缺点都告诉你的开源项目）。文章开头提到的那篇文章就讲述了几个在实践过程中才会真正发现的「问题」，我也大概循着作者的思路，以及附上其它一些在工作中体会到的事情。</p>
-
-<h3>显著增加运维（DevOps）成本</h3>
-
-<p>这里的成本包括人力和物力成本。先说说物力，在服务化之前，一个项目的所有代码应该都在一个代码仓库里，在部署的时候很自然地我们把代码 clone 下来，可能还会编译打包，最后把整个项目放到生产环境。采用服务化意味着你的项目可能会从一个变成几十个（曾经有新同事来了之后惊讶于知乎内部居然有这么多项目，其实里面有很多都是一个个小的服务），想象一下此时你的部署流程会变成什么样子？当然我们并不会每次部署都要把这几十个项目挨个部署一遍，但最坏情况下你需要关心的项目的确变多了。比如所有项目依赖的一个特殊的服务有变化，需要依赖方重启，这将会是一场「浩大」的工程，不同项目大部分情况下拥有不同的维护者，通知到所有人并且完成这件事情本身就变得比较困难（难度取决于团队大小，当然这个例子并不会是经常发生的事情）。</p>
-
-<p>在 microservices 的思想里不同的服务应该拥有完全「独立」的资源，包括代码、机器、存储等，理论上每台机器应该只运行一个服务，存储也应该只供这一个服务读写。如果再考虑不同服务的负载和高可用，那么需要为每个服务分配 2 至多台机器。此时从运维角度上来看已经增加了「数量庞大」的机器，不过考虑到成本问题，我们可能会把服务都部署在虚拟机里，而单个存储实例也可能是被多个服务共享。但这只是物理机器的数目变少了，实际上需要管理的机器还是很多。不过现在越来越流行的容器（container）的概念也许是一个不错的解决方案，有效利用了集群的资源，同时还能做到自动伸缩（auto scaling，前提是你的服务必须是无状态的）。</p>
-
-<p>有了这么多服务，找到它们变成了一件困难的事情。这个时候我们需要一个 proxy，它的功能很简单，帮你找到你想使用的服务，再高级一点的，也许还会帮你完成负载均衡。但有网络必有开销，即使是内网，何况还是单点，有一天你会发现某个服务的调用量已经大到无法忽视 proxy 带来的网络开销。于是我们把一个 proxy 变成多个，来分担压力。但维护这些 proxy 的信息其实也是一件麻烦事，服务的机器可能会调整，可能会有很多新的服务出现，对于运维来说是不容忽视的成本。也许你在某个地方看到了另一种方案，我们其实可以不需要 proxy，直连服务岂不更好？直连减少了多余的网络开销，同时也意味着你需要自己做负载均衡和高可用，以及发现新的或者死掉的服务。其实很多人已经想到了一个解决的办法：服务发现（service discovery）。这是一个已经很成熟的方案，你甚至可以找到<a href="http://nerds.airbnb.com/smartstack-service-discovery-cloud">很</a><a href="https://github.com/Netflix/eureka">多</a><a href="https://www.consul.io">开</a><a href="https://coreos.com">源</a>实现，这里有一篇<a href="http://jasonwilder.com/blog/2014/02/04/service-discovery-in-the-cloud">文章</a>比较详细地介绍、对比了服务发现相关的技术。当然这些开源实现各有利弊，也许最终你会选择自己开发。但服务发现终归引入了一个新的概念，意味着你需要单独为它部署、配置、管理，也许还会与你的代码耦合。</p>
-
-<p>另一个必须关心的事情就是监控，当然你说监控本来就是运维需要做的事情，但无形中增加了这么多机器监控肯定值得关注。并且监控不仅仅是指服务是否正常运行，还包括服务的请求量、负载、响应时间，这些都不是现成的，需要额外统计。</p>
-
-<p>然后就是人力成本。前面提到的架构已经比服务化之前复杂了许多，这也许就不是一个人能完成的事情。还有很多组件并不一定是现成的，于是运维同学还需要具备一定的开发能力，DevOps 这个称谓其实是一个蛮高的要求。伴随而来的就是招人的标准也得提高，考虑到我们是家小公司，技术团队规模也不会太大，必须在招人上做出取舍。</p>
-
-<h3>接口</h3>
-
-<p>有了服务之后接口变成了一件很重要的事情。我们需要制定一些接口规范，讲究一点的可能还会要求命名风格；需要考虑接口的粒度，不能过细，尽量通用；不能让接口的使用者对服务内部产生太大影响，比如调用一个非常消耗服务资源的接口，这时服务的开发者就需要对接口参数进行必要的检验；最重要的，接口一旦发布，之后的任何改动都必须向后兼容。Protocol Buffers 就是一个很好的例子，因为是强类型，所以接口参数验证可以很方便地完成，Google 还给出了一套<a href="https://developers.google.com/protocol-buffers/docs/proto#updating">更新接口的准则</a>，例如新增的参数必须是 <code>optional</code> 或者 <code>repeated</code>，不能删除 <code>required</code> 参数。但有时候难免会做出不兼容的改动或者发布了新的接口，这时就需要告知所有服务的调用者。但你会发现找到服务是一个难题，找到服务的调用者其实也是一个难题。糙一点的可能就是发邮件给所有人或者通过经验来逐一排查，智能一点的就得在服务的框架里做些统计，自动生成服务的调用关系图。总之接口是一个你不可避免需要考虑的问题。</p>
-
-<h3>重复逻辑</h3>
-
-<p>软件工程一个比较重要的思想就是要避免重复代码，有这样一句耳熟能详的话：当你第二次写下同样的代码的时候就得思考是否可以抽象出一段新的代码。在一个项目里这件事很容易，可以是封装好一些函数、mixin 或者类。服务化之后有好几种方案可以选择：</p>
-
-<ul>
-<li>抽象出一个新的服务</li>
-<li>把这段逻辑封装为一个库</li>
-<li>管他的，我们就直接复制粘贴了吧</li>
-</ul>
-
-
-<p>每一个其实都有优缺点，挨个说一下。抽象新服务有滥用服务化的嫌疑，并且新的服务意味着更多的网络开销，多个服务也跟这个新服务显式地绑在了一起，稳定性有待商榷。封装库少了刚才提到的不稳定因素，但同时带来了维护成本，只要维护过库的同学应该都了解版本更新是一件很麻烦的事情，在迭代速度上肯定要逊于第一种方案。最后一种，嗯。。就像武侠小说中的锦囊一样，不到万不得已千万不要用。目前我们更倾向于第二种。</p>
-
-<h3>分布式系统带来的复杂性</h3>
-
-<p>服务化打破了长久以来的三层架构（3-tier architecture），有人称之为<a href="http://nginx.com/blog/time-to-move-to-a-four-tier-application-architecture">四层架构</a>。分层在软件工程里是一件好事，可以有效减少单层实现的复杂度，但同时也会给整个系统产生额外的代价。网络开销、网络的不稳定性、架构的容错性、消息的序列化和反序列化、不同服务之间负载的变化等等。四层架构里多了很重要的一层「服务层」，这一层内部的网络通信需要与上层隔离，客户端需要对服务的某些异常进行捕获，必要的时候重发请求，服务如何做到 graceful 部署，分布式事务（如果你真的需要事务），不要因为某个服务挂掉而导致整个系统宕机，序列化是采用二进制还是 JSON，序列化程序的性能如何，服务层内部又如何分层，如何避免循环调用。前面这些都必须考虑。</p>
-
-<p>还有一个问题可能很多人刚开始并不一定会想到，那就是分布式系统的整体跟踪（tracing）。这是干嘛的？当一个问题出现时，你需要准确判断是哪一层出了问题，而不是靠猜或者逐一排查；当你需要优化整体性能时，你需要判断是哪次调用拖了后腿。早在 2010 年 Google 发表了 <a href="http://research.google.com/pubs/pub36356.html">Dapper 的论文</a>，之后 Twitter 开源了他们的实现 <a href="https://twitter.github.io/zipkin">Zipkin</a>，目前知乎也是在 Zipkin 的基础上针对我们自己的服务化框架定制了一套 tracing 系统。</p>
-
-<p>系统架构的变化也会影响到开发者的某些设计，在以前这就是一些普通的函数调用，我们可以自由地控制调用的顺序、处理相关的异常，现在我们需要考虑到网络调用的因素，时序性也是一个问题，什么时候需要重试，什么时候又不行。某些问题是一个好的服务框架可以解决的，但某些不可以。</p>
-
-<h3>异步</h3>
-
-<p>由于<a href="http://en.wikipedia.org/wiki/Global_Interpreter_Lock">众所周知的原因</a>，Python 的多线程并不是一个效率很高的方案（事实上多线程本身也不是一个很好的方案），于是异步大行其道。但是 Python 的异步毕竟不是语言级别的，虽然有很多实现，但都不是特别好用（Python 3 这货也不知道要何年何月才能普及）。某些异步实现也会带来编程习惯上的改变，在使用的时候需要特别注意，否则可能会遇到一些看似「莫名其妙」的 bug。异步也不是银弹，当一个服务既有异步请求又有同步请求的时候，异步请求的性能反而会因为同步请求变差，因此一个服务最好是完完全全的异步。</p>
-
-<h3>开发与测试</h3>
-
-<p>这可能是比较容易忽视的一块，毕竟是给自己用的东西，不好用也许还可以忍忍，但我觉得这反而是最影响开发效率的环节。当一个项目的运行需要依赖十几个、几十个服务的时候，开发、测试就成了一个难题。我们也许可以分别在开发环境和测试环境将这些服务部署好，但是维护这些服务的可用性和稳定性会变成新的问题。比较理想的情况是项目的开发和测试不依赖任何第三方服务，从单元测试的角度上来讲你也只需要测试自己代码的逻辑就够了，这也许就得从服务框架的角度入手，不管开发还是测试都要保证接口正常调用，必要的时候把接口 mock 掉（但不能滥用 mock），不过集成测试还是不可避免大量服务的依赖。</p>
-
-<h3>RPC 框架</h3>
-
-<p>知乎从一开始就没有使用 Thrift 这样现成的 RPC 框架，而是基于 Protocol Buffers 自己搞了一个，后来又有了 JSON 序列化的框架，也逐渐从 Python 版扩展到 Node.js、Java 等语言。对于使用 HTTP 协议或者现成框架的团队来说可能这不是什么问题，但对于我们来说几乎是从零开始。凡事有利有弊，但知乎技术团队还是更倾向于简单的解决方案，服务化是一个生态，每个组件都需要完成自己的工作，框架可能是其中的胶水，把各个组件连接起来。2015 年我们会继续完善最新一版的 RPC 框架，同时还有整个服务化的生态。</p>
-
-<h2>组织结构与 Microservices</h2>
-
-<p>这是一个比较有趣的话题，我也是在看 Martin Fowler 的文章时才第一次了解到。引用一段著名的理论——Conway&rsquo;s Law（这个理论因《The Mythical Man-Month》而得名）：</p>
-
-<blockquote><p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization&#8217;s communication structure.</p><footer><strong>Conway&#8217;s Law</strong> <cite><a href='http://www.melconway.com/Home/Conways_Law.html'>www.melconway.com/Home/&hellip;</a></cite></footer></blockquote>
-
-
-<p>翻译过来就是：一个组织设计的系统（广义的指代，并不一定指软件系统）往往就是公司管理组织结构的翻版。在大公司通常是这样的，设计师、产品经理、工程师、测试、运维分别属于不同的团队，但是他们又共同负责一个产品，于是这个产品可能就变成产品经理想好需求，设计师负责界面交互，弄好之后交给工程师，工程师弄好之后交给测试，测试通过最后交给运维部署，软件架构上每个角色负责的东西都是独立的。而 microservices 更加强调小团队，每个团队的成员可以承担多种角色（感觉跟敏捷开发好像），microservices 往往又跟 <a href="http://en.wikipedia.org/wiki/Continuous_integration">CI</a> 和 <a href="http://en.wikipedia.org/wiki/Continuous_delivery">CD</a> 联系紧密，因此这样的组织结构能够更加契合新的软件架构。前段时间知乎内部也有关于这个话题的讨论，最后觉得软件架构和组织结构其实是相互影响的，任何一方不契合另外一方，都会造成这两个的融合。</p>
-
-<h2>一点总结</h2>
-
-<p>写了这么多，并不是想说服务化有多么可怕，相反，在我看来在如今移动互联网的时代，microservices 架构是一个趋势，但每个团队应该根据自己当前的需要合理选择服务化架构，这个架构可以很复杂也可以很简单，没有必要完全相同，适合的就是最好的，这绝对是软件工程第一准则。</p>
-
-<h2>相关文章</h2>
-
-<ul>
-<li><a href="http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html">Microservices &ndash; Not A Free Lunch!</a></li>
-<li><a href="http://martinfowler.com/articles/microservices.html">Microservices</a></li>
-<li><a href="http://nginx.com/blog/time-to-move-to-a-four-tier-application-architecture">It’s Time to Move to a Four-Tier Application Architecture</a></li>
-</ul>
 
 ]]></content>
   </entry>
