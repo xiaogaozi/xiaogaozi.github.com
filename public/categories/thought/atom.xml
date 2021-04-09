@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Thought | Freedom]]></title>
+  <link href="https://blog.xiaogaozi.org/categories/thought/atom.xml" rel="self"/>
+  <link href="https://blog.xiaogaozi.org/"/>
+  <updated>2021-04-08T18:22:01+08:00</updated>
+  <id>https://blog.xiaogaozi.org/</id>
+  <author>
+    <name><![CDATA[xiaogaozi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[我的一些阅读习惯]]></title>
+    <link href="https://blog.xiaogaozi.org/2021/04/08/some-of-my-reading-habits/"/>
+    <updated>2021-04-08T18:20:13+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2021/04/08/some-of-my-reading-habits</id>
+    <content type="html"><![CDATA[<p>不知不觉 <a href="https://blog.xiaogaozi.org/categories/maybe-news/">Maybe News</a> 已经要发布第 10 期了（其实是第 11 期，起始下标为 0），本来计划周更，一度拖延到季度更感觉甚是惭愧，目前的愿望是能尽量保持半月更的节奏。今天这篇是想聊聊我目前的一些阅读习惯，正所谓<a href="https://blog.xiaogaozi.org/2020/06/10/maybe-news-issue-3/">「You are how you read」</a>（你读啥就是啥）。我并不是想要介绍什么「成功经验」，也不是类似《<del>搞笑</del>高效人士的 X 个习惯》这种高浓鸡汤，只是我目前与阅读有关的一些个人总结。</p>
+
+<!-- more -->
+
+
+<h2>论文</h2>
+
+<p>首先讲讲论文阅读。我阅读论文的经历最早应该追溯到本科上学的时候，当时因为毕业设计的需要读了 <a href="https://research.google/pubs/pub27898">Bigtable</a> 的论文，并照猫画虎用 Go 写了一个现在只能称之为玩具的实现。后来工作中断断续续也会听说一些好的论文，但并没有系统地去阅读和整理。最近几年的一份工作因为和 AI 有关，才开始比较频繁地接触业界的论文，并有意识地收集一些我认为比较好的论文。收集的渠道其实可以有很多种，最直接的就是去看每年各个顶会的网站，上面都会列出今年已经接受的论文，类似 OSDI 这种会议还会直接附带 PDF 链接，节省了不少找论文的时间。另外每篇论文最后的「引用」其实也是一个发现宝藏的好场所，一般被好论文引用的论文也都不会差，如果你阅读的都是同一个领域的论文会发现有些论文是会被反复频繁引用的。<a href="https://blog.acolyer.org">The Morning Paper</a> 是我最喜欢的博客之一，作者 <a href="https://accel.com/people/adrian-colyer">Adrian Colyer</a> 目前是 Accel 的合伙人，之前是 Pivotal、VMware 和 SpringSource 的 CTO，去年疫情期间停止更新了一段时间，后来恢复了每月更新 2~5 篇的节奏，不过现在又<a href="https://blog.acolyer.org/2021/02/08/the-ants-and-the-pheromones">停更</a>了（非常悲痛）。国内的话 D 神的<a href="https://draveness.me">「面向信仰编程」</a>博客也是一个不错的地方，不过相比之下论文数就少了很多。</p>
+
+<p>正如各位所看到的，我会固定在每一期 Maybe News 的开头推荐一篇我近期阅读的认为比较好的论文，我关注的领域也基本围绕在分布式系统、数据库、大数据、AI 这几块。这些论文有新有旧，毕竟逃下的课还是得补上的。每次阅读其实都会有很多疑问，如果有机会的话我会尽量联系上作者寻求答案（比如最新的<a href="https://blog.xiaogaozi.org/2021/03/23/maybe-news-issue-9/">第 9 期</a>），或者去翻阅作者以前写的相关论文，如果是开源软件也会去社区或者代码里找找。阅读特别是精读一篇论文是需要非常专注的环境的，我现在比较习惯于在上下班的地铁上阅读，用的设备是一台 6 寸的 Kindle。可能会有人觉得看论文是不是最好用大屏，但根据我的体验 6 寸 Kindle 除了在滑动的时候卡一点以外其它都还好，并且这个尺寸和重量在便携性上是非常有优势的，如果换成一台 10 寸或者更大尺寸的平板就没有这么方便了。为了完成一篇论文的笔记，这篇论文会被至少阅读两遍，多的时候读上四五遍也是有可能的。</p>
+
+<h2>邮件订阅</h2>
+
+<p>邮件订阅是我另一个比较重要的阅读来源，日常订阅了如 <a href="https://golangweekly.com">Golang Weekly</a>、<a href="https://kubeweekly.io">KubeWeekly</a>、<a href="https://sreweekly.com">SRE Weekly</a>、<a href="https://www.datascienceweekly.org">Data Science Weekly</a> 等。这些内容我并不一定会立即查看，大部分时候它们都是呆在我的收件箱里<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>。一般我会定期去查看，如果看到感兴趣的内容会先放到 Instapaper 里（或者类似的 Read It Later 服务）。放到 Instapaper 里有几个好处：首先如果时间来不及可以不用立即都看完，以前我有一个习惯是没看完的浏览器 tab 就这样一直开着，时间长了会发现浏览器里保留了很多 tab，不仅影响机器性能查找的时候也很不方便；另外就是 Instapaper 可以作为一个统一的归档，便于搜索曾经看过的内容；最后我可以用任何我喜欢的阅读器在任何设备上阅读，现在我用的是 <a href="https://reederapp.com">Reeder</a>，支持 macOS 和 iOS，支持 RSS 订阅，也支持包括 Instapaper 在内的多种服务，这样很多碎片时间也可以用来阅读文章。不过 Reeder 有一个需要吐槽的地方在于不能记住文章的阅读位置，这样当我下次打开的时候有可能需要再重新滚动到上次阅读的地方。除此之外，Reeder 是一个体验非常棒的工具，我从最早的版本一直用到现在的 Reeder 5。</p>
+
+<h2>微信公众号</h2>
+
+<p>微信公众号是一个比较特别的存在，不知道从什么时候开始，大家都喜欢通过公众号来发布消息和文章。如果说 Web 2.0 的代表之一是博客，那 Web 3.0 可能就是微信公众号<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>？但我一直认为微信公众号是违背万维网<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>精神的，或者说整个移动互联网都是，也有人<a href="https://www.wired.com/2010/08/ff-webrip">说</a>万维网早就已经死了<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>。我曾经尝试过运营一个自己的公众号，基于种种原因目前已经废弃<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>。一些匪夷所思的限制使得在公众号里撰写和阅读文章变得极不愉快，比如不支持任何形式的外链、发布后不能编辑<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>、强制需要一个头图、每天推送次数限制、阅读过程中没有消息通知<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>、在桌面端没有一个好的阅读入口<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>、封闭的生态<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>。在我看来公众号并不适合深度阅读，更适合发布一些时效性的消息<sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>，但确实有一些好的内容生产者选择了用公众号作为唯一的发布平台。因此很长一段时间关于怎么比较舒适地阅读公众号文章成了困扰我的问题<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>，直到最近在看一篇<a href="https://www.zmonster.me/2020/04/17/wechat-articles-rss-solution.html">文章</a>介绍如何自己搭建一个公众号的 RSS 服务时，知道了一些可以转成 RSS 的方法。本来也想照着弄一个，但是因为老年人比较懒，不太想 DIY，于是试用了文章中提到的付费服务 <a href="https://werss.app">WeRSS</a>。经过一段时间的体验，除了文章更新有一定延时<sup id="fnref:12"><a href="#fn:12" rel="footnote">12</a></sup>以及看不到评论以外，其它都没啥问题。目前我还是会继续用微信来阅读部分公众号，但基本仅限于时效类的消息，让微信回归聊天的本质而不是一个啥都往里塞的大杂烩。</p>
+
+<h2>RSS</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Google_Reader">Google Reader</a> 虽然死了，但是 RSS 还活着。作为 Web 2.0 时代的「遗老」，我依然保留了用 RSS 的习惯。前面提到微信公众号文章目前我已经是通过 RSS 的方式来阅读，除此之外我还订阅了一些感兴趣的至今依然在更新的博客。但总的来说，用 RSS 的频率已经比以前少了很多。</p>
+
+<h2>纸质书籍</h2>
+
+<p>自高中毕业以后，我阅读纸质书籍的频率就开始大幅降低（大学的专业书籍除外），以前保持的每月固定购买期刊杂志的习惯也没能得以延续，豆瓣的<a href="https://book.douban.com/people/xiaogaozi/collect">读书列表</a>也还停留在 2018 年。归根结底可能还是没有养成定期读书的习惯<sup id="fnref:13"><a href="#fn:13" rel="footnote">13</a></sup>，相比之下我的另一个朋友在毕业多年以后依然保持着每年阅读一定数量的书籍。看了下家里书架上的藏书，基本包含这么几类：专业工具书、金融、装修、小说、漫画、吉他谱。最近在蹭老婆的漫画书看，是大友克洋的《阿基拉》，虽然已经看过动画，但感觉漫画的内容更加丰富。这里就不立什么 flag 了，有机会的话还是希望以后尽量多看书，把高中的习惯重新捡起来。</p>
+
+<p>除了阅读，最近几年也养成了听播客的习惯，关于这个可以以后再说，如果你喜欢欢迎订阅我的博客。</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>所以 <a href="https://www.youtube.com/watch?v=z9UjeTMb3Yk">Inbox Zero</a> 基本跟我也没啥关系了<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>不过也有人说 Web 3.0 的代表是区块链，V 神万寿无疆！<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>现在还有多少人提到这个词汇？<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>或者<a href="https://www.wired.com/insights/2014/02/web-dead">没死</a><a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>我当然不会把原因归结为自己太懒<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>只能改几个字也能叫编辑？<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>为此我经常错过重要的消息<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>别跟我提桌面版微信，这玩意儿只能勉强叫能用。<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<li id="fn:9">
+<p>某种程度上来说已经打造了一个闭环！<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<li id="fn:10">
+<p>比如政府又权威发布了什么新闻、你家对面商场的促销活动、你的信用卡该还钱了、你该去拿快递了<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
+<li id="fn:11">
+<p>之前在 Twitter 上有过一个<a href="https://twitter.com/xiaogaozi/status/1270657764709355520">讨论</a><a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
+<li id="fn:12">
+<p>这个是目前大部分解决方案的通病<a href="#fnref:12" rev="footnote">&#8617;</a></p></li>
+<li id="fn:13">
+<p>归根结底还是懒<a href="#fnref:13" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>
