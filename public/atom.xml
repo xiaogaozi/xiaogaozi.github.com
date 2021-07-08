@@ -4,7 +4,7 @@
   <title><![CDATA[Freedom]]></title>
   <link href="https://blog.xiaogaozi.org/atom.xml" rel="self"/>
   <link href="https://blog.xiaogaozi.org/"/>
-  <updated>2021-04-29T17:37:24+08:00</updated>
+  <updated>2021-07-08T14:22:00+08:00</updated>
   <id>https://blog.xiaogaozi.org/</id>
   <author>
     <name><![CDATA[xiaogaozi]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maybe News Issue #11]]></title>
+    <link href="https://blog.xiaogaozi.org/2021/07/08/maybe-news-issue-11/"/>
+    <updated>2021-07-08T14:20:18+08:00</updated>
+    <id>https://blog.xiaogaozi.org/2021/07/08/maybe-news-issue-11</id>
+    <content type="html"><![CDATA[<p>本期关键词：Procella、PrestoDB@Facebook、Apache Arrow、S3 Consistency、Feast、Uptown Records。详细内容请访问：<a href="https://maybe.news/issues/11">https://maybe.news/issues/11</a>。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe News Issue #10]]></title>
@@ -1452,179 +1461,6 @@
 <p>也许有人会问索引数据难道是不更新的吗？答案是需要更新，有关如何更新索引数据会在下一篇文章中介绍。<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
 <li id="fn:6">
 <p>频繁从堆外拷贝大量数据并反序列化可能会是一个比较耗时的过程，因此我们在实际使用时还在正排索引上增加了一层堆内的缓存。<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[如何设计与实现一个分布式索引框架（二）：Schema、API 及倒排索引]]></title>
-    <link href="https://blog.xiaogaozi.org/2020/04/22/how-to-design-a-distributed-index-framework-part-2/"/>
-    <updated>2020-04-22T18:16:55+08:00</updated>
-    <id>https://blog.xiaogaozi.org/2020/04/22/how-to-design-a-distributed-index-framework-part-2</id>
-    <content type="html"><![CDATA[<blockquote><p>这是一个<a href="https://blog.xiaogaozi.org/categories/htdadif/">系列文章</a>，大部分内容都来自我过去在小红书发现 Feed 团队工作期间的实践和经验。在介绍的过程中我会尽量不掺杂过多的业务细节，而专注于这背后我个人一些浅薄的设计思想，希望你在阅读完这些文章以后能够直接或者间接地拓展到不同的场景。</p></blockquote>
-
-<p>在<a href="https://blog.xiaogaozi.org/2020/04/21/how-to-design-a-distributed-index-framework-part-1/">上一篇文章</a>中简单介绍了什么是推荐系统以及实现一个推荐系统的核心组件有哪些，文章最后引入了一个非常重要的概念「索引」，本篇将会首先从框架使用者的角度介绍如何定义索引，框架有哪些 API 可以使用以及从设计者的角度介绍如何实现一个简单的倒排索引。</p>
-
-<!-- more -->
-
-
-<h2>Schema</h2>
-
-<p>在传统的数据库系统中，当我们提到 schema 时通常是指表（table）的逻辑定义，这个定义中会包含这些信息：表名、有哪些列（column）、列名、列的数据类型、主键（primary key）、索引名、索引的列等。非常类似的，在推荐系统中我们也需要这样的信息。框架的使用者需要首先定义好存储的数据实体，如实体名（表名）、实体有哪些字段（列）、字段的名称和数据类型、哪个字段是主键、哪些字段需要创建倒排索引。正如传统数据库系统中通过 SQL 来定义 shcema，我们也需要一种类似的 DDL<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>。经过一番调研和比较以后，我们选用了 <a href="https://google.github.io/flatbuffers">FlatBuffers</a> 作为定义 schema 的语言。同 <a href="https://developers.google.com/protocol-buffers">Protocol Buffers</a>（以下简称 PB）一样，FlatBuffers 也是 Google 开源的一种序列化协议，支持多种主流语言。为什么要选用 FlatBuffers 呢？FlatBuffers 的主页上列举了几个特点，我选取了几个最重要的翻译过来<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>，如果你熟悉 PB、Thrift 这一类 IDL 应该能很明显看出区别。</p>
-
-<ul>
-<li><strong>无需反序列化即可访问序列化后的数据</strong>：将 FlatBuffers 同其它协议区分开来的一个重要原因是 FlatBuffers 通过平展的二进制缓冲区（flat binary buffer）表示层级数据（hierarchical data），因此无需反序列化（parsing/unpacking）即可直接访问数据。同时依然支持数据结构的演变（evolution），保持向前和向后兼容性。</li>
-<li><strong>高效的内存空间和访问性能</strong>：当访问数据时唯一需要分配的内存就只有数据本身的缓冲区（buffer），不需要任何额外的内存空间（C++ 语言支持，其它语言可能有变化）。FlatBuffers 也非常适合用于 mmap（或者流式处理），允许只有部分缓冲区在内存中。访问序列化后的数据基本等价于访问原始的结构体（struct），只会增加一次额外的跳转（一种虚表）来实现数据格式的演变（evolution）和可选字段。FlatBuffers 旨在应用于那些不接受耗费大量时间和空间访问或者构建序列化数据的项目，例如游戏或者任何其它对性能敏感的应用。点击查看<a href="https://google.github.io/flatbuffers/flatbuffers_benchmarks.html">性能测试</a>了解更详细的信息。</li>
-</ul>
-
-
-<p>有兴趣进一步了解设计细节的朋友可以看看官网的 <a href="https://google.github.io/flatbuffers/flatbuffers_internals.html">FlatBuffers Internals</a> 文档，简单总结就是 FlatBuffers 通过一种特殊的序列化格式（针对更小的内存开销和访问性能设计）相比传统 IDL 更加高性能，同时又兼具传统 IDL 的大部分特性（语言无关、强类型、schema evolution）。当然 FlatBuffers 也不是没有缺点，最明显的一个问题就是为了实现高性能，FlatBuffers 的原始 API 对开发者及其不友好，手动编写序列化或者读取数据<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>的代码非常容易出错。不过好在这些问题都可以通过自动生成的代码和框架隐藏起来，不需要直接暴露给用户<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>。前面列举的几个特点为什么对于索引框架如此重要呢？笼统讲当然是为了高性能，不过后面介绍倒排索引的设计时会详细说明一些细节点。</p>
-
-<p>说了这么多还是不知道具体的 schema 长什么样子，下面以一个实际的例子来说明。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>table NoteInfo {
-</span><span class='line'>  note_id:string (id: 0, primary_key);
-</span><span class='line'>  ...
-</span><span class='line'>  note_gender:NoteGender (id: 29, index_attribute);
-</span><span class='line'>  taxonomies:[KeyValueEntry] (id: 30, index_key);
-</span><span class='line'>  ...
-</span><span class='line'>  breakdown_stats:[BreakdownStats] (id: 47, secondary_key);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面是一个完整的索引实体定义，也就是小红书里用户创建的笔记（note）。每一行定义了实体中的字段名称、数据类型以及可选的属性标记。例如 <code>note_id</code> 这个字段是笔记的 ID，数据类型是 <code>string</code>，<code>id: 0</code> 是字段在 FlatBuffers 中的唯一 ID，<code>primary_key</code> 表示这个字段是主键。类似的后面列举的几个字段也具有某些特殊含义，例如 <code>NoteGender</code> 是一个枚举值，<code>index_attribute</code> 表示这是一个索引属性；<code>[KeyValueEntry]</code> 是一个 <code>KeyValueEntry</code> 类型的数组，<code>index_key</code> 表示这是一个倒排索引；<code>secondary_key</code> 表示这是一个二级索引。可以看到语法上 FlatBuffers 跟传统 IDL 类似，某种意义上可能还略微简洁一些。定义里有些是 FlatBuffers 官方的语法（如 <code>id: 0</code>），还有一些是我们扩展的（如 <code>primary_key</code>）<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>。这里扩展性是非常有必要的，否则这个 IDL 就只能用于序列化而没法作为一种数据的逻辑定义语言来使用了。这些扩展的语法具体是什么意思之后的几篇文章会逐渐展开。</p>
-
-<h2>API</h2>
-
-<p>有了 schema 框架就可以理解索引的数据结构了，但是对于使用者来说其实更加关心的是如何「查询」数据。推荐系统的业务特点是一个读远大于写的场景，且在线请求中只会涉及读数据而不涉及写数据，即请求都是只读的。结合上一篇文章的介绍，使用者真正需要用到的 API 基本就是下面几种：</p>
-
-<ol>
-<li>查询正排索引</li>
-<li>查询倒排索引</li>
-<li>查询二级索引</li>
-</ol>
-
-
-<p>以 Java 语言为例，实际的 API 大概长这样：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">QueryApi</span><span class="o">.</span><span class="na">queryByPrimaryKey</span><span class="o">(</span><span class="n">Object</span> <span class="n">primaryKey</span><span class="o">)</span>
-</span><span class='line'><span class="n">QueryApi</span><span class="o">.</span><span class="na">queryByIndexKey</span><span class="o">(</span><span class="n">String</span> <span class="n">indexKeyName</span><span class="o">,</span> <span class="n">Object</span> <span class="n">indexKey</span><span class="o">,</span> <span class="kt">long</span> <span class="n">limit</span><span class="o">,</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">IndexPayload</span><span class="o">&lt;?&gt;,</span> <span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
-</span><span class='line'><span class="n">QueryApi</span><span class="o">.</span><span class="na">queryBySecondaryKey</span><span class="o">(</span><span class="n">Object</span> <span class="n">primaryKey</span><span class="o">,</span> <span class="n">String</span> <span class="n">secondaryKeyName</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">SecondaryKey</span><span class="o">&gt;</span> <span class="n">secondaryKeys</span><span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>第 1 个 API 通过主键查询正排索引；第 2 个 API 通过倒排索引的字段 key 来查询倒排索引，同时还限定了查询的索引条目数以及一个用户自定义的过滤器；第 3 个 API 通过主键和二级索引 key 查询二级索引。</p>
-
-<p>当然除了以上列举的最基本的 API 以外我们还提供了一些额外的接口，例如为了优化批量查询性能的批量查询接口，为了监控和可视化的索引统计信息查询接口。</p>
-
-<h2>倒排索引</h2>
-
-<p>假设给你一份序列化好的索引数据，要怎么创建倒排索引呢？这里有几个关键的问题需要思考：</p>
-
-<ol>
-<li>如何解析序列化的数据？</li>
-<li>如何知道哪些字段需要创建倒排索引？</li>
-<li>如何在运行时读取需要创建倒排的字段的值？</li>
-<li>倒排索引在内存中的数据结构是什么？</li>
-<li>倒排索引的条目列表如何排序？</li>
-<li>如何实现在查询倒排索引的同时对条目进行过滤？</li>
-</ol>
-
-
-<p>第 1 个和第 2 个问题结合前面介绍 schema 时的知识应该很容易解答，只要框架能够提前获取到数据的 schema<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>，就能对索引数据有一个全局的了解，并能够事先知道哪些字段需要创建倒排索引。</p>
-
-<p>第 3 个问题需要通过 FlatBuffers 提供的<a href="https://github.com/google/flatbuffers/blob/master/reflection/reflection.fbs">反射 API</a> 来解决<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>，配合 shcema 就能够从实际的数据中获取某个字段的值。还记得前面没有细讲的一个问题吗？为什么我们选用了 FlatBuffers 作为序列化协议，一个非常重要的原因就是<strong>无需反序列化即可访问序列化后的数据</strong>。在创建倒排索引时这个需求尤其强烈，一个完整的定义有可能包含几十甚至上百个字段，每个字段的大小都是不同的，但是这其中可能只有个位数的字段需要创建倒排索引，如果使用传统的 IDL 反序列化整个对象的时间和空间开销将会非常大，特别是对于有 GC 的语言来说<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>。因此在这一点上 FlatBuffers 基本完美解决了这个问题。</p>
-
-<p>第 4 个问题思考的角度需要从查询性能出发，既然是索引那必然追求的是查询时间复杂度最小，那就没有比 O(1) 更小的复杂度了。能够实现 O(1) 查找的数据结构最常见的就是 hash map<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>，在不同语言中这都是非常基础的数据结构，基本不用操心是否需要自己从头开始实现。Hash map 的 key 就是倒排索引 key，value 就是索引的条目列表。而 value 应该用什么数据结构呢？倒排索引的 value 一定是有序的，且通常是倒序排列，最简单的场景用 array 其实就够了，如果需要动态增删那你可能会想到类似 <a href="https://en.wikipedia.org/wiki/Skip_list">skip list</a> 这样的数据结构。这里有一个细节点需要注意，同一个条目是有可能同时出现在不同的倒排索引中的，因此做好对象复用是节省内存非常关键的点。</p>
-
-<p>回答第 5 个问题前可以先回到介绍 schema 时举的例子，倒排索引的字段是一个特殊的数据结构 <code>[KeyValueEntry]</code>，那么这个 <code>KeyValueEntry</code> 具体是什么呢？</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">table</span> <span class="n">KeyValueEntry</span> <span class="o">{</span>
-</span><span class='line'>  <span class="nl">key:</span><span class="n">string</span> <span class="o">(</span><span class="n">key</span><span class="o">);</span>
-</span><span class='line'>  <span class="nl">value:</span><span class="kt">double</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这是一个由用户自定义的数据结构，只有两个字段 <code>key</code> 和 <code>value</code>，前者即是倒排索引 key，而后者即是倒排索引条目的 score，同一个倒排索引 key 下的条目列表将会根据这个 score 从大到小逆序排序。这个特殊的数据结构是框架约定俗成的，只要符合一定条件就可以作为倒排索引的字段类型。</p>
-
-<p>最后一个问题是在推荐系统的业务场景中相当常见的需求，通常查询时会限定查询 top N 的条目，但是对于不同用户这个 top N 可能是不一样的。例如需要过滤掉每个用户历史上曾经有过曝光（impression）的条目，需要根据某些用户画像属性过滤条目等。出于节省内存的原因我们不可能将一个完整定义中的所有字段都直接存放在内存中<sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>，因此限定了只有某些标记了特殊属性的字段才会存储在索引条目中，这也是前面示例中 <code>index_attribute</code> 这个标记的作用。因此一个完整的索引条目数据结构大概是这样（以 Java 语言为例）：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IndexPayload</span><span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">Comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="kd">implements</span> <span class="n">Cloneable</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">T</span> <span class="n">primaryKey</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">indexKey</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">score</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">attributes</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">getAttribute</span><span class="o">(</span><span class="n">String</span> <span class="n">attrName</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">attributes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">attrName</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面的 <code>attributes</code> 成员变量即是索引属性，key 是标记了索引属性的字段名，value 是对应的值，可以通过 <code>getAttribute()</code> 方法查询这个值。前面介绍的 <code>QueryApi.queryByIndexKey()</code> 接口中有一个 <code>filter</code> 参数，数据类型是 <code>Function&lt;IndexPayload&lt;?&gt;, Boolean&gt;</code>，也就是说这个参数是一个函数，输入参数的数据类型是 <code>IndexPayload</code>，返回值的数据类型是 <code>Boolean</code>。用户需要自己实现过滤器的逻辑，通过 <code>IndexPayload</code> 提供的接口来判断是否需要过滤当前条目。</p>
-
-<p>以上就是本篇要介绍的全部内容，简单回顾一下：</p>
-
-<ul>
-<li>基于 FlatBuffers 的 schema 定义</li>
-<li>根据不同索引类型提供不同的查询 API</li>
-<li>如何在运行时创建倒排索引</li>
-</ul>
-
-
-<p>下一篇文章依然是围绕索引来介绍，不过重点将会是正排索引，看似一个 hash map 即可解决的问题其实有很多玄机。</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>为什么不直接用 SQL 呢？首先 SQL 的语法很复杂，很多原语是多余的，这对于使用者来说是不必要的负担。其次我们是实现一个推荐系统而不是一个完备的 DBMS，没必要硬套。最后这个 DDL 需要足够的扩展性来满足针对推荐系统的一些定制需求，关于这一点后面会提到。<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>需要查看原文和所有特点的朋友请转到 FlatBuffers 的官网<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>这里我刻意没有用「反序列化」这个词，理论上 FlatBuffers 是没有反序列化这个概念的，buffer is data（缓冲区即数据）。<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
-<li id="fn:4">
-<p>框架使用者甚至不需要知道底层用的是 FlatBuffers<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
-<li id="fn:5">
-<p>同样的设计思想在 <a href="https://github.com/FoundationDB/fdb-record-layer/blob/master/docs/Overview.md">FoundationDB Record Layer</a> 里也有所体现，只不过它使用的是 PB 作为 DDL，相比之下 FlatBuffers 的语法会更加简洁。<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
-<li id="fn:6">
-<p>实际在实现时是通过框架暴露的注册 schema 的 API 由用户来提供这些信息<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
-<li id="fn:7">
-<p>截止 2020 年 4 月 FlatBuffers 官方依然没有提供 Java 语言的反射 API，有需要的朋友可以参考 <a href="https://github.com/google/flatbuffers/pull/4019">#4019</a> 这个 PR，虽然这个 PR 也烂尾了。<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
-<li id="fn:8">
-<p>如果你使用的是 Java 语言，即使用对象池这个问题也是没法优化的，类似 PB 这样的协议对于对象池的支持可以说是相当不友好。<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
-<li id="fn:9">
-<p>这里暂时忽略掉哈希碰撞<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
-<li id="fn:10">
-<p>至于完整的数据存放在哪里后续的文章中会介绍<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
